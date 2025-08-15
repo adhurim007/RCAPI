@@ -1,0 +1,17 @@
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Infrastructure.deps.json
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Infrastructure.dll
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Infrastructure.pdb
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Application.dll
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Domain.dll
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Application.pdb
+C:\github\rentacar\RentCar.Infrastructure\bin\Debug\net8.0\RentCar.Domain.pdb
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.csproj.AssemblyReference.cache
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.AssemblyInfoInputs.cache
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.AssemblyInfo.cs
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.csproj.CoreCompileInputs.cache
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.csproj.CopyComplete
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.dll
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\refint\RentCar.Infrastructure.dll
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\RentCar.Infrastructure.pdb
+C:\github\rentacar\RentCar.Infrastructure\obj\Debug\net8.0\ref\RentCar.Infrastructure.dll

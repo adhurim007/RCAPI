@@ -1,0 +1,11 @@
+C:\github\rentacar\RentCar.Domain\bin\Debug\net8.0\RentCar.Domain.deps.json
+C:\github\rentacar\RentCar.Domain\bin\Debug\net8.0\RentCar.Domain.dll
+C:\github\rentacar\RentCar.Domain\bin\Debug\net8.0\RentCar.Domain.pdb
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.AssemblyInfoInputs.cache
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.AssemblyInfo.cs
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.csproj.CoreCompileInputs.cache
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.dll
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\refint\RentCar.Domain.dll
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.pdb
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\ref\RentCar.Domain.dll
