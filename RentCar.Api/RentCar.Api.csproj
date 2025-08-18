@@ -27,8 +27,8 @@
   <ItemGroup>
     <ProjectReference Include="..\RentCar.Application\RentCar.Application.csproj" />
     <ProjectReference Include="..\RentCar.Domain\RentCar.Domain.csproj" />
-    <ProjectReference Include="..\RentCar.Infrastructure\RentCar.Infrastructure.csproj" />
     <ProjectReference Include="..\RentCar.Persistence\RentCar.Persistence.csproj" />
+    <ProjectReference Include="..\RentCar.Infrastructure\RentCar.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

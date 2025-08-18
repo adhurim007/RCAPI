@@ -157,8 +157,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj"
+              "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+                "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj"
               }
             }
           }
@@ -184,6 +184,10 @@
               "version": "[15.0.1, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "FluentValidation": {
               "target": "Package",
               "version": "[12.0.0, )"
             },
@@ -370,6 +374,9 @@
               },
               "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
                 "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj"
+              },
+              "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+                "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj"
               }
             }
           }
@@ -464,9 +471,6 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj"
-              },
               "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
                 "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj"
               }

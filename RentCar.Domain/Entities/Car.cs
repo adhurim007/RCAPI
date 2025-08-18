@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace RentCar.Domain.Entities
 {
     public class Car
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public Guid BusinessId { get; set; }
         public int CarModelId { get; set; }
         public int CarTypeId { get; set; }
@@ -24,7 +25,7 @@ namespace RentCar.Domain.Entities
         public DateTime CreatedAt { get; set; }
 
         public Business Business { get; set; }
-        public CarModel CarModel { get; set; }
+        public CarModel CarModel { get; set; } 
         public CarType CarType { get; set; }
         public FuelType FuelType { get; set; }
         public Transmission Transmission { get; set; }
