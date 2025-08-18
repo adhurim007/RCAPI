@@ -38,14 +38,14 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var car = await _mediator.Send(new GetCarByIdQuery(id));
             return Ok(car);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateCarCommand command)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCarCommand command)
         {
             if (id != command.Id)
                 return BadRequest("Id mismatch");
@@ -56,5 +56,39 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteCarCommand { Id = id });
+
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpGet("by-business/{businessId}")]
+        public async Task<IActionResult> GetByBusinessId(int businessId)
+        {
+            var cars = await _mediator.Send(new GetCarsByBusinessIdQuery { BusinessId = businessId });
+            return Ok(cars);
+        }
+
+        [HttpPut("{id}/availability")]
+        public async Task<IActionResult> SetAvailability(Guid id, [FromBody] bool isAvailable)
+        {
+            var result = await _mediator.Send(new SetCarAvailabilityCommand
+            {
+                CarId = id,
+                IsAvailable = isAvailable
+            });
+
+            if (!result)
+                return NotFound("Car not found.");
+
+            return NoContent();
+        }
+
     }
 }

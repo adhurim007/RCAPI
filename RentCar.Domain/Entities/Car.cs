@@ -9,8 +9,8 @@ namespace RentCar.Domain.Entities
 {
     public class Car
     {
-        public int Id { get; set; }
-        public Guid BusinessId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public int BusinessId { get; set; }
         public int CarModelId { get; set; }
         public int CarTypeId { get; set; }
         public int FuelTypeId { get; set; }

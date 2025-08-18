@@ -8,7 +8,7 @@ namespace RentCar.Application.DTOs
 {
     public class CarDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string LicensePlate { get; set; }
         public string Color { get; set; }
         public decimal DailyPrice { get; set; }
@@ -22,6 +22,9 @@ namespace RentCar.Application.DTOs
         public string TransmissionName { get; set; }
         public string CarModel { get; set; }
         public string CarBrand { get; set; }
+          
+        public int Year { get; set; }
+        
 
     }
 }

@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
 using RentCar.Domain.Entities;
+using RentCar.Domain.Interfaces;
 using RentCar.Infrastructure;
 using RentCar.Persistence;
+using RentCar.Persistence.Repositories;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,11 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
+  
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
+
 
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
 

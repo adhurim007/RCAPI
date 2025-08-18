@@ -11,7 +11,7 @@ namespace RentCar.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid CarId { get; set; }
-        public string RuleType { get; set; } // e.g., Weekend, Seasonal
+        public string RuleType { get; set; }  
         public decimal Value { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

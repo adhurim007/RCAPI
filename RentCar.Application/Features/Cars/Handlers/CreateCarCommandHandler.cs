@@ -22,8 +22,7 @@ namespace RentCar.Application.Features.Cars.Handlers
         public async Task<Guid> Handle(CreateCarCommand request, CancellationToken cancellationToken)
         {
             var car = new Car
-            {
-                Id = Guid.NewGuid(),
+            { 
                 BusinessId = request.BusinessId,
                 CarModelId = request.CarModelId,
                 CarTypeId = request.CarTypeId,

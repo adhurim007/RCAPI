@@ -8,7 +8,7 @@ namespace RentCar.Domain.Entities
 {
     public class Business
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public Guid UserId { get; set; }
 
         public string CompanyName { get; set; }

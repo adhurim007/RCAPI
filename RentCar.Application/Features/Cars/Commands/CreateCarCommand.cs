@@ -9,7 +9,7 @@ namespace RentCar.Application.Features.Cars.Commands
 {
     public class CreateCarCommand : IRequest<Guid>
     {
-        public Guid BusinessId { get; set; }
+        public int BusinessId { get; set; }
         public int CarModelId { get; set; }
         public int CarTypeId { get; set; }
         public int FuelTypeId { get; set; }
