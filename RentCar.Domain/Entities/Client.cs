@@ -9,7 +9,7 @@ namespace RentCar.Domain.Entities
 {
     public class Client
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public Guid UserId { get; set; }
 
         public string FirstName { get; set; }
@@ -19,5 +19,6 @@ namespace RentCar.Domain.Entities
         public ApplicationUser User { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
     }
-     
+
+
 }

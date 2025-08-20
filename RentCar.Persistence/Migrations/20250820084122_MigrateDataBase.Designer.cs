@@ -12,8 +12,8 @@ using RentCar.Persistence;
 namespace RentCar.Persistence.Migrations
 {
     [DbContext(typeof(RentCarDbContext))]
-    [Migration("20250818091342_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250820084122_MigrateDataBase")]
+    partial class MigrateDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,7 +200,6 @@ namespace RentCar.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -228,22 +227,22 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Business", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("ApprovedBy")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ApprovedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactPhone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -253,7 +252,6 @@ namespace RentCar.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("TaxId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -275,8 +273,8 @@ namespace RentCar.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("BusinessId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
@@ -292,12 +290,14 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Car", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("BusinessId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CarModelId")
                         .HasColumnType("int");
@@ -306,31 +306,28 @@ namespace RentCar.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Color")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("DailyPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FuelTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
                     b.Property<string>("LicensePlate")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TransmissionId")
@@ -360,12 +357,35 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("CarBrands");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.CarImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarImages");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.CarModel", b =>
@@ -380,7 +400,6 @@ namespace RentCar.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -392,28 +411,33 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.CarPricingRule", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CarId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("PricePerDay")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("RuleType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -432,7 +456,6 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -442,20 +465,19 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Client", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -471,19 +493,20 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Contract", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FileUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -502,7 +525,6 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -519,11 +541,9 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -533,22 +553,24 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Payment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaidAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -560,27 +582,20 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Reservation", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("BusinessId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("BusinessId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CarId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("CarId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClientId1")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -592,21 +607,16 @@ namespace RentCar.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessId");
 
-                    b.HasIndex("BusinessId1");
-
                     b.HasIndex("CarId");
 
-                    b.HasIndex("CarId1");
-
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("ClientId1");
 
                     b.HasIndex("ReservationStatusId");
 
@@ -622,7 +632,6 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -639,7 +648,6 @@ namespace RentCar.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -771,6 +779,17 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Transmission");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.CarImage", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Car", "Car")
+                        .WithMany("Images")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.CarModel", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.CarBrand", "CarBrand")
@@ -829,34 +848,22 @@ namespace RentCar.Persistence.Migrations
             modelBuilder.Entity("RentCar.Domain.Entities.Reservation", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.Business", "Business")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("BusinessId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentCar.Domain.Entities.Business", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("BusinessId1");
-
                     b.HasOne("RentCar.Domain.Entities.Car", "Car")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("RentCar.Domain.Entities.Car", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("CarId1");
-
                     b.HasOne("RentCar.Domain.Entities.Client", "Client")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("RentCar.Domain.Entities.Client", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("ClientId1");
 
                     b.HasOne("RentCar.Domain.Entities.ReservationStatus", "ReservationStatus")
                         .WithMany()
@@ -875,11 +882,9 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Navigation("Business")
-                        .IsRequired();
+                    b.Navigation("Business");
 
-                    b.Navigation("Client")
-                        .IsRequired();
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.Business", b =>
@@ -893,6 +898,8 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Car", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("PricingRules");
 
                     b.Navigation("Reservations");
@@ -910,11 +917,9 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Reservation", b =>
                 {
-                    b.Navigation("Contract")
-                        .IsRequired();
+                    b.Navigation("Contract");
 
-                    b.Navigation("Payment")
-                        .IsRequired();
+                    b.Navigation("Payment");
                 });
 #pragma warning restore 612, 618
         }

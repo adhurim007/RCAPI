@@ -9,8 +9,8 @@ namespace RentCar.Application.Features.Cars.Commands
 {
     public record CreateCarPricingRuleCommand : IRequest<int>
     {
-        public Guid Id { get; init; }
-        public Guid CarId { get; init; }
+        public int Id { get; init; }
+        public int CarId { get; init; }
         public DateTime StartDate { get; init; }
         public DateTime EndDate { get; init; }
         public decimal Price { get; init; }

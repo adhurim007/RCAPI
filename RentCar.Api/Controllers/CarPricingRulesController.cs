@@ -1,0 +1,58 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Features.Cars.Commands;
+using RentCar.Application.Features.Cars.Queries.GetAllCars;
+
+namespace RentCar.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = "Business")]
+    public class CarPricingRulesController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public CarPricingRulesController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCarPricingRuleCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id = result }, new { id = result });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCarPricingRuleCommand command)
+        {
+            if (id != command.Id) return BadRequest("Id mismatch");
+            var result = await _mediator.Send(command);
+            return result ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteCarPricingRuleCommand(id));
+            return result ? NoContent() : NotFound();
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var rule = await _mediator.Send(new GetCarPricingRuleByIdQuery(id));
+            return rule == null ? NotFound() : Ok(rule);
+        }
+
+        [HttpGet("by-car/{carId}")]
+        public async Task<IActionResult> GetByCarId(int carId)
+        {
+            var rules = await _mediator.Send(new GetCarPricingRulesByCarIdQuery(carId));
+            return Ok(rules);
+        } 
+    }
+}

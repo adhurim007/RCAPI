@@ -9,6 +9,6 @@ namespace RentCar.Application.Features.Cars.Commands
 {
     public class DeleteCarCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

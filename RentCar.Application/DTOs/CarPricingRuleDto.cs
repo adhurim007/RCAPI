@@ -8,10 +8,13 @@ namespace RentCar.Application.DTOs
 {
     public class CarPricingRuleDto
     {
-        public Guid Id { get; set; }
-        public Guid CarId { get; set; }
-        public decimal PricePerDay { get; set; }
+        public int Id { get; set; }
+        public int CarId { get; set; } 
         public int MinDays { get; set; }
-        public int MaxDays { get; set; }
+        public int MaxDays { get; set; } 
+        public decimal Value { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal PricePerDay { get; set; }
     } 
 }

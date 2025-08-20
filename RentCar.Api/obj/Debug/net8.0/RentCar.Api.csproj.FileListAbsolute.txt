@@ -138,13 +138,18 @@ E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.d
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.Debug.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.Identity.Client.dll
@@ -273,7 +278,6 @@ E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.development.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar..C350BB2D.Up2Date
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\refint\RentCar.Api.dll

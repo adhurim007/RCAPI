@@ -7,7 +7,9 @@ namespace RentCar.Domain.Interfaces
 {
     public interface ICarPricingRuleRepository : IGenericRepository<CarPricingRule>
     {
-        Task<CarPricingRule> GetByCarIdAsync(Guid carId);
-        Task<CarPricingRule> GetByIdAsync(Guid id);
+        Task<List<CarPricingRule>> GetByCarIdAsync(int carId);
+
+
+        Task<CarPricingRule> GetByIdAsync(int id);
     }
 }

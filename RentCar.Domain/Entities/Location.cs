@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
 {
+
     public class Location
     {
         public int Id { get; set; }

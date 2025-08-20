@@ -9,7 +9,7 @@ namespace RentCar.Application.Features.Cars.Commands
 {
     public class SetCarAvailabilityCommand : IRequest<bool>
     {
-        public Guid CarId { get; set; }
+        public int CarId { get; set; }
         public bool IsAvailable { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace RentCar.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<ICarImageRepository, CarImageRepository>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
 
             return services;
         }

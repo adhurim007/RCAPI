@@ -38,27 +38,26 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             var car = await _mediator.Send(new GetCarByIdQuery(id));
             return Ok(car);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCarCommand command)
+        [HttpPut("images/{imageId}")]
+        [Authorize(Roles = "Business,Admin")]
+        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] IFormFile file)
         {
-            if (id != command.Id)
-                return BadRequest("Id mismatch");
+            if (file == null)
+                return BadRequest("Image file is required.");
 
-            var result = await _mediator.Send(command);
-            if (!result)
-                return NotFound();
-
-            return NoContent();
+            var result = await _mediator.Send(new UpdateCarImageCommand(imageId, file));
+            return Ok(result);
         }
 
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCarCommand { Id = id });
 
@@ -76,7 +75,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPut("{id}/availability")]
-        public async Task<IActionResult> SetAvailability(Guid id, [FromBody] bool isAvailable)
+        public async Task<IActionResult> SetAvailability(int id, [FromBody] bool isAvailable)
         {
             var result = await _mediator.Send(new SetCarAvailabilityCommand
             {
@@ -89,6 +88,30 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{carId}/images")]
+        [Authorize(Roles = "Business")]
+        public async Task<IActionResult> UploadImages(int carId, [FromForm] List<IFormFile> files)
+        {
+            var result = await _mediator.Send(new UploadCarImageCommand
+            {
+                CarId = carId,
+                Files = files
+            });
+
+            return Ok(result);
+        }
+
+        [HttpDelete("images/{imageId}")]
+        public async Task<IActionResult> DeleteImage(int imageId)
+        {
+            var result = await _mediator.Send(new DeleteCarImageCommand(imageId));
+            if (!result)
+                return NotFound("Image not found.");
+
+            return NoContent();
+        }
+
 
     }
 }

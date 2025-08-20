@@ -9,9 +9,11 @@ namespace RentCar.Domain.Entities
     public class BusinessLocation
     {
         public int Id { get; set; }
-        public Guid BusinessId { get; set; }
-        public Business Business { get; set; }
+        public int BusinessId { get; set; }
         public int LocationId { get; set; }
+
+        public Business Business { get; set; }
         public Location Location { get; set; }
     }
+
 }

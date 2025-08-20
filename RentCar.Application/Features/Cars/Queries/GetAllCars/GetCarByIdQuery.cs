@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Cars.Queries.GetAllCars
 {
-    public record GetCarByIdQuery(Guid Id) : IRequest<CarDto>;
+    public record GetCarByIdQuery(int Id) : IRequest<CarDto>;
 
 }
