@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using RentCar.Application.Common.Models;
-using RentCar.Application.DTOs;
+using RentCar.Application.DTOs.Cars;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
 using RentCar.Domain.Interfaces.Repositories;
 using System;

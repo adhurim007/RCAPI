@@ -27,11 +27,13 @@ namespace RentCar.Persistence
         public DbSet<Location> Locations { get; set; }
         public DbSet<BusinessLocation> BusinessLocations { get; set; }
 
+        public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // One-to-One User Relations
+          
             modelBuilder.Entity<Client>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)
@@ -72,7 +74,7 @@ namespace RentCar.Persistence
                 .WithMany(b => b.Cars)
                 .HasForeignKey(c => c.BusinessId);
 
-            // Car Pricing Rule
+            
             modelBuilder.Entity<CarPricingRule>()
                 .HasOne(p => p.Car)
                 .WithMany(c => c.PricingRules)
@@ -82,14 +84,14 @@ namespace RentCar.Persistence
                 .Property(p => p.Value)
                 .HasPrecision(18, 2);
 
-            // Car Images
+            
             modelBuilder.Entity<CarImage>()
                 .HasOne(ci => ci.Car)
                 .WithMany(c => c.Images)
                 .HasForeignKey(ci => ci.CarId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Reservation
+             
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Car)
                 .WithMany(c => c.Reservations)
@@ -116,13 +118,13 @@ namespace RentCar.Persistence
                 .Property(r => r.TotalPrice)
                 .HasPrecision(18, 2);
 
-            // Contract
+           
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.Reservation)
                 .WithOne(r => r.Contract)
                 .HasForeignKey<Contract>(c => c.ReservationId);
 
-            // Payment
+          
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Reservation)
                 .WithOne(r => r.Payment)
@@ -132,7 +134,7 @@ namespace RentCar.Persistence
                 .Property(p => p.Amount)
                 .HasPrecision(18, 2);
 
-            // Business Locations
+            
             modelBuilder.Entity<BusinessLocation>()
                 .HasOne(bl => bl.Business)
                 .WithMany(b => b.Locations)
@@ -143,7 +145,7 @@ namespace RentCar.Persistence
                 .WithMany()
                 .HasForeignKey(bl => bl.LocationId);
 
-            // CarBrand -> CarModel
+            
             modelBuilder.Entity<CarModel>()
                 .HasOne(cm => cm.CarBrand)
                 .WithMany(cb => cb.Models)
@@ -152,6 +154,17 @@ namespace RentCar.Persistence
             modelBuilder.Entity<CarPricingRule>()
                 .Property(p => p.PricePerDay)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<ReservationStatusHistory>()
+                .HasOne(h => h.Reservation)
+                .WithMany(r => r.StatusHistories)
+                .HasForeignKey(h => h.ReservationId)
+                .OnDelete(DeleteBehavior.Restrict);   
+             
+            modelBuilder.Entity<ReservationStatusHistory>()
+                .HasOne(h => h.ReservationStatus)
+                .WithMany()
+                .HasForeignKey(h => h.ReservationStatusId);
         }
     }
 }

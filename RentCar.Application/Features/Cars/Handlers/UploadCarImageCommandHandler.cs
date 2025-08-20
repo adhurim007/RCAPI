@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using RentCar.Application.DTOs;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces.Repositories;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RentCar.Application.DTOs.Cars;
 
 namespace RentCar.Application.Features.Cars.Handlers
 {

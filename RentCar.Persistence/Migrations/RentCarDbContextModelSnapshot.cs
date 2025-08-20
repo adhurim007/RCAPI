@@ -636,6 +636,38 @@ namespace RentCar.Persistence.Migrations
                     b.ToTable("ReservationStatuses");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.ReservationStatusHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ChangedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReservationStatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationId");
+
+                    b.HasIndex("ReservationStatusId");
+
+                    b.ToTable("ReservationStatusHistories");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.Transmission", b =>
                 {
                     b.Property<int>("Id")
@@ -877,6 +909,25 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("ReservationStatus");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.ReservationStatusHistory", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Reservation", "Reservation")
+                        .WithMany("StatusHistories")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RentCar.Domain.Entities.ReservationStatus", "ReservationStatus")
+                        .WithMany()
+                        .HasForeignKey("ReservationStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("ReservationStatus");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Business");
@@ -917,6 +968,8 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Contract");
 
                     b.Navigation("Payment");
+
+                    b.Navigation("StatusHistories");
                 });
 #pragma warning restore 612, 618
         }

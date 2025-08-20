@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RentCar.Application.DTOs;
+using RentCar.Application.DTOs.Cars;
 using System;
 using System.Collections.Generic;
 using System.Linq;

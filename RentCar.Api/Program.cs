@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
+using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.Services;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
 using RentCar.Infrastructure;
@@ -28,7 +30,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
-
+builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
+builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
 
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
 

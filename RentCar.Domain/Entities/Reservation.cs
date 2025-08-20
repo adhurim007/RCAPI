@@ -25,6 +25,9 @@ namespace RentCar.Domain.Entities
         public ReservationStatus ReservationStatus { get; set; }
         public Payment Payment { get; set; }
         public Contract Contract { get; set; }
+
+        public ICollection<ReservationStatusHistory> StatusHistories { get; set; }
     }
+
 
 }
