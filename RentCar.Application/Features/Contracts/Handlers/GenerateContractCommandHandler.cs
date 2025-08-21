@@ -17,54 +17,34 @@ namespace RentCar.Application.Features.Contracts.Handlers
     public class GenerateContractCommandHandler : IRequestHandler<GenerateContractCommand, int>
     {
         private readonly RentCarDbContext _context;
-        private readonly IContractPdfGenerator _pdfGenerator;
 
-        public GenerateContractCommandHandler(RentCarDbContext context, IContractPdfGenerator pdfGenerator)
+        public GenerateContractCommandHandler(RentCarDbContext context)
         {
             _context = context;
-            _pdfGenerator = pdfGenerator;
         }
 
         public async Task<int> Handle(GenerateContractCommand request, CancellationToken cancellationToken)
         {
             var reservation = await _context.Reservations
-                .Include(r => r.Car).ThenInclude(c => c.CarModel)
-                .Include(r => r.Client)
-                .Include(r => r.Business)
+                .Include(r => r.Payment)
                 .FirstOrDefaultAsync(r => r.Id == request.ReservationId, cancellationToken);
 
             if (reservation == null)
                 throw new Exception("Reservation not found.");
 
-            if (reservation.ReservationStatusId != (int)ReservationStatusEnum.Confirmed)
-                throw new Exception("Contract can only be generated for confirmed reservations.");
+            // ✅ Check payment before generating contract
+            if (reservation.Payment == null || !reservation.Payment.IsConfirmed)
+                throw new Exception("Contract cannot be generated until payment is confirmed.");
 
-            if (reservation.Contract != null)
-                throw new Exception("Contract already exists for this reservation.");
-
-            // ✅ Generate PDF
-            string filePath = _pdfGenerator.GenerateContractPdf(reservation);
-
+            // Generate PDF path or stub (we’ll implement actual PDF later)
             var contract = new Contract
             {
                 ReservationId = reservation.Id,
-                FileUrl = filePath,
+                FileUrl = $"contracts/{Guid.NewGuid()}.pdf",
                 CreatedAt = DateTime.UtcNow
             };
 
             _context.Contracts.Add(contract);
-
-            reservation.ReservationStatusId = (int)ReservationStatusEnum.Completed;
-
-            _context.ReservationStatusHistories.Add(new ReservationStatusHistory
-            {
-                ReservationId = reservation.Id,
-                ReservationStatusId = reservation.ReservationStatusId,
-                ChangedAt = DateTime.UtcNow,
-                ChangedBy = request.GeneratedBy,
-                Note = "Contract generated and saved as PDF."
-            });
-
             await _context.SaveChangesAsync(cancellationToken);
 
             return contract.Id;

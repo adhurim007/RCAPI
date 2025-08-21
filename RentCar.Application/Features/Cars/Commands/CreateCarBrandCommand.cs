@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using RentCar.Application.DTOs.Cars;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,5 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Cars.Commands
 {
-    public class GetCarsByBusinessIdQuery : IRequest<List<CarDto>>
-    {
-        public int BusinessId { get; set; }
-    }
+    public record CreateCarBrandCommand(string Name) : IRequest<int>;
 }

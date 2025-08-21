@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Contracts.Commands
 {
-    public class GenerateContractCommand : IRequest<int>
-    {
-        public int ReservationId { get; set; }
-        public string GeneratedBy { get; set; } // Business User who generated the contract
-    }
+    public record GenerateContractCommand(int ReservationId) : IRequest<int>;
 
 }

@@ -6,10 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.Reports; 
 using RentCar.Application.Services;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
-using RentCar.Infrastructure;
+using RentCar.Infrastructure; 
 using RentCar.Persistence;
 using RentCar.Persistence.Repositories;
 using System.Reflection;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
 builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
 builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
+builder.Services.AddScoped<ReportGenerator>();
+
 
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
 

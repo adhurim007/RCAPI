@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentCar.Application.Features.Cars.Commands
+namespace RentCar.Application.Features.Cars.Queries.GetAllCars
 {
     public class FilterCarsQuery : IRequest<List<CarDto>>
     {

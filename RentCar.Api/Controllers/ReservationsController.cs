@@ -4,6 +4,7 @@ using RentCar.Application.DTOs.Reservations;
 using RentCar.Application.Features.Contracts.Commands;
 using RentCar.Application.Features.Reservations.Commands;
 using RentCar.Application.Features.Reservations.Queries;
+using RentCar.Application.Reports;
 
 namespace RentCar.Api.Controllers
 {
@@ -12,10 +13,12 @@ namespace RentCar.Api.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ReservationReportService _reportService;
 
-        public ReservationsController(IMediator mediator)
+        public ReservationsController(IMediator mediator, ReservationReportService reportService)
         {
             _mediator = mediator;
+            _reportService = reportService;
         }
 
         [HttpPost]
@@ -69,7 +72,7 @@ namespace RentCar.Api.Controllers
             var result = await _mediator.Send(new CancelReservationCommand(id, reason));
             return result ? Ok("Reservation canceled.") : BadRequest("Unable to cancel reservation.");
         }
-         
+
         [HttpPut("{id}/approve")]
         public async Task<IActionResult> Approve(int id, [FromQuery] int approvedBy)
         {
@@ -103,6 +106,35 @@ namespace RentCar.Api.Controllers
             var id = await _mediator.Send(command);
             return Ok(new { HistoryId = id });
         }
-         
+
+        [HttpPost("{reservationId}/generate-contract")]
+        public async Task<IActionResult> GenerateContract(int reservationId)
+        {
+            var contractId = await _mediator.Send(new GenerateContractCommand(reservationId));
+            return Ok(new { ContractId = contractId });
+        }
+
+        [HttpGet("report/list")]
+        public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
+        {
+            var pdf = await _reportService.GenerateReservationListReport(from, to, businessId);
+            return File(pdf, "application/pdf", "ReservationList.pdf");
+        }
+
+        [HttpGet("report/income")]
+        public async Task<IActionResult> GetIncomeReport(DateTime from, DateTime to)
+        {
+            var pdf = await _reportService.GenerateIncomeReport(from, to);
+            return File(pdf, "application/pdf", "IncomeReport.pdf");
+        }
+
+        [HttpGet("report/pending")]
+        public async Task<IActionResult> GetPendingReservationsReport()
+        {
+            var pdf = await _reportService.GeneratePendingReservationsReport();
+            return File(pdf, "application/pdf", "PendingReservations.pdf");
+        }
+
+
     }
 }
