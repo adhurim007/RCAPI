@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentCar.Application.Features.Roles.Commands;
+using RentCar.Application.Features.Roles.Queries;
 
 namespace RentCar.Api.Controllers
 {
@@ -22,6 +23,28 @@ namespace RentCar.Api.Controllers
         {
             var success = await _mediator.Send(command);
             return success ? Ok("Role created successfully.") : BadRequest("Failed to create role.");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var roles = await _mediator.Send(new GetAllRolesQuery());
+            return Ok(roles);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateRoleCommand command)
+        {
+            if (id != command.Id) return BadRequest("ID mismatch");
+            var result = await _mediator.Send(command);
+            return result ? Ok("Role updated") : NotFound("Role not found");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _mediator.Send(new DeleteRoleCommand(id));
+            return result ? Ok("Role deleted") : NotFound("Role not found");
         }
     }
 }

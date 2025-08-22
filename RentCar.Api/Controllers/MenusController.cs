@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RentCar.Application.Authorization;
 using RentCar.Application.Features.Menus.Commands;
 using RentCar.Application.Features.Menus.Queries;
+using RentCar.Domain.Entities;
 
 namespace RentCar.Api.Controllers
 {
@@ -41,6 +42,29 @@ namespace RentCar.Api.Controllers
         {
             var menus = await _mediator.Send(new GetMenusByRoleQuery(roleId));
             return Ok(menus);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Menu>>> GetAll()
+        {
+            var result = await _mediator.Send(new GetAllMenusQuery());
+            return Ok(result);
+        }
+         
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuCommand command)
+        {
+            if (id != command.Id) return BadRequest("ID mismatch");
+            var success = await _mediator.Send(command);
+            return success ? Ok("Menu updated") : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _mediator.Send(new DeleteMenuCommand(id));
+            return success ? Ok("Menu deleted") : NotFound();
         }
 
     }
