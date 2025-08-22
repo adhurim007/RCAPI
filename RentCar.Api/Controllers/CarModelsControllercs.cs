@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Queries.CarBrandAndModel;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
@@ -22,6 +23,7 @@ namespace RentCar.Api.Controllers
 
         // GET: api/carmodels
         [HttpGet]
+        [Authorize(Policy = Permissions.CarModels.View)]
         public async Task<ActionResult<List<CarModel>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllCarModelsQuery());
@@ -30,6 +32,7 @@ namespace RentCar.Api.Controllers
 
         // GET: api/carmodels/{id}
         [HttpGet("{id}")]
+        [Authorize(Policy = Permissions.CarModels.View)]
         public async Task<ActionResult<CarModel>> GetById(int id)
         {
             var model = await _mediator.Send(new GetCarModelByIdQuery(id));
@@ -39,6 +42,7 @@ namespace RentCar.Api.Controllers
 
         // POST: api/carmodels
         [HttpPost]
+        [Authorize(Policy = Permissions.CarModels.Create)]
         public async Task<ActionResult<int>> Create([FromBody] CreateCarModelCommand command)
         {
             var id = await _mediator.Send(command);
@@ -47,6 +51,7 @@ namespace RentCar.Api.Controllers
 
         // PUT: api/carmodels/{id}
         [HttpPut("{id}")]
+        [Authorize(Policy = Permissions.CarModels.Update)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCarModelCommand command)
         {
             if (id != command.Id) return BadRequest("ID mismatch");
@@ -56,6 +61,7 @@ namespace RentCar.Api.Controllers
 
         // DELETE: api/carmodels/{id}
         [HttpDelete("{id}")]
+        [Authorize(Policy = Permissions.CarModels.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             await _mediator.Send(new DeleteCarModelCommand(id));

@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Payments.Commands;
 using RentCar.Application.Features.Payments.Commands.RentCar.Application.Features.Payments.Commands;
 
@@ -15,6 +17,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Policy = Permissions.Payments.Add)]
         public async Task<IActionResult> Add([FromBody] AddPaymentCommand command)
         {
             var paymentId = await _mediator.Send(command);
@@ -22,6 +25,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost("confirm/{paymentId}")]
+        [Authorize(Policy = Permissions.Payments.Confirm)]
         public async Task<IActionResult> Confirm(int paymentId)
         {
             var result = await _mediator.Send(new ConfirmPaymentCommand(paymentId));

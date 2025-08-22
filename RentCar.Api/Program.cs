@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
 using RentCar.Application.Reports; 
 using RentCar.Application.Services;
@@ -31,7 +32,62 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
-  
+
+
+builder.Services.AddAuthorization(options =>
+{
+    // Cars
+    options.AddPolicy(Permissions.Cars.View, p => p.RequireClaim("Permission", Permissions.Cars.View));
+    options.AddPolicy(Permissions.Cars.Create, p => p.RequireClaim("Permission", Permissions.Cars.Create));
+    options.AddPolicy(Permissions.Cars.Update, p => p.RequireClaim("Permission", Permissions.Cars.Update));
+    options.AddPolicy(Permissions.Cars.Delete, p => p.RequireClaim("Permission", Permissions.Cars.Delete));
+    options.AddPolicy(Permissions.Cars.ManageImages, p => p.RequireClaim("Permission", Permissions.Cars.ManageImages));
+
+    // Car Brands
+    options.AddPolicy(Permissions.CarBrands.View, p => p.RequireClaim("Permission", Permissions.CarBrands.View));
+    options.AddPolicy(Permissions.CarBrands.Create, p => p.RequireClaim("Permission", Permissions.CarBrands.Create));
+    options.AddPolicy(Permissions.CarBrands.Update, p => p.RequireClaim("Permission", Permissions.CarBrands.Update));
+    options.AddPolicy(Permissions.CarBrands.Delete, p => p.RequireClaim("Permission", Permissions.CarBrands.Delete));
+
+    // Car Models
+    options.AddPolicy(Permissions.CarModels.View, p => p.RequireClaim("Permission", Permissions.CarModels.View));
+    options.AddPolicy(Permissions.CarModels.Create, p => p.RequireClaim("Permission", Permissions.CarModels.Create));
+    options.AddPolicy(Permissions.CarModels.Update, p => p.RequireClaim("Permission", Permissions.CarModels.Update));
+    options.AddPolicy(Permissions.CarModels.Delete, p => p.RequireClaim("Permission", Permissions.CarModels.Delete));
+
+    // Car Pricing Rules
+    options.AddPolicy(Permissions.CarPricingRules.View, p => p.RequireClaim("Permission", Permissions.CarPricingRules.View));
+    options.AddPolicy(Permissions.CarPricingRules.Create, p => p.RequireClaim("Permission", Permissions.CarPricingRules.Create));
+    options.AddPolicy(Permissions.CarPricingRules.Update, p => p.RequireClaim("Permission", Permissions.CarPricingRules.Update));
+    options.AddPolicy(Permissions.CarPricingRules.Delete, p => p.RequireClaim("Permission", Permissions.CarPricingRules.Delete));
+
+    // Reservations
+    options.AddPolicy(Permissions.Reservations.View, p => p.RequireClaim("Permission", Permissions.Reservations.View));
+    options.AddPolicy(Permissions.Reservations.Create, p => p.RequireClaim("Permission", Permissions.Reservations.Create));
+    options.AddPolicy(Permissions.Reservations.Update, p => p.RequireClaim("Permission", Permissions.Reservations.Update));
+    options.AddPolicy(Permissions.Reservations.Cancel, p => p.RequireClaim("Permission", Permissions.Reservations.Cancel));
+    options.AddPolicy(Permissions.Reservations.Approve, p => p.RequireClaim("Permission", Permissions.Reservations.Approve));
+    options.AddPolicy(Permissions.Reservations.Reject, p => p.RequireClaim("Permission", Permissions.Reservations.Reject));
+    options.AddPolicy(Permissions.Reservations.ViewHistory, p => p.RequireClaim("Permission", Permissions.Reservations.ViewHistory));
+    options.AddPolicy(Permissions.Reservations.AddHistory, p => p.RequireClaim("Permission", Permissions.Reservations.AddHistory));
+    options.AddPolicy(Permissions.Reservations.GenerateContract, p => p.RequireClaim("Permission", Permissions.Reservations.GenerateContract));
+
+    // Reports
+    options.AddPolicy(Permissions.Reports.View, p => p.RequireClaim("Permission", Permissions.Reports.View));
+
+    // Contracts
+    options.AddPolicy(Permissions.Contracts.Generate, p => p.RequireClaim("Permission", Permissions.Contracts.Generate));
+
+    // Menus
+    options.AddPolicy(Permissions.Menus.Add, p => p.RequireClaim("Permission", Permissions.Menus.Add));
+    options.AddPolicy(Permissions.Menus.AssignToRole, p => p.RequireClaim("Permission", Permissions.Menus.AssignToRole));
+    options.AddPolicy(Permissions.Menus.ViewByRole, p => p.RequireClaim("Permission", Permissions.Menus.ViewByRole));
+    options.AddPolicy(Permissions.Menus.Manage, p => p.RequireClaim("Permission", Permissions.Menus.Manage));
+
+    // Payments
+    options.AddPolicy(Permissions.Payments.Add, p => p.RequireClaim("Permission", Permissions.Payments.Add));
+    options.AddPolicy(Permissions.Payments.Confirm, p => p.RequireClaim("Permission", Permissions.Payments.Confirm));
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
@@ -90,6 +146,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))

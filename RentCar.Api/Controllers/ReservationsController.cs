@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.DTOs.Reservations;
 using RentCar.Application.Features.Contracts.Commands;
 using RentCar.Application.Features.Reservations.Commands;
@@ -22,6 +24,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = Permissions.Reservations.Create)]
         public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
         {
             var reservationId = await _mediator.Send(command);
@@ -74,6 +77,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPut("{id}/approve")]
+        [Authorize(Policy = Permissions.Reservations.Approve)]
         public async Task<IActionResult> Approve(int id, [FromQuery] int approvedBy)
         {
             var success = await _mediator.Send(new ApproveReservationCommand(id, approvedBy));
@@ -115,6 +119,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("report/list")]
+        [Authorize(Policy = AuthorizationPolicies.ViewReports)]
         public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
         {
             var pdf = await _reportService.GenerateReservationListReport(from, to, businessId);
@@ -122,6 +127,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("report/income")]
+        [Authorize(Policy = AuthorizationPolicies.ViewReports)]
         public async Task<IActionResult> GetIncomeReport(DateTime from, DateTime to)
         {
             var pdf = await _reportService.GenerateIncomeReport(from, to);
@@ -129,6 +135,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("report/pending")]
+        [Authorize(Policy = AuthorizationPolicies.ViewReports)]
         public async Task<IActionResult> GetPendingReservationsReport()
         {
             var pdf = await _reportService.GeneratePendingReservationsReport();

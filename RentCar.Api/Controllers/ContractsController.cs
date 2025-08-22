@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Contracts.Commands;
 
 namespace RentCar.Api.Controllers
@@ -16,6 +18,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost("generate")]
+        [Authorize(Policy = Permissions.Contracts.Generate)]
         public async Task<IActionResult> Generate([FromBody] GenerateContractCommand command)
         {
             var contractId = await _mediator.Send(command);

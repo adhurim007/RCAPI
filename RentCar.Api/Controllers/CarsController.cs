@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Handlers;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
@@ -19,6 +20,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = Permissions.Cars.Create)]
         [Authorize(Roles = "Business")]  
         public async Task<IActionResult> Create([FromBody] CreateCarCommand command)
         {
@@ -30,7 +32,8 @@ namespace RentCar.Api.Controllers
         }
           
         [HttpGet]
-        [AllowAnonymous]  
+        [AllowAnonymous]
+        [Authorize(Policy = Permissions.Cars.View)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllCarsQuery());
@@ -38,6 +41,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = Permissions.Cars.View)]
         public async Task<IActionResult> GetById(int id)
         {
             var car = await _mediator.Send(new GetCarByIdQuery(id));
@@ -46,6 +50,7 @@ namespace RentCar.Api.Controllers
 
         [HttpPut("images/{imageId}")]
         [Authorize(Roles = "Business,Admin")]
+        [Authorize(Policy = Permissions.Cars.Update)]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] IFormFile file)
         {
             if (file == null)
@@ -57,6 +62,7 @@ namespace RentCar.Api.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = Permissions.Cars.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCarCommand { Id = id });
@@ -68,6 +74,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("by-business/{businessId}")]
+        [Authorize(Policy = Permissions.Cars.View)]
         public async Task<IActionResult> GetByBusinessId(int businessId)
         {
             var cars = await _mediator.Send(new GetCarsByBusinessIdQuery { BusinessId = businessId });
@@ -75,6 +82,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPut("{id}/availability")]
+        [Authorize(Policy = Permissions.Cars.Update)]
         public async Task<IActionResult> SetAvailability(int id, [FromBody] bool isAvailable)
         {
             var result = await _mediator.Send(new SetCarAvailabilityCommand
@@ -91,6 +99,7 @@ namespace RentCar.Api.Controllers
 
         [HttpPost("{carId}/images")]
         [Authorize(Roles = "Business")]
+        [Authorize(Policy = Permissions.Cars.ManageImages)]
         public async Task<IActionResult> UploadImages(int carId, [FromForm] List<IFormFile> files)
         {
             var result = await _mediator.Send(new UploadCarImageCommand
@@ -103,6 +112,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpDelete("images/{imageId}")]
+        [Authorize(Policy = Permissions.Cars.ManageImages)]
         public async Task<IActionResult> DeleteImage(int imageId)
         {
             var result = await _mediator.Send(new DeleteCarImageCommand(imageId));

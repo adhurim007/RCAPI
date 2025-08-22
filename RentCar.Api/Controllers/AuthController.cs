@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RentCar.Application.Common.Identity;
+using RentCar.Application.DTOs.Auth;
+using RentCar.Application.Services;
 using RentCar.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,62 +16,45 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly IConfiguration _configuration;
+    private readonly AuthService _authService;
 
-    public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, RoleManager<IdentityRole<int>> roleManager)
+    public AuthController(UserManager<ApplicationUser> userManager, 
+        IConfiguration configuration, RoleManager<IdentityRole<int>> roleManager, AuthService authService)
     {
         _userManager = userManager;
         _configuration = configuration;
         _roleManager = roleManager;
+        _authService = authService;
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
-        var user = await _userManager.FindByNameAsync(request.Username);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-            return Unauthorized("Invalid credentials");
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            return Unauthorized();
 
-        var authClaims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        var userRoles = await _userManager.GetRolesAsync(user);
-        foreach (var role in userRoles)
-        {
-            authClaims.Add(new Claim(ClaimTypes.Role, role));
-
-            // Add role claims
-            var identityRole = await _roleManager.FindByNameAsync(role);
-            var roleClaims = await _roleManager.GetClaimsAsync(identityRole);
-            foreach (var claim in roleClaims)
-            {
-                authClaims.Add(claim);
-            }
-        }
-         
-        var jwtSettings = _configuration.GetSection("JwtSettings");
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-
-        var token = new JwtSecurityToken(
-            issuer: jwtSettings["Issuer"],
-            audience: jwtSettings["Audience"],
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["DurationInMinutes"])),
-            claims: authClaims,
-            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-        );
-
-        return Ok(new
-        {
-            token = new JwtSecurityTokenHandler().WriteToken(token),
-            expiration = token.ValidTo
-        });
+        var token = await _authService.GenerateJwtToken(user);
+        return Ok(new { Token = token });
     }
-}
+     
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDto model)
+    {
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        var result = await _userManager.CreateAsync(user, model.Password);
 
-public class LoginRequest
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        await _userManager.AddToRoleAsync(user, DefaultRoles.Client);
+        return Ok("User registered successfully");
+
+    }
+
+    public class LoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
 }

@@ -27,6 +27,9 @@ namespace RentCar.Persistence
         public DbSet<Location> Locations { get; set; }
         public DbSet<BusinessLocation> BusinessLocations { get; set; }
 
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<RoleMenu> RoleMenus { get; set; }
+
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -165,6 +168,18 @@ namespace RentCar.Persistence
                 .HasOne(h => h.ReservationStatus)
                 .WithMany()
                 .HasForeignKey(h => h.ReservationStatusId);
+          
+
+            modelBuilder.Entity<RoleMenu>()
+                 .HasOne(rm => rm.Menu)
+                 .WithMany(m => m.RoleMenus)
+                 .HasForeignKey(rm => rm.MenuId);
+
+            modelBuilder.Entity<RoleMenu>()
+                .HasOne(rm => rm.Role)
+                .WithMany() // Roles don’t need a collection of menus
+                .HasForeignKey(rm => rm.RoleId);
+
         }
     }
 }

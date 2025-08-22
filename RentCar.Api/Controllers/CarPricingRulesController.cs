@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Authorization;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
 
@@ -19,6 +20,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = Permissions.CarPricingRules.Create)]
         public async Task<IActionResult> Create([FromBody] CreateCarPricingRuleCommand command)
         {
             var result = await _mediator.Send(command);
@@ -26,6 +28,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = Permissions.CarPricingRules.Update)]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCarPricingRuleCommand command)
         {
             if (id != command.Id) return BadRequest("Id mismatch");
@@ -34,6 +37,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = Permissions.CarPricingRules.Delete)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _mediator.Send(new DeleteCarPricingRuleCommand(id));
@@ -42,6 +46,7 @@ namespace RentCar.Api.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize(Policy = Permissions.CarPricingRules.View)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var rule = await _mediator.Send(new GetCarPricingRuleByIdQuery(id));
@@ -49,6 +54,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("by-car/{carId}")]
+        [Authorize(Policy = Permissions.CarPricingRules.View)]
         public async Task<IActionResult> GetByCarId(int carId)
         {
             var rules = await _mediator.Send(new GetCarPricingRulesByCarIdQuery(carId));

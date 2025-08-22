@@ -39,6 +39,13 @@
     <ProjectReference Include="..\RentCar.Persistence\RentCar.Persistence.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Features\Menus\Validators\" />
+    <Folder Include="Features\Roles\Validators\" />
+    <Folder Include="Features\Users\Validators\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
