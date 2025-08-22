@@ -7,6 +7,7 @@ namespace RentCar.Domain.Entities
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
+        public string FullName { get; set; }
         public string Role { get; set; }
         public Client Client { get; set; }
         public Business Business { get; set; }

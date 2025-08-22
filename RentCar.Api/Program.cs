@@ -14,6 +14,7 @@ using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
 using RentCar.Infrastructure; 
 using RentCar.Persistence;
+using RentCar.Persistence.Identity;
 using RentCar.Persistence.Repositories;
 using System.Reflection;
 using System.Text;
@@ -57,11 +58,24 @@ builder.Services.AddSwaggerGen(opt =>
     opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>() // int PK
+//builder.Services.AddScoped<RoleSeeder>();
+
+var app = builder.Build();
+ 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    await RoleSeeder.SeedAsync(roleManager, userManager);
+} 
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
-
-// Add JWT
+ 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.AddAuthentication(options =>
 {
@@ -78,14 +92,12 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
     };
 });
 
-
-var app = builder.Build();
-
+builder.Services.AddAuthorization();
+ 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

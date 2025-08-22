@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; 
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Queries.CarBrandAndModel;
@@ -7,6 +8,7 @@ using RentCar.Domain.Entities;
 
 namespace RentCar.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CarModelsController : ControllerBase
