@@ -8,8 +8,9 @@ namespace RentCar.Domain.Entities
 {
     public class Contract
     {
-        public Guid Id { get; set; }
-        public Guid ReservationId { get; set; }
+        public int Id { get; set; }
+        public int ReservationId { get; set; }
+
         public string FileUrl { get; set; }
         public DateTime CreatedAt { get; set; }
 

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
 {
+
     public class Car
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Id { get; set; }
         public int BusinessId { get; set; }
         public int CarModelId { get; set; }
         public int CarTypeId { get; set; }
@@ -25,13 +26,14 @@ namespace RentCar.Domain.Entities
         public DateTime CreatedAt { get; set; }
 
         public Business Business { get; set; }
-        public CarModel CarModel { get; set; } 
+        public CarModel CarModel { get; set; }
         public CarType CarType { get; set; }
         public FuelType FuelType { get; set; }
         public Transmission Transmission { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<CarPricingRule> PricingRules { get; set; }
+        public ICollection<CarImage> Images { get; set; }
     }
 
 }

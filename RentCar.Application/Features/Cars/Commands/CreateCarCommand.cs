@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Cars.Commands
 {
-    public class CreateCarCommand : IRequest<Guid>
+    public class CreateCarCommand : IRequest<int>
     {
         public int BusinessId { get; set; }
         public int CarModelId { get; set; }

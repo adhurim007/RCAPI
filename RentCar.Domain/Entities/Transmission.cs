@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
-{
+{ 
     public class Transmission
     {
         public int Id { get; set; }

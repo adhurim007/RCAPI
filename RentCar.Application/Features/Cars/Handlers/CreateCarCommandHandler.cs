@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Cars.Handlers
 {
-    public class CreateCarCommandHandler : IRequestHandler<CreateCarCommand, Guid>
+    public class CreateCarCommandHandler : IRequestHandler<CreateCarCommand, int>
     {
         private readonly ICarRepository _carRepository;
 
@@ -19,10 +19,10 @@ namespace RentCar.Application.Features.Cars.Handlers
             _carRepository = carRepository;
         }
 
-        public async Task<Guid> Handle(CreateCarCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateCarCommand request, CancellationToken cancellationToken)
         {
             var car = new Car
-            { 
+            {  
                 BusinessId = request.BusinessId,
                 CarModelId = request.CarModelId,
                 CarTypeId = request.CarTypeId,
@@ -38,7 +38,9 @@ namespace RentCar.Application.Features.Cars.Handlers
             };
 
             await _carRepository.AddAsync(car);
+
             return car.Id;
         }
+ 
     }
 }

@@ -5,14 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
-{
+{ 
     public class Payment
     {
-        public Guid Id { get; set; }
-        public Guid ReservationId { get; set; }
+        public int Id { get; set; }
+        public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
+
         public decimal Amount { get; set; }
         public DateTime PaidAt { get; set; }
-        public string PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; } 
+        public bool IsConfirmed { get; set; }     
     }
+
 }
