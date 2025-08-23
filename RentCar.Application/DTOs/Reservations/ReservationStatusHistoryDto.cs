@@ -10,12 +10,12 @@ namespace RentCar.Application.DTOs.Reservations
     {
         public int Id { get; set; }
         public int ReservationId { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public int ReservationStatusId { get; set; }
         public DateTime ChangedAt { get; set; }
-        public string ReservationStatusName { get; set; } 
-        public string ChangedBy { get; set; }
-        public string Note { get; set; }
+        public string? ReservationStatusName { get; set; } 
+        public string? ChangedBy { get; set; }
+        public string? Note { get; set; }
     }
 
 }
