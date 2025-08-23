@@ -14,10 +14,10 @@ namespace RentCar.Application.DTOs.Reservations
         public int CarId { get; set; }
         public int ClientId { get; set; }
         public int BusinessId { get; set; }
-        public string CarModel { get; set; }
-        public string ClientName { get; set; }
-        public string BusinessName { get; set; }
-        public string Status { get; set; }
+        public string? CarModel { get; set; }
+        public string? ClientName { get; set; }
+        public string? BusinessName { get; set; }
+        public string? Status { get; set; }
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

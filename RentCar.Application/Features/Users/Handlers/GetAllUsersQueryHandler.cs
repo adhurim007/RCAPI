@@ -31,7 +31,7 @@ namespace RentCar.Application.Features.Users.Handlers
                 result.Add(new UserDto
                 {
                     Id = user.Id.ToString(),
-                    Email = user.Email,
+                    Email = user.Email ?? "",
                     Roles = roles.ToList()
                 });
             }

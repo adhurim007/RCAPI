@@ -22,7 +22,7 @@ namespace RentCar.Application.Features.Reservations.Handlers
             _context = context;
         }
 
-        public async Task<ReservationDetailsDto> Handle(GetReservationDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<ReservationDetailsDto?> Handle(GetReservationDetailsQuery request, CancellationToken cancellationToken)
         {
             var reservation = await _context.Reservations
                 .Include(r => r.Car).ThenInclude(c => c.CarModel)
