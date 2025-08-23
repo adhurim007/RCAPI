@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using RentCar.Application.DTOs;
+using RentCar.Application.DTOs.Cars;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
 using RentCar.Domain.Entities;
-using RentCar.Domain.Interfaces.Repositories; 
+using RentCar.Domain.Interfaces.Repositories;
 
 namespace RentCar.Application.Features.Cars.Handlers
 { 

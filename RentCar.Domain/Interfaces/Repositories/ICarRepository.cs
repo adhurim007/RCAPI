@@ -13,17 +13,17 @@ namespace RentCar.Domain.Interfaces.Repositories
         Task AddAsync(Car car);
         Task UpdateAsync(Car car);
         Task DeleteAsync(Car car);
-        Task<bool> ExistsAsync(Guid id);
-        Task<Car> GetByIdAsync(Guid id);
+        Task<bool> ExistsAsync(int id);
+        Task<Car> GetByIdAsync(int id);
         IQueryable<Car> Query();
-        Task UpdateCarImageAsync(Guid carId, string imageUrl);
-        Task<List<CarPricingRule>> GetByCarIdAsync(Guid carId); 
+        Task UpdateCarImageAsync(int carId, string imageUrl);
+        Task<List<CarPricingRule>> GetByCarIdAsync(int carId); 
         IQueryable<Car> GetQueryable();
 
-        Task<List<CarPricingRule>> GetPricingRulesAsync(Guid carId);
-        Task<CarPricingRule?> GetPricingRuleByIdAsync(Guid id);
+        Task<List<CarPricingRule>> GetPricingRulesAsync(int carId);
+        Task<CarPricingRule?> GetPricingRuleByIdAsync(int id);
         Task AddPricingRuleAsync(CarPricingRule rule);
         Task UpdatePricingRuleAsync(CarPricingRule rule);
-        Task DeletePricingRuleAsync(Guid id);
+        Task DeletePricingRuleAsync(int id);
     }
 }

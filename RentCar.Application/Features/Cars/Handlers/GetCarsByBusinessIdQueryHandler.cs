@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using RentCar.Application.DTOs;
-using RentCar.Application.Features.Cars.Commands; 
-using RentCar.Domain.Interfaces.Repositories; 
+using RentCar.Application.DTOs.Cars;
+using RentCar.Application.Features.Cars.Queries.GetAllCars;
+using RentCar.Domain.Interfaces.Repositories;
 namespace RentCar.Application.Features.Cars.Handlers
 {
     public class GetCarsByBusinessIdQueryHandler : IRequestHandler<GetCarsByBusinessIdQuery, List<CarDto>>

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
 {
+
     public class ReservationStatus
     {
         public int Id { get; set; }
-        public string Name { get; set; }  
+        public string Name { get; set; }
     }
 }

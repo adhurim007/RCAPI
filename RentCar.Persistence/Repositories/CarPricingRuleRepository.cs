@@ -14,12 +14,18 @@ namespace RentCar.Persistence.Repositories
     {
         public CarPricingRuleRepository(RentCarDbContext context) : base(context)
         {
-        }
-         
-        public Task<CarPricingRule?> GetByCarIdAsync(Guid carId)
+        } 
+        public async Task<List<CarPricingRule>> GetByCarIdAsync(int carId)
         {
-            return _context.CarPricingRules.FirstOrDefaultAsync(x => x.Id == carId);
+            return await _context.CarPricingRules
+                .Where(r => r.CarId == carId)
+                .ToListAsync();
         }
-    } 
-     
+
+        public Task<CarPricingRule> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

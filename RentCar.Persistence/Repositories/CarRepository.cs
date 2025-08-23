@@ -35,12 +35,12 @@ namespace RentCar.Persistence.Repositories
             _dbContext.Cars.Remove(car);
             await _dbContext.SaveChangesAsync();
         } 
-        public async Task<bool> ExistsAsync(Guid id)
+        public async Task<bool> ExistsAsync(int id)
         {
             return await _dbContext.Cars.AnyAsync(c => c.Id == id);
         }
 
-        public async Task<Car?> GetByIdAsync(Guid id)
+        public async Task<Car?> GetByIdAsync(int id)
         {
             return await _dbContext.Cars
                 .Include(c => c.CarModel)
@@ -53,7 +53,7 @@ namespace RentCar.Persistence.Repositories
             return _dbContext.Cars.AsQueryable();
         }
          
-        public async Task UpdateCarImageAsync(Guid carId, string imageUrl)
+        public async Task UpdateCarImageAsync(int carId, string imageUrl)
         {
             var car = await _dbContext.Cars.FindAsync(carId);
             if (car == null) throw new Exception("Car not found");
@@ -69,17 +69,17 @@ namespace RentCar.Persistence.Repositories
                     .ThenInclude(m => m.CarBrand); 
         }
 
-        public Task<List<CarPricingRule>> GetByCarIdAsync(Guid carId)
+        public Task<List<CarPricingRule>> GetByCarIdAsync(int carId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<CarPricingRule>> GetPricingRulesAsync(Guid carId)
+        public async Task<List<CarPricingRule>> GetPricingRulesAsync(int carId)
         {
             return await _dbContext.CarPricingRules.Where(r => r.CarId == carId).ToListAsync();
         }
 
-        public async Task<CarPricingRule?> GetPricingRuleByIdAsync(Guid id)
+        public async Task<CarPricingRule?> GetPricingRuleByIdAsync(int id)
         {
             return await _dbContext.CarPricingRules.FindAsync(id);
         }
@@ -94,7 +94,7 @@ namespace RentCar.Persistence.Repositories
             _dbContext.CarPricingRules.Update(rule);
         }
 
-        public async Task DeletePricingRuleAsync(Guid id)
+        public async Task DeletePricingRuleAsync(int id)
         {
             var rule = await _dbContext.CarPricingRules.FindAsync(id);
             if (rule != null)

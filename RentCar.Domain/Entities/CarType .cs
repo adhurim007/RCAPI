@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
 {
-    public class CarType // SUV, Sedan, etc.
+    public class CarType
     {
         public int Id { get; set; }
         public string Name { get; set; }
