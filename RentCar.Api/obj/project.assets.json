@@ -1929,7 +1929,7 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.19",
           "Microsoft.EntityFrameworkCore": "8.0.19",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.19",
-          "RentCar.Domain": "1.0.0"
+          "RentCar.Persistence": "1.0.0"
         },
         "compile": {
           "bin/placeholder/RentCar.Application.dll": {}
@@ -1963,7 +1963,8 @@
           "Microsoft.EntityFrameworkCore": "8.0.19",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.19",
           "RentCar.Application": "1.0.0",
-          "RentCar.Domain": "1.0.0"
+          "RentCar.Domain": "1.0.0",
+          "RentCar.Persistence": "1.0.0"
         },
         "compile": {
           "bin/placeholder/RentCar.Infrastructure.dll": {}
@@ -1980,7 +1981,6 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.19",
           "Microsoft.EntityFrameworkCore": "8.0.19",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.19",
-          "RentCar.Application": "1.0.0",
           "RentCar.Domain": "1.0.0"
         },
         "compile": {
