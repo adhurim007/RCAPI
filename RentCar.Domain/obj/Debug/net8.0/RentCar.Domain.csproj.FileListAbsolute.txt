@@ -24,3 +24,7 @@ E:\RCAPI\RentCar.Domain\obj\Debug\net8.0\refint\RentCar.Domain.dll
 E:\RCAPI\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.pdb
 E:\RCAPI\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.genruntimeconfig.cache
 E:\RCAPI\RentCar.Domain\obj\Debug\net8.0\ref\RentCar.Domain.dll
+C:\github\rentacar\RentCar.Domain\bin\Debug\net8.0\RentCar.Domain.runtimeconfig.json
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.csproj.AssemblyReference.cache
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.sourcelink.json
+C:\github\rentacar\RentCar.Domain\obj\Debug\net8.0\RentCar.Domain.genruntimeconfig.cache
