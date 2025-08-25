@@ -32,6 +32,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.8.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
   </ItemGroup>
 
 
@@ -41,6 +43,8 @@
 
 
   <ItemGroup>
+    <Folder Include="Features\Audit\Commands\" />
+    <Folder Include="Features\Dashboard\Commands\" />
     <Folder Include="Features\Menus\Validators\" />
     <Folder Include="Features\Roles\Validators\" />
     <Folder Include="Features\Users\Validators\" />

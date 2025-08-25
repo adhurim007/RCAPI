@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RentCar.Application.Features.Reservations.Commands;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.Notifications;
 using RentCar.Domain.Entities;
 using RentCar.Persistence;
 using System;
@@ -16,11 +17,17 @@ namespace RentCar.Application.Features.Reservations.Handlers
     {
         private readonly RentCarDbContext _context;
         private readonly IReservationValidator _validator;
+        private readonly INotificationService _notificationService;
 
-        public CreateReservationCommandHandler(RentCarDbContext context, IReservationValidator validator)
+        public CreateReservationCommandHandler(
+            RentCarDbContext context, 
+            IReservationValidator validator, 
+            INotificationService notificationService)
         {
             _context = context;
             _validator = validator;
+            _notificationService = notificationService;
+
         }
 
         public async Task<int> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
@@ -75,6 +82,20 @@ namespace RentCar.Application.Features.Reservations.Handlers
              
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync(cancellationToken);
+
+
+            await _notificationService.SendEmailAsync(
+                "client@email.com", // look up from client entity
+                "Reservation Created",
+                $"Your reservation #{reservation.Id} has been created and is pending approval."
+            );
+
+            // Send notification to business
+            await _notificationService.SendEmailAsync(
+                "business@email.com", // look up from business entity
+                "New Reservation",
+                $"A new reservation #{reservation.Id} has been made for your car."
+            );
 
             return reservation.Id;
         }

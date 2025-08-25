@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RentCar.Application.Auditing;
 using RentCar.Application.Features.Cars.Commands; 
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces.Repositories;
@@ -13,10 +14,12 @@ namespace RentCar.Application.Features.Cars.Handlers
     public class CreateCarCommandHandler : IRequestHandler<CreateCarCommand, int>
     {
         private readonly ICarRepository _carRepository;
+        private readonly IAuditLogService _auditLogService;
 
-        public CreateCarCommandHandler(ICarRepository carRepository)
+        public CreateCarCommandHandler(ICarRepository carRepository, IAuditLogService auditLogService)
         {
             _carRepository = carRepository;
+            _auditLogService = auditLogService;
         }
 
         public async Task<int> Handle(CreateCarCommand request, CancellationToken cancellationToken)
@@ -38,6 +41,8 @@ namespace RentCar.Application.Features.Cars.Handlers
             };
 
             await _carRepository.AddAsync(car);
+
+            await _auditLogService.LogAsync("Create", "Car", car.Id.ToString(), car);
 
             return car.Id;
         }

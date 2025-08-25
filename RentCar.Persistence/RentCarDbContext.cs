@@ -25,10 +25,11 @@ namespace RentCar.Persistence
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<CarPricingRule> CarPricingRules { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<BusinessLocation> BusinessLocations { get; set; }
-
+        public DbSet<BusinessLocation> BusinessLocations { get; set; } 
         public DbSet<Menu> Menus { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 

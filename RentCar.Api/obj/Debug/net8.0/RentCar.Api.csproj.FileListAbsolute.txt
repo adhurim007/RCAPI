@@ -286,7 +286,6 @@ E:\RCAPI\RentCar.Api\bin\Debug\net8.0\zh-Hant\System.ServiceModel.Primitives.res
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\RentCar.Api.csproj.AssemblyReference.cache
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\RentCar.Api.GeneratedMSBuildEditorConfig.editorconfig
@@ -576,3 +575,12 @@ C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\refint\RentCar.Api.dll
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\RentCar.Api.pdb
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\RentCar.Api.genruntimeconfig.cache
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\ref\RentCar.Api.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.AspNetCore.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Serilog.Sinks.File.dll
