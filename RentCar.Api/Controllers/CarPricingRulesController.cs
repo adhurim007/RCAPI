@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentCar.Application.Authorization;
-using RentCar.Application.Features.Cars.Commands;
+using RentCar.Application.Features.CarPricingRules.Command;
+using RentCar.Application.Features.CarPricingRules.Queries;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
 
 namespace RentCar.Api.Controllers
@@ -29,7 +30,7 @@ namespace RentCar.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Policy = Permissions.CarPricingRules.Update)]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCarPricingRuleCommand command)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCarPricingRuleCommand command)
         {
             if (id != command.Id) return BadRequest("Id mismatch");
             var result = await _mediator.Send(command);
@@ -38,7 +39,7 @@ namespace RentCar.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Policy = Permissions.CarPricingRules.Delete)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCarPricingRuleCommand(id));
             return result ? NoContent() : NotFound();

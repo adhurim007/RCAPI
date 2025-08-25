@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using RentCar.Application.Features.Cars.Queries.GetAllCars;
 using RentCar.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using RentCar.Application.DTOs.Cars;
+using RentCar.Application.Features.CarPricingRules.Queries;
 
 namespace RentCar.Application.Features.Cars.Handlers
 {
@@ -24,8 +24,8 @@ namespace RentCar.Application.Features.Cars.Handlers
             {
                 Id = rule.Id,
                 CarId = rule.CarId,
-                StartDate = rule.FromDate,
-                EndDate = rule.ToDate,
+                StartDate = (DateTime)rule.FromDate,
+                EndDate = (DateTime)rule.ToDate,
                 PricePerDay = rule.PricePerDay
             }).ToList();
         }

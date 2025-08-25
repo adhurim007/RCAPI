@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RentCar.Application.Features.Cars.Commands;
+using RentCar.Application.Features.CarPricingRules.Command;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentCar.Application.Features.Cars.Handlers
+namespace RentCar.Application.Features.CarPricingRules.Handlers
 {
     public class CreateCarPricingRuleHandler : IRequestHandler<CreateCarPricingRuleCommand, int>
     {
@@ -24,9 +24,9 @@ namespace RentCar.Application.Features.Cars.Handlers
             var rule = new CarPricingRule
             { 
                 CarId = request.CarId,
-                FromDate = request.StartDate,
-                ToDate = request.EndDate,
-                Value = request.Price,
+                FromDate = (DateTime)request.FromDate,
+                ToDate = (DateTime)request.ToDate,
+                Value = request.PricePerDay,
                 RuleType = "Custom"  
             };
 

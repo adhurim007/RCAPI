@@ -12,6 +12,7 @@ using RentCar.Application.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
 using RentCar.Application.MultiTenancy;
 using RentCar.Application.Notifications;
+using RentCar.Application.Pricing;
 using RentCar.Application.Reports; 
 using RentCar.Application.Services;
 using RentCar.Domain.Entities;
@@ -40,6 +41,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
+builder.Services.AddScoped<IPricingEngine, PricingEngine>();
 
 builder.Services.AddAuthorization(options =>
 {

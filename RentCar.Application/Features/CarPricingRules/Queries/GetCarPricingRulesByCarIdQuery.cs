@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentCar.Application.Features.Cars.Queries.GetAllCars
+namespace RentCar.Application.Features.CarPricingRules.Queries
 {
-    public record GetCarPricingRuleByIdQuery(Guid Id) : IRequest<CarPricingRuleDto>;
+    public record GetCarPricingRulesByCarIdQuery(int CarId) : IRequest<List<CarPricingRuleDto>>;
 }
