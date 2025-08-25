@@ -7,8 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
+using RentCar.Application.Auditing;
 using RentCar.Application.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.MultiTenancy;
+using RentCar.Application.Notifications;
+using RentCar.Application.Pricing;
 using RentCar.Application.Reports; 
 using RentCar.Application.Services;
 using RentCar.Domain.Entities;
@@ -17,6 +21,7 @@ using RentCar.Infrastructure;
 using RentCar.Persistence;
 using RentCar.Persistence.Identity;
 using RentCar.Persistence.Repositories;
+using Serilog;
 using System.Reflection;
 using System.Text;
 
@@ -33,6 +38,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+
+builder.Services.AddScoped<IPricingEngine, PricingEngine>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -89,12 +98,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(Permissions.Payments.Confirm, p => p.RequireClaim("Permission", Permissions.Payments.Confirm));
 });
 
+builder.Services.AddScoped<INotificationService, EmailNotificationService>();
+
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
 builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
 builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
 builder.Services.AddScoped<ReportGenerator>();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
 
@@ -152,6 +165,13 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
     };
 });
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddAuthorization();
  

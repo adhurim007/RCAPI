@@ -225,6 +225,40 @@ namespace RentCar.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.AuditLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Changes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.Business", b =>
                 {
                     b.Property<int>("Id")
@@ -420,10 +454,14 @@ namespace RentCar.Persistence.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DaysOfWeek")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FromDate")
+                    b.Property<DateTime?>("FromDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("PricePerDay")
@@ -433,7 +471,7 @@ namespace RentCar.Persistence.Migrations
                     b.Property<string>("RuleType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ToDate")
+                    b.Property<DateTime?>("ToDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Value")
@@ -532,6 +570,44 @@ namespace RentCar.Persistence.Migrations
                     b.ToTable("FuelTypes");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Language");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Code = "en",
+                            IsActive = true,
+                            Name = "English"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Code = "sq",
+                            IsActive = true,
+                            Name = "Albanian"
+                        });
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -571,6 +647,34 @@ namespace RentCar.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.Payment", b =>
@@ -717,6 +821,32 @@ namespace RentCar.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RoleMenus");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId", "Key")
+                        .IsUnique()
+                        .HasFilter("[Key] IS NOT NULL");
+
+                    b.ToTable("Translation");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.Transmission", b =>
@@ -998,6 +1128,17 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.Translation", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Language", "Language")
+                        .WithMany("Translations")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Business");
@@ -1031,6 +1172,11 @@ namespace RentCar.Persistence.Migrations
             modelBuilder.Entity("RentCar.Domain.Entities.Client", b =>
                 {
                     b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.Language", b =>
+                {
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.Menu", b =>

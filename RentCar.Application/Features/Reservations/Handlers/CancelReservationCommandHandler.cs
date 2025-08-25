@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RentCar.Application.Features.Reservations.Commands;
+using RentCar.Application.Notifications;
 using RentCar.Domain.Entities;
 using RentCar.Persistence;
 using System;
@@ -14,10 +15,11 @@ namespace RentCar.Application.Features.Reservations.Handlers
     public class CancelReservationCommandHandler : IRequestHandler<CancelReservationCommand, bool>
     {
         private readonly RentCarDbContext _context;
-
-        public CancelReservationCommandHandler(RentCarDbContext context)
+        private readonly INotificationService _notificationService;
+        public CancelReservationCommandHandler(RentCarDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<bool> Handle(CancelReservationCommand request, CancellationToken cancellationToken)
@@ -63,6 +65,22 @@ namespace RentCar.Application.Features.Reservations.Handlers
             }
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            // Notify client
+            await _notificationService.SendEmailAsync(
+               "client@email.com",
+               "Reservation Canceled",
+               $"Your reservation #{reservation.Id} has been canceled. Reason: {request.Reason}"
+           );
+
+            // Notify business
+            await _notificationService.SendEmailAsync(
+                "business@email.com",
+                "Reservation Canceled",
+                $"Reservation #{reservation.Id} has been canceled by the client/admin. Reason: {request.Reason}"
+            );
+
+
             return true;
         }
     }

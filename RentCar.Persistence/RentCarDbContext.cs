@@ -25,18 +25,25 @@ namespace RentCar.Persistence
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<CarPricingRule> CarPricingRules { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<BusinessLocation> BusinessLocations { get; set; }
-
+        public DbSet<BusinessLocation> BusinessLocations { get; set; } 
         public DbSet<Menu> Menus { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<Language> Language { get; set; }
+        public DbSet<Translation> Translation { get; set; }
 
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); 
+            //modelBuilder.Entity<Car>().HasQueryFilter(c =>
+            //  !_tenantProvider.IsSuperAdmin() && _tenantProvider.GetBusinessId().HasValue
+            //      ? c.BusinessId == _tenantProvider.GetBusinessId()
+            //      : true);
 
-          
             modelBuilder.Entity<Client>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)
@@ -47,7 +54,10 @@ namespace RentCar.Persistence
                 .WithOne(u => u.Business)
                 .HasForeignKey<Business>(b => b.UserId);
 
-            // Car
+            modelBuilder.Entity<CarPricingRule>()
+               .Property(c => c.DaysOfWeek)
+               .HasPrecision(18, 2);
+             
             modelBuilder.Entity<Car>()
                 .Property(c => c.DailyPrice)
                 .HasPrecision(18, 2);
@@ -120,14 +130,12 @@ namespace RentCar.Persistence
             modelBuilder.Entity<Reservation>()
                 .Property(r => r.TotalPrice)
                 .HasPrecision(18, 2);
-
-           
+             
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.Reservation)
                 .WithOne(r => r.Contract)
                 .HasForeignKey<Contract>(c => c.ReservationId);
-
-          
+       
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Reservation)
                 .WithOne(r => r.Payment)
@@ -136,8 +144,7 @@ namespace RentCar.Persistence
             modelBuilder.Entity<Payment>()
                 .Property(p => p.Amount)
                 .HasPrecision(18, 2);
-
-            
+             
             modelBuilder.Entity<BusinessLocation>()
                 .HasOne(bl => bl.Business)
                 .WithMany(b => b.Locations)
@@ -177,8 +184,25 @@ namespace RentCar.Persistence
 
             modelBuilder.Entity<RoleMenu>()
                 .HasOne(rm => rm.Role)
-                .WithMany() // Roles don’t need a collection of menus
+                .WithMany()  
                 .HasForeignKey(rm => rm.RoleId);
+
+            modelBuilder.Entity<Language>()
+                .HasMany(l => l.Translations)
+                .WithOne(t => t.Language)
+                .HasForeignKey(t => t.LanguageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Keys should be unique per language
+            modelBuilder.Entity<Translation>()
+                .HasIndex(t => new { t.LanguageId, t.Key })
+                .IsUnique();
+
+            // Seed default language
+            modelBuilder.Entity<Language>().HasData(
+                new Language { Id = 1, Code = "en", Name = "English", IsActive = true },
+                new Language { Id = 2, Code = "sq", Name = "Albanian", IsActive = true }
+            );
 
         }
     }

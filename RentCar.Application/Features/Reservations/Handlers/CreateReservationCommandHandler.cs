@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using RentCar.Application.Features.Reservations.Commands;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.Notifications;
+using RentCar.Application.Pricing;
 using RentCar.Domain.Entities;
 using RentCar.Persistence;
 using System;
@@ -16,15 +18,27 @@ namespace RentCar.Application.Features.Reservations.Handlers
     {
         private readonly RentCarDbContext _context;
         private readonly IReservationValidator _validator;
-
-        public CreateReservationCommandHandler(RentCarDbContext context, IReservationValidator validator)
+        private readonly INotificationService _notificationService;
+        private readonly IPricingEngine _pricingEngine;
+        public CreateReservationCommandHandler(
+            RentCarDbContext context, 
+            IReservationValidator validator, 
+            INotificationService notificationService,
+            IPricingEngine pricingEngine
+             )
         {
             _context = context;
             _validator = validator;
+            _notificationService = notificationService;
+            _pricingEngine = pricingEngine;
+
         }
 
         public async Task<int> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
+            // calculate total price using pricing engine
+            var totalPrice = await _pricingEngine.CalculateReservationPrice(request.CarId, request.StartDate, request.EndDate);
+
             var reservation = new Reservation
             {
                 CarId = request.CarId,
@@ -32,10 +46,11 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 BusinessId = request.BusinessId,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
-                ReservationStatusId = 1 
+                TotalPrice = totalPrice,
+                ReservationStatusId = 1  
             };
 
-         
+
             var (isValid, errorMessage) = await _validator.ValidateAsync(reservation);
             if (!isValid)
                 throw new InvalidOperationException(errorMessage);
@@ -49,8 +64,7 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 throw new InvalidOperationException("Car not found.");
 
             int days = (reservation.EndDate - reservation.StartDate).Days;
-            decimal totalPrice = 0;
-
+            
             for (int i = 0; i < days; i++)
             {
                 var currentDate = reservation.StartDate.AddDays(i);
@@ -75,6 +89,20 @@ namespace RentCar.Application.Features.Reservations.Handlers
              
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync(cancellationToken);
+
+
+            await _notificationService.SendEmailAsync(
+                "client@email.com", // look up from client entity
+                "Reservation Created",
+                $"Your reservation #{reservation.Id} has been created and is pending approval."
+            );
+
+            // Send notification to business
+            await _notificationService.SendEmailAsync(
+                "business@email.com", // look up from business entity
+                "New Reservation",
+                $"A new reservation #{reservation.Id} has been made for your car."
+            );
 
             return reservation.Id;
         }

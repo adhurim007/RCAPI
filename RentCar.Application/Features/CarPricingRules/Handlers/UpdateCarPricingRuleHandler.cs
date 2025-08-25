@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RentCar.Application.Features.Cars.Commands;
+using RentCar.Application.Features.CarPricingRules.Command;
 using RentCar.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RentCar.Application.Features.Cars.Handlers
+namespace RentCar.Application.Features.CarPricingRules.Handlers
 {
     public class UpdateCarPricingRuleHandler : IRequestHandler<UpdateCarPricingRuleCommand, bool>
     {
@@ -23,9 +23,9 @@ namespace RentCar.Application.Features.Cars.Handlers
             var rule = await _unitOfWork.CarPricingRules.GetByIdAsync(request.Id);
             if (rule == null) return false;
 
-            rule.FromDate = request.StartDate;
-            rule.ToDate = request.EndDate;
-            rule.Value = request.Price;
+            rule.FromDate = (DateTime)request.FromDate;
+            rule.ToDate = (DateTime)request.ToDate;
+            rule.Value = request.PricePerDay;
 
             _unitOfWork.CarPricingRules.Update(rule);
             await _unitOfWork.SaveChangesAsync();
