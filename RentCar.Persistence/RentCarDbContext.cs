@@ -51,7 +51,10 @@ namespace RentCar.Persistence
                 .WithOne(u => u.Business)
                 .HasForeignKey<Business>(b => b.UserId);
 
-        
+            modelBuilder.Entity<CarPricingRule>()
+               .Property(c => c.DaysOfWeek)
+               .HasPrecision(18, 2);
+             
             modelBuilder.Entity<Car>()
                 .Property(c => c.DailyPrice)
                 .HasPrecision(18, 2);
