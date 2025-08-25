@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\RCAPI\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj": {}
+    "C:\\github\\rentacar\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj": {}
   },
   "projects": {
-    "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj": {
+    "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj",
+        "projectUniqueName": "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj",
         "projectName": "RentCar.Application",
-        "projectPath": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj",
-        "packagesPath": "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\",
-        "outputPath": "E:\\RCAPI\\RentCar.Application\\obj\\",
+        "projectPath": "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\github\\rentacar\\RentCar.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\adhurim.sulejmani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,15 +27,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj"
+              "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+                "projectPath": "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj"
               }
             }
           }
@@ -71,9 +71,33 @@
               "target": "Package",
               "version": "[13.0.0, )"
             },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.19, )"
+              "version": "[8.0.4, )"
+            },
+            "Microsoft.CodeAnalysis.CSharp": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Microsoft.CodeAnalysis.CSharp.Workspaces": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Microsoft.CodeAnalysis.Common": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "Microsoft.CodeAnalysis.VisualBasic": {
+              "target": "Package",
+              "version": "[4.8.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -94,6 +118,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.19, )"
+            },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2025.7.0, )"
+            },
+            "ReportViewerCore.NETCore": {
+              "target": "Package",
+              "version": "[15.1.26, )"
             }
           },
           "imports": [
@@ -116,20 +148,21 @@
         }
       }
     },
-    "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
+    "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj",
+        "projectUniqueName": "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj",
         "projectName": "RentCar.Domain",
-        "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj",
-        "packagesPath": "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\",
-        "outputPath": "E:\\RCAPI\\RentCar.Domain\\obj\\",
+        "projectPath": "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\github\\rentacar\\RentCar.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\adhurim.sulejmani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -138,7 +171,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -167,9 +199,13 @@
               "target": "Package",
               "version": "[2.2.4, )"
             },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.19, )"
+              "version": "[8.0.4, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -216,20 +252,21 @@
         }
       }
     },
-    "E:\\RCAPI\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj": {
+    "C:\\github\\rentacar\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\RCAPI\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj",
+        "projectUniqueName": "C:\\github\\rentacar\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj",
         "projectName": "RentCar.Infrastructure",
-        "projectPath": "E:\\RCAPI\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\",
-        "outputPath": "E:\\RCAPI\\RentCar.Infrastructure\\obj\\",
+        "projectPath": "C:\\github\\rentacar\\RentCar.Infrastructure\\RentCar.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\github\\rentacar\\RentCar.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\adhurim.sulejmani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -238,21 +275,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj"
+              "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj": {
+                "projectPath": "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj"
               },
-              "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj"
+              "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj": {
+                "projectPath": "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj"
               },
-              "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj"
+              "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+                "projectPath": "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj"
               }
             }
           }
@@ -273,9 +309,21 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Hosting": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.AspNetCore.Hosting.Server.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.19, )"
+              "version": "[8.0.4, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -310,6 +358,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
@@ -318,20 +369,21 @@
         }
       }
     },
-    "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+    "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj",
+        "projectUniqueName": "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj",
         "projectName": "RentCar.Persistence",
-        "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj",
-        "packagesPath": "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\",
-        "outputPath": "E:\\RCAPI\\RentCar.Persistence\\obj\\",
+        "projectPath": "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "C:\\github\\rentacar\\RentCar.Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\adhurim.sulejmani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -340,15 +392,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj": {
-                "projectPath": "E:\\RCAPI\\RentCar.Domain\\RentCar.Domain.csproj"
+              "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj": {
+                "projectPath": "C:\\github\\rentacar\\RentCar.Domain\\RentCar.Domain.csproj"
               }
             }
           }
@@ -373,13 +424,13 @@
               "target": "Package",
               "version": "[6.5.1, )"
             },
+            "Microsoft.AspNetCore.Hosting.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.19, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[8.0.19, )"
+              "version": "[8.0.4, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
