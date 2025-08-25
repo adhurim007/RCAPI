@@ -16,7 +16,7 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
-        // ADMIN Dashboard
+        // Admin dashboard summary
         [HttpGet("admin")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetAdminDashboard()
@@ -25,13 +25,29 @@ namespace RentCar.Api.Controllers
             return Ok(result);
         }
 
-        // BUSINESS Dashboard
+        // Business dashboard summary
         [HttpGet("business/{businessId}")]
         [Authorize(Roles = "Business")]
         public async Task<IActionResult> GetBusinessDashboard(int businessId)
         {
             var result = await _mediator.Send(new GetBusinessDashboardQuery(businessId));
             return Ok(result);
+        }
+
+        // 📊 Reservations per month
+        [HttpGet("reservations-per-month")]
+        public async Task<IActionResult> GetReservationsPerMonth([FromQuery] int? businessId)
+        {
+            var stats = await _mediator.Send(new GetReservationsPerMonthQuery(businessId));
+            return Ok(stats);
+        }
+
+        // 💰 Income per month
+        [HttpGet("income-per-month")]
+        public async Task<IActionResult> GetIncomePerMonth([FromQuery] int? businessId)
+        {
+            var stats = await _mediator.Send(new GetIncomePerMonthQuery(businessId));
+            return Ok(stats);
         }
     }
 }

@@ -10,6 +10,7 @@ using RentCar.Application;
 using RentCar.Application.Auditing;
 using RentCar.Application.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.MultiTenancy;
 using RentCar.Application.Notifications;
 using RentCar.Application.Reports; 
 using RentCar.Application.Services;
@@ -35,6 +36,9 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
 
 builder.Services.AddAuthorization(options =>
