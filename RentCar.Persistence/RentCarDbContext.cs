@@ -31,6 +31,9 @@ namespace RentCar.Persistence
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<Language> Language { get; set; }
+        public DbSet<Translation> Translation { get; set; }
+
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -183,6 +186,23 @@ namespace RentCar.Persistence
                 .HasOne(rm => rm.Role)
                 .WithMany()  
                 .HasForeignKey(rm => rm.RoleId);
+
+            modelBuilder.Entity<Language>()
+                .HasMany(l => l.Translations)
+                .WithOne(t => t.Language)
+                .HasForeignKey(t => t.LanguageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Keys should be unique per language
+            modelBuilder.Entity<Translation>()
+                .HasIndex(t => new { t.LanguageId, t.Key })
+                .IsUnique();
+
+            // Seed default language
+            modelBuilder.Entity<Language>().HasData(
+                new Language { Id = 1, Code = "en", Name = "English", IsActive = true },
+                new Language { Id = 2, Code = "sq", Name = "Albanian", IsActive = true }
+            );
 
         }
     }
