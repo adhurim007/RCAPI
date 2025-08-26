@@ -314,6 +314,7 @@ E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.deps.json
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.runtimeconfig.json
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.pdb
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.xml
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\AutoMapper.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\Azure.Core.dll
@@ -578,6 +579,7 @@ E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.development.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar..C350BB2D.Up2Date
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\refint\RentCar.Api.dll

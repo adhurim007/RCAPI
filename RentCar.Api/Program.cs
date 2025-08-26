@@ -1,23 +1,23 @@
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
 using RentCar.Application.Auditing;
 using RentCar.Application.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
+using RentCar.Application.Localization;
 using RentCar.Application.MultiTenancy;
 using RentCar.Application.Notifications;
 using RentCar.Application.Pricing;
-using RentCar.Application.Reports; 
+using RentCar.Application.Reports;
 using RentCar.Application.Services;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
-using RentCar.Infrastructure; 
+using RentCar.Infrastructure;
 using RentCar.Persistence;
 using RentCar.Persistence.Identity;
 using RentCar.Persistence.Repositories;
@@ -27,6 +27,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ----------------- Logging -----------------
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+// ----------------- Services -----------------
 
 builder.Services.AddDbContext<RentCarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -34,14 +43,16 @@ builder.Services.AddDbContext<RentCarDbContext>(options =>
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
 
+// ✅ Use Identity with GUID everywhere
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
-
 builder.Services.AddScoped<IPricingEngine, PricingEngine>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ILocalizationService, CachedLocalizationService>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -99,14 +110,11 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
-
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
 builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
 builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
 builder.Services.AddScoped<ReportGenerator>();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
@@ -123,28 +131,54 @@ builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "RentCar API", Version = "v1" });
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    // 🔒 Safe XML docs inclusion
+    try
+    {
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+        if (File.Exists(xmlPath))
+        {
+            opt.IncludeXmlComments(xmlPath);
+        }
+        else
+        {
+            Console.WriteLine($"⚠️ Swagger XML file not found at {xmlPath}, skipping XML comments.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Swagger XML include failed: {ex.Message}");
+    }
+
+    // ✅ Swagger JWT support
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
-//builder.Services.AddScoped<RoleSeeder>();
 
-var app = builder.Build();
- 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
 
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-    await RoleSeeder.SeedAsync(roleManager, userManager);
-} 
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
-    .AddEntityFrameworkStores<RentCarDbContext>()
-    .AddDefaultTokenProviders();
- 
+// ✅ JWT Authentication (before app.Build)
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.AddAuthentication(options =>
 {
@@ -166,15 +200,19 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
+// ----------------- Build -----------------
+var app = builder.Build();
 
-builder.Host.UseSerilog();
+// ✅ Role seeding
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    await RoleSeeder.SeedAsync(roleManager, userManager);
+}
 
-builder.Services.AddAuthorization();
- 
+// ----------------- Middleware -----------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -183,6 +221,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

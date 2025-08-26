@@ -48,17 +48,17 @@ namespace RentCar.Api.Controllers
             return Ok(car);
         }
 
-        [HttpPut("images/{imageId}")]
-        [Authorize(Roles = "Business,Admin")]
-        [Authorize(Policy = Permissions.Cars.Update)]
-        public async Task<IActionResult> UpdateImage(int imageId, [FromForm] IFormFile file)
-        {
-            if (file == null)
-                return BadRequest("Image file is required.");
+        //[HttpPut("images/{imageId}")]
+        //[Authorize(Roles = "Business,Admin")] 
+        //[Authorize(Policy = Permissions.Cars.Update)]
+        //public async Task<IActionResult> UpdateImage(int imageId, [FromForm] IFormFile file)
+        //{
+        //    if (file == null)
+        //        return BadRequest("Image file is required.");
 
-            var result = await _mediator.Send(new UpdateCarImageCommand(imageId, file));
-            return Ok(result);
-        }
+        //    var result = await _mediator.Send(new UpdateCarImageCommand(imageId, file));
+        //    return Ok(result);
+        //}
 
 
         [HttpDelete("{id}")]
