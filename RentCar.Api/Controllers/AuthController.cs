@@ -14,12 +14,12 @@ using System.Text;
 public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole<int>> _roleManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly AuthService _authService;
 
-    public AuthController(UserManager<ApplicationUser> userManager, 
-        IConfiguration configuration, RoleManager<IdentityRole<int>> roleManager, AuthService authService)
+    public AuthController(UserManager<ApplicationUser> userManager,
+        IConfiguration configuration, RoleManager<IdentityRole<Guid>> roleManager, AuthService authService)
     {
         _userManager = userManager;
         _configuration = configuration;
@@ -27,17 +27,26 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+
     [HttpPost("signin")]
     public async Task<IActionResult> Login([FromBody] LoginDto model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            return Unauthorized();
+            return Unauthorized(new { message = "Wrong email or password" });
 
         var token = await _authService.GenerateJwtToken(user);
-        return Ok(new { Token = token });
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return Ok(new
+        {
+            Token = token,
+            Email = user.Email,
+            Roles = roles
+        });
     }
-     
+
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto model)
     {
