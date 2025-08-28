@@ -22,12 +22,12 @@ using RentCar.Persistence;
 using RentCar.Persistence.Identity;
 using RentCar.Persistence.Repositories;
 using Serilog;
+using System;
 using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ----------------- Logging -----------------
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
@@ -35,15 +35,11 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// ----------------- Services -----------------
-
 builder.Services.AddDbContext<RentCarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
-
-// ✅ Use Identity with GUID everywhere
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<RentCarDbContext>()
     .AddDefaultTokenProviders();
@@ -108,7 +104,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(Permissions.Payments.Add, p => p.RequireClaim("Permission", Permissions.Payments.Add));
     options.AddPolicy(Permissions.Payments.Confirm, p => p.RequireClaim("Permission", Permissions.Payments.Confirm));
 });
-
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
@@ -116,22 +111,17 @@ builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
 builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
 builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
-
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
-
 builder.Services.AddControllers()
     .AddFluentValidation(cfg =>
         cfg.RegisterValidatorsFromAssemblyContaining<AssemblyMarker>());
-
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "RentCar API", Version = "v1" });
-
-    // 🔒 Safe XML docs inclusion
     try
     {
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -149,8 +139,7 @@ builder.Services.AddSwaggerGen(opt =>
     {
         Console.WriteLine($"⚠️ Swagger XML include failed: {ex.Message}");
     }
-
-    // ✅ Swagger JWT support
+    
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
@@ -175,10 +164,9 @@ builder.Services.AddSwaggerGen(opt =>
         }
     });
 });
+ 
+ 
 
-
-
-// ✅ JWT Authentication (before app.Build)
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -192,19 +180,24 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
     };
 });
+ 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
-builder.Services.AddAuthorization();
-
-// ----------------- Build -----------------
 var app = builder.Build();
-
-// ✅ Role seeding
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -213,7 +206,6 @@ using (var scope = app.Services.CreateScope())
     await RoleSeeder.SeedAsync(roleManager, userManager);
 }
 
-// ----------------- Middleware -----------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -221,10 +213,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
