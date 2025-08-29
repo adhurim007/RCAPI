@@ -36,6 +36,9 @@ namespace RentCar.Persistence
 
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); 
@@ -197,12 +200,34 @@ namespace RentCar.Persistence
             modelBuilder.Entity<Translation>()
                 .HasIndex(t => new { t.LanguageId, t.Key })
                 .IsUnique();
+             
 
             // Seed default language
             modelBuilder.Entity<Language>().HasData(
                 new Language { Id = 1, Code = "en", Name = "English", IsActive = true },
                 new Language { Id = 2, Code = "sq", Name = "Albanian", IsActive = true }
             );
+
+            // State -> Cities
+            modelBuilder.Entity<State>()
+                .HasMany(s => s.Cities)
+                .WithOne(c => c.State)
+                .HasForeignKey(c => c.StateId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Business -> State
+            modelBuilder.Entity<Business>()
+                .HasOne(b => b.State)
+                .WithMany()
+                .HasForeignKey(b => b.StateId)
+                .OnDelete(DeleteBehavior.Restrict); // 👈 prevent cascade
+
+            // Business -> City
+            modelBuilder.Entity<Business>()
+                .HasOne(b => b.City)
+                .WithMany()
+                .HasForeignKey(b => b.CityId)
+                .OnDelete(DeleteBehavior.Restrict); // 👈 prevent cascade
 
         }
     }
