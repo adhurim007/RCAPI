@@ -579,10 +579,10 @@ E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.json.cache
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.development.json
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar..C350BB2D.Up2Date
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\refint\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.pdb
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.genruntimeconfig.cache
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\ref\RentCar.Api.dll
+E:\RCAPI\RentCar.Api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

@@ -10,7 +10,6 @@ namespace RentCar.Domain.Entities
     {
         public int Id { get; set; }
         public Guid UserId { get; set; }
-
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
         public string ContactPhone { get; set; }
@@ -19,11 +18,19 @@ namespace RentCar.Domain.Entities
         public int? ApprovedBy { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
+        // 🔗 Location info
+        public int StateId { get; set; }
+        public State State { get; set; }
+
+        public int CityId { get; set; }
+        public City City { get; set; }
+
         public ApplicationUser User { get; set; }
         public ICollection<Car> Cars { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<BusinessLocation> Locations { get; set; }
     }
+
 
 
 }

@@ -113,9 +113,16 @@ builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
-builder.Services.AddControllers()
+builder.Services.AddControllers() 
     .AddFluentValidation(cfg =>
         cfg.RegisterValidatorsFromAssemblyContaining<AssemblyMarker>());
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddEndpointsApiExplorer();
