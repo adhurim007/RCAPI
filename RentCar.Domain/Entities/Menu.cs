@@ -1,34 +1,41 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentCar.Domain.Entities
 {
     public class Menu
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Route { get; set; } = string.Empty; // e.g. "/cars/list"
-        public string Icon { get; set; } = string.Empty;
 
-        // Role-based visibility
-        public ICollection<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
+        // Hierarchy
+        public int? ParentId { get; set; }
+        public Menu Parent { get; set; }
+        public ICollection<Menu> Children { get; set; } = new List<Menu>();
+
+        // Display
+        public string Title { get; set; } = string.Empty;
+        public string? Subtitle { get; set; }
+        public string? Type { get; set; } // e.g. "basic", "group", "collapsable" (Fuse navigation)
+        public string? Icon { get; set; }
+        public string? Link { get; set; }
+
+        // Behavior
+        public bool HasSubMenu { get; set; }
+        public string? Claim { get; set; } // Permission claim (Cars.View, Reservations.Manage, etc.)
+        public bool Active { get; set; } = true;
+        public int SortNumber { get; set; }
+
+        // Audit
+        public Guid? CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+        public Guid? LastModifiedBy { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
+        public Guid? DeletedBy { get; set; }
+        public DateTime? DeletedOn { get; set; }
+
+        // Role-based visibility 
     }
 
-    public class RoleMenu
-    {
-        public int Id { get; set; }
-
-        // Must match IdentityRole<Guid>
-        public Guid RoleId { get; set; }
-
-        public int MenuId { get; set; }
-
-        public Menu Menu { get; set; }
-
-        public IdentityRole<Guid> Role { get; set; }
-    }
+ 
 }

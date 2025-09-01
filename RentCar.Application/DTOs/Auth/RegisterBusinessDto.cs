@@ -10,16 +10,13 @@ namespace RentCar.Application.DTOs.Auth
     {
         public string FullName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-
-        public Guid? UserId { get; set; }   // 👈 nullable
-        public string? TaxId { get; set; }  // 👈 nullable
-
+        public string Password { get; set; } 
+        public Guid? UserId { get; set; }   
+        public string? TaxId { get; set; }   
         public string CompanyName { get; set; }
         public string ContactPhone { get; set; }
         public int CityId { get; set; }
         public int StateId { get; set; }
-    }
-
-
+        public string Address { get; set; }
+    } 
 }

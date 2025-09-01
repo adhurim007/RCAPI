@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Menus.Commands
 {
-    public record AssignMenuToRoleCommand(Guid RoleId, int MenuId) : IRequest<bool>;
+    public record AssignMenuToRoleCommand(int MenuId, Guid RoleId, string Claim) : IRequest<bool>;
 }

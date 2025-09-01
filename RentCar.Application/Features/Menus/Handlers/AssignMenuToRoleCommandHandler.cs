@@ -1,41 +1,36 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using RentCar.Application.Features.Menus.Commands;
 using RentCar.Domain.Entities;
 using RentCar.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace RentCar.Application.Features.Menus.Handlers
+public class AssignMenuToRoleCommandHandler : IRequestHandler<AssignMenuToRoleCommand, bool>
 {
-    public class AssignMenuToRoleCommandHandler : IRequestHandler<AssignMenuToRoleCommand, bool>
+    private readonly RentCarDbContext _context;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+
+    public AssignMenuToRoleCommandHandler(RentCarDbContext context, RoleManager<IdentityRole<Guid>> roleManager)
     {
-        private readonly RentCarDbContext _db;
+        _context = context;
+        _roleManager = roleManager;
+    }
 
-        public AssignMenuToRoleCommandHandler(RentCarDbContext db)
+    public async Task<bool> Handle(AssignMenuToRoleCommand request, CancellationToken cancellationToken)
+    {
+        var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
+        if (role == null) return false;
+
+        // Check if claim already exists
+        var existingClaims = await _roleManager.GetClaimsAsync(role);
+        if (existingClaims.Any(c => c.Type == "Permission" && c.Value == request.Claim))
         {
-            _db = db;
+            return false; // already assigned
         }
 
-        public async Task<bool> Handle(AssignMenuToRoleCommand request, CancellationToken cancellationToken)
-        {
-            var exists = _db.RoleMenus
-                .Any(rm => rm.RoleId == request.RoleId && rm.MenuId == request.MenuId);
-
-            if (exists) return false; // already assigned
-
-            var roleMenu = new RoleMenu
-            {
-                RoleId = request.RoleId,
-                MenuId = request.MenuId
-            };
-
-            _db.RoleMenus.Add(roleMenu);
-            await _db.SaveChangesAsync(cancellationToken);
-
-            return true;
-        }
+        // Add claim to role
+        var result = await _roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", request.Claim));
+        return result.Succeeded;
     }
 }

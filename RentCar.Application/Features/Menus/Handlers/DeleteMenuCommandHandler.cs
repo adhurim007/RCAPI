@@ -25,6 +25,7 @@ namespace RentCar.Application.Features.Menus.Handlers
 
             _context.Menus.Remove(menu);
             await _context.SaveChangesAsync(cancellationToken);
+
             return true;
         }
     }

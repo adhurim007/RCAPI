@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentCar.Persistence;
 
@@ -11,9 +12,11 @@ using RentCar.Persistence;
 namespace RentCar.Persistence.Migrations
 {
     [DbContext(typeof(RentCarDbContext))]
-    partial class RentCarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250901065827_AddressField")]
+    partial class AddressField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -669,57 +672,16 @@ namespace RentCar.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Claim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("HasSubMenu")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Link")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SortNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subtitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
+                    b.Property<string>("Route")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Menus");
                 });
@@ -873,6 +835,29 @@ namespace RentCar.Persistence.Migrations
                     b.HasIndex("ReservationStatusId");
 
                     b.ToTable("ReservationStatusHistories");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.RoleMenu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleMenus");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.State", b =>
@@ -1139,16 +1124,6 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Reservation");
                 });
 
-            modelBuilder.Entity("RentCar.Domain.Entities.Menu", b =>
-                {
-                    b.HasOne("RentCar.Domain.Entities.Menu", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("RentCar.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.Reservation", "Reservation")
@@ -1214,6 +1189,25 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("ReservationStatus");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.RoleMenu", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Menu", "Menu")
+                        .WithMany("RoleMenus")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.Translation", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.Language", "Language")
@@ -1267,7 +1261,7 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Menu", b =>
                 {
-                    b.Navigation("Children");
+                    b.Navigation("RoleMenus");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.Reservation", b =>

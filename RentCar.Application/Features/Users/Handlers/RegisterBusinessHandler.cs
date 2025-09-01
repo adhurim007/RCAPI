@@ -32,7 +32,7 @@ namespace RentCar.Application.Features.Users.Handlers
         {
             var dto = request.Dto;
 
-            // 1️⃣ Create ApplicationUser
+           
             var user = new ApplicationUser
             {
                 UserName = dto.Email,
@@ -46,22 +46,22 @@ namespace RentCar.Application.Features.Users.Handlers
                 throw new Exception(string.Join("; ", result.Errors.Select(e => e.Description)));
             }
 
-            // 2️⃣ Assign BusinessAdmin role
+          
             if (!await _roleManager.RoleExistsAsync("BusinessAdmin"))
             {
                 await _roleManager.CreateAsync(new IdentityRole<Guid>("BusinessAdmin"));
             }
             await _userManager.AddToRoleAsync(user, "BusinessAdmin");
-
-            // 3️⃣ Register Business
+             
             var business = new Business
             {
-                UserId = user.Id,  // ✅ Use created userId
+                UserId = user.Id,   
                 CompanyName = dto.CompanyName,
                 TaxId = dto.TaxId ?? string.Empty,
                 ContactPhone = dto.ContactPhone,
                 CityId = dto.CityId,
                 StateId = dto.StateId,
+                Address = dto.Address,
                 IsActive = true,
                 IsApproved = false
             };

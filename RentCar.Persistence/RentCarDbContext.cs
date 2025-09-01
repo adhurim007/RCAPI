@@ -26,8 +26,7 @@ namespace RentCar.Persistence
         public DbSet<CarPricingRule> CarPricingRules { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<BusinessLocation> BusinessLocations { get; set; } 
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<Menu> Menus { get; set; } 
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
@@ -178,18 +177,13 @@ namespace RentCar.Persistence
                 .HasOne(h => h.ReservationStatus)
                 .WithMany()
                 .HasForeignKey(h => h.ReservationStatusId);
-          
 
-            modelBuilder.Entity<RoleMenu>()
-                 .HasOne(rm => rm.Menu)
-                 .WithMany(m => m.RoleMenus)
-                 .HasForeignKey(rm => rm.MenuId);
-
-            modelBuilder.Entity<RoleMenu>()
-                .HasOne(rm => rm.Role)
-                .WithMany()  
-                .HasForeignKey(rm => rm.RoleId);
-
+            modelBuilder.Entity<Menu>()
+               .HasMany(m => m.Children)
+               .WithOne(m => m.Parent)
+               .HasForeignKey(m => m.ParentId)
+               .OnDelete(DeleteBehavior.Restrict);
+             
             modelBuilder.Entity<Language>()
                 .HasMany(l => l.Translations)
                 .WithOne(t => t.Language)
@@ -228,6 +222,9 @@ namespace RentCar.Persistence
                 .WithMany()
                 .HasForeignKey(b => b.CityId)
                 .OnDelete(DeleteBehavior.Restrict); // 👈 prevent cascade
+
+            modelBuilder.Entity<Business>()
+            .Property(c => c.Address);
 
         }
     }
