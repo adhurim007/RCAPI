@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
 using RentCar.Application.Auditing;
-using RentCar.Application.Authorization;
+using RentCar.Domain.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
 using RentCar.Application.Localization;
 using RentCar.Application.MultiTenancy;

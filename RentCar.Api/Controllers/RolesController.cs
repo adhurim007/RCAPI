@@ -8,7 +8,7 @@ namespace RentCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "SuperAdmin")] // only SuperAdmin can manage roles
+    //[Authorize(Roles = "SuperAdmin")] // only SuperAdmin can manage roles
     public class RolesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,7 +25,7 @@ namespace RentCar.Api.Controllers
             return success ? Ok("Role created successfully.") : BadRequest("Failed to create role.");
         }
 
-        [HttpGet]
+       [HttpGet("roles")]
         public async Task<IActionResult> GetAll()
         {
             var roles = await _mediator.Send(new GetAllRolesQuery());

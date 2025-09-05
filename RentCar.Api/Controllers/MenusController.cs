@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Application.Authorization;
+using RentCar.Domain.Authorization;
 using RentCar.Application.DTOs.MenuDto;
 using RentCar.Application.Features.Menus.Commands;
 using RentCar.Application.Features.Menus.Queries;
@@ -69,18 +69,7 @@ namespace RentCar.Api.Controllers
 
             return Ok(result);
         }
-
-        /// <summary>
-        /// Get menus assigned to a specific role
-        /// </summary>d
-        [HttpGet("by-role/{roleId}")]
-        [Authorize(Policy = Permissions.Menus.ViewByRole)]
-        public async Task<IActionResult> GetMenusByRole(Guid roleId)
-        {
-            var menus = await _mediator.Send(new GetMenusByRoleQuery(roleId));
-            return Ok(menus);
-        }
-
+  
         /// <summary>
         /// Assign a menu (claim) to a role
         /// </summary>
@@ -91,5 +80,15 @@ namespace RentCar.Api.Controllers
             var success = await _mediator.Send(command);
             return success ? Ok("Menu assigned to role.") : BadRequest("Menu already assigned or role not found.");
         }
+
+        [HttpGet("my-menus")]
+        //[Authorize] // must be logged in
+        public async Task<ActionResult<List<MenuDto>>> GetMyMenus()
+        {
+            var result = await _mediator.Send(new GetMenusForUserQuery());
+            return Ok(result);
+        }
+
+
     }
 }

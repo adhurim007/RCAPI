@@ -1,4 +1,4 @@
-﻿namespace RentCar.Application.Authorization
+﻿namespace RentCar.Domain.Authorization
 {
     public static class Permissions
     {
@@ -73,5 +73,7 @@
             public const string Add = "Permissions.Payments.Add";
             public const string Confirm = "Permissions.Payments.Confirm";
         }
+
+
     }
 }

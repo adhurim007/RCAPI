@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RentCar.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using RentCar.Domain.Authorization;
 
 namespace RentCar.Persistence.Identity
 {
@@ -19,16 +15,9 @@ namespace RentCar.Persistence.Identity
             public static readonly string[] AllRoles = { SuperAdmin, BusinessAdmin, Client };
         }
 
-        public static class DefaultClaims
-        {
-            public static readonly Claim[] AllClaims = new[]
-            {
-                new Claim("Permission", "ManageUsers"),
-                new Claim("Permission", "ManageCars"),
-                new Claim("Permission", "ViewReports"), 
-            };
-        }
-        public static async Task SeedAsync(RoleManager<IdentityRole<Guid>> roleManager, UserManager<ApplicationUser> userManager)
+        public static async Task SeedAsync(
+            RoleManager<IdentityRole<Guid>> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             // Ensure roles exist
             foreach (var role in DefaultRoles.AllRoles)
@@ -39,17 +28,20 @@ namespace RentCar.Persistence.Identity
                 }
             }
 
-            // Assign claims to SuperAdmin role
+            // 🔹 Collect ALL permissions dynamically
+            var allPermissions = GetAllPermissions();
+
+            // Assign all permissions to SuperAdmin role
             var superAdminRole = await roleManager.FindByNameAsync(DefaultRoles.SuperAdmin);
             if (superAdminRole != null)
             {
-                var roleClaims = await roleManager.GetClaimsAsync(superAdminRole);
+                var existingClaims = await roleManager.GetClaimsAsync(superAdminRole);
 
-                foreach (var claim in DefaultClaims.AllClaims)
+                foreach (var permission in allPermissions)
                 {
-                    if (!roleClaims.Any(c => c.Type == claim.Type && c.Value == claim.Value))
+                    if (!existingClaims.Any(c => c.Type == "Permission" && c.Value == permission))
                     {
-                        await roleManager.AddClaimAsync(superAdminRole, claim);
+                        await roleManager.AddClaimAsync(superAdminRole, new Claim("Permission", permission));
                     }
                 }
             }
@@ -72,6 +64,30 @@ namespace RentCar.Persistence.Identity
                     await userManager.AddToRoleAsync(superAdminUser, DefaultRoles.SuperAdmin);
                 }
             }
+        }
+
+        /// <summary>
+        /// Extracts all permission constants from the Permissions static class
+        /// </summary>
+        private static List<string> GetAllPermissions()
+        {
+            var permissions = new List<string>();
+
+            // Reflect over Permissions class and get all public const strings
+            var fields = typeof(Permissions).GetNestedTypes()
+                .SelectMany(t => t.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
+                .Where(f => f.IsLiteral && !f.IsInitOnly && f.FieldType == typeof(string));
+
+            foreach (var field in fields)
+            {
+                var value = field.GetRawConstantValue() as string;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    permissions.Add(value);
+                }
+            }
+
+            return permissions;
         }
     }
 }
