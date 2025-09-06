@@ -210,7 +210,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    await RoleSeeder.SeedAsync(roleManager, userManager);
+   // await RoleSeeder.SeedAsync(roleManager, userManager);
 }
 
 if (app.Environment.IsDevelopment())
