@@ -1,34 +1,59 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RentCar.Domain.Entities
+public class Menu
 {
-    public class Menu
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Route { get; set; } = string.Empty; // e.g. "/cars/list"
-        public string Icon { get; set; } = string.Empty;
+    [Column(Order = 0)]
+    public int Id { get; set; }
 
-        // Role-based visibility
-        public ICollection<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
-    }
+    [Column(Order = 1)]
+    public int? ParentId { get; set; }
+    public Menu Parent { get; set; }
+    public ICollection<Menu> Children { get; set; } = new List<Menu>();
 
-    public class RoleMenu
-    {
-        public int Id { get; set; }
+    [Column(Order = 2)]
+    public string Title { get; set; } = string.Empty;
 
-        // Must match IdentityRole<Guid>
-        public Guid RoleId { get; set; }
+    [Column(Order = 3)]
+    public string? Subtitle { get; set; }
 
-        public int MenuId { get; set; }
+    [Column(Order = 4)]
+    public string? Type { get; set; }
 
-        public Menu Menu { get; set; }
+    [Column(Order = 5)]
+    public string? Icon { get; set; }
 
-        public IdentityRole<Guid> Role { get; set; }
-    }
+    [Column(Order = 6)]
+    public string? Link { get; set; }
+
+    [Column(Order = 7)]
+    public bool HasSubMenu { get; set; }
+
+    [Column("Claim", Order = 8)]
+    public string? Claim { get; set; }
+
+    [Column(Order = 9)]
+    public bool Active { get; set; } = true;
+
+    [Column(Order = 10)]
+    public int SortNumber { get; set; }
+
+    [Column(Order = 11)]
+    public Guid? CreatedBy { get; set; }
+
+    [Column(Order = 12)]
+    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
+    [Column(Order = 13)]
+    public Guid? LastModifiedBy { get; set; }
+
+    [Column(Order = 14)]
+    public DateTime? LastModifiedOn { get; set; }
+
+    [Column(Order = 15)]
+    public Guid? DeletedBy { get; set; }
+
+    [Column(Order = 16)]
+    public DateTime? DeletedOn { get; set; }
 }

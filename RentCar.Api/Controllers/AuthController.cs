@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
         var businessId = await _mediator.Send(new RegisterBusinessCommand(dto));
         return Ok(new { Message = "Business registered successfully", BusinessId = businessId });
     }
-
+     
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto model)

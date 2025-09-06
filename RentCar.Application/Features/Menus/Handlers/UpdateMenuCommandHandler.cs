@@ -23,9 +23,17 @@ namespace RentCar.Application.Features.Menus.Handlers
             var menu = await _context.Menus.FindAsync(new object[] { request.Id }, cancellationToken);
             if (menu == null) return false;
 
-            menu.Name = request.Name;
-            menu.Route = request.Route;
+            menu.Title = request.Title;
+            menu.Subtitle = request.Subtitle;
+            menu.Type = request.Type;
+            menu.Link = request.Link;
             menu.Icon = request.Icon;
+            menu.ParentId = request.ParentId;
+            menu.Claim = request.Claim;
+            menu.Active = request.Active;
+            menu.SortNumber = request.SortNumber;
+            menu.LastModifiedBy = request.LastModifiedBy;
+            menu.LastModifiedOn = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
             return true;

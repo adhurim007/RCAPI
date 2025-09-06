@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RentCar.Application.DTOs.MenuDto;
 using RentCar.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Menus.Queries
 {
-    public record GetAllMenusQuery() : IRequest<List<Menu>>;
+    public class GetAllMenusQuery : IRequest<List<MenuDto>> { }
 }

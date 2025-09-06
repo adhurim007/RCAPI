@@ -1,4 +1,4 @@
-﻿namespace RentCar.Application.Authorization
+﻿namespace RentCar.Domain.Authorization
 {
     public static class Permissions
     {
@@ -51,9 +51,11 @@
         public static class Menus
         {
             public const string Add = "Permissions.Menus.Add";
+            public const string Edit = "Permissions.Menus.Edit";
             public const string Manage = "Permissions.Menus.Manage";
             public const string AssignToRole = "Permissions.Menus.AssignToRole";
             public const string ViewByRole = "Permissions.Menus.ViewByRole";
+            public const string DeleteByRole = "Permissions.Menus.DeleteByRole";
         } 
 
         public static class Reports
@@ -71,5 +73,7 @@
             public const string Add = "Permissions.Payments.Add";
             public const string Confirm = "Permissions.Payments.Confirm";
         }
+
+
     }
 }

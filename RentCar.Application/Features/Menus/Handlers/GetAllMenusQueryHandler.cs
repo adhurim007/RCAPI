@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using RentCar.Application.DTOs.MenuDto;
 using RentCar.Application.Features.Menus.Queries;
 using RentCar.Domain.Entities;
 using RentCar.Persistence;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Menus.Handlers
 {
-    public class GetAllMenusQueryHandler : IRequestHandler<GetAllMenusQuery, List<Menu>>
+    public class GetAllMenusQueryHandler : IRequestHandler<GetAllMenusQuery, List<MenuDto>>
     {
         private readonly RentCarDbContext _context;
 
@@ -20,10 +21,17 @@ namespace RentCar.Application.Features.Menus.Handlers
             _context = context;
         }
 
-        public async Task<List<Menu>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
+        public async Task<List<MenuDto>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
         {
             return await _context.Menus
-                .Include(m => m.RoleMenus)
+                .Select(m => new MenuDto
+                {
+                    Id = m.Id,
+                    Title = m.Title, // map correctly from your entity field
+                    Type = string.IsNullOrEmpty(m.Type) ? "basic" : m.Type,
+                    Icon = string.IsNullOrEmpty(m.Icon) ? "heroicons_outline:square-3-stack-3d" : m.Icon,
+                    Link = string.IsNullOrEmpty(m.Subtitle) ? "/" : m.Subtitle
+                })
                 .ToListAsync(cancellationToken);
         }
     }

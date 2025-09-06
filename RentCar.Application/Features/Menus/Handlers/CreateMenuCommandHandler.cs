@@ -23,9 +23,17 @@ namespace RentCar.Application.Features.Menus.Handlers
         {
             var menu = new Menu
             {
-                Name = request.Name,
-                Route = request.Route,
-                Icon = request.Icon
+                Title = request.Title,
+                Subtitle = request.Subtitle,
+                Type = request.Type,        // e.g. "basic", "group", "collapsable"
+                Link = request.Link,        // route like "/cars/list"
+                Icon = request.Icon,
+                ParentId = request.ParentId,
+                Claim = request.Claim,
+                Active = request.Active,
+                SortNumber = request.SortNumber,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = DateTime.UtcNow
             };
 
             _context.Menus.Add(menu);

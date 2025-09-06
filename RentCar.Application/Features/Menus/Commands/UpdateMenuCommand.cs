@@ -7,5 +7,17 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Menus.Commands
 {
-    public record UpdateMenuCommand(int Id, string Name, string Route, string Icon) : IRequest<bool>;
+    public record UpdateMenuCommand(
+    int Id,
+    string Title,
+    string? Subtitle,
+    string? Type,
+    string? Link,
+    string? Icon,
+    int? ParentId,
+    string? Claim,
+    bool Active,
+    int SortNumber,
+    Guid? LastModifiedBy
+) : IRequest<bool>;
 }

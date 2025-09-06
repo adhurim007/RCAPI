@@ -26,8 +26,7 @@ namespace RentCar.Persistence
         public DbSet<CarPricingRule> CarPricingRules { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<BusinessLocation> BusinessLocations { get; set; } 
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<Menu> Menus { get; set; } 
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
@@ -178,18 +177,13 @@ namespace RentCar.Persistence
                 .HasOne(h => h.ReservationStatus)
                 .WithMany()
                 .HasForeignKey(h => h.ReservationStatusId);
-          
 
-            modelBuilder.Entity<RoleMenu>()
-                 .HasOne(rm => rm.Menu)
-                 .WithMany(m => m.RoleMenus)
-                 .HasForeignKey(rm => rm.MenuId);
-
-            modelBuilder.Entity<RoleMenu>()
-                .HasOne(rm => rm.Role)
-                .WithMany()  
-                .HasForeignKey(rm => rm.RoleId);
-
+            modelBuilder.Entity<Menu>()
+               .HasMany(m => m.Children)
+               .WithOne(m => m.Parent)
+               .HasForeignKey(m => m.ParentId)
+               .OnDelete(DeleteBehavior.Restrict);
+             
             modelBuilder.Entity<Language>()
                 .HasMany(l => l.Translations)
                 .WithOne(t => t.Language)
@@ -228,6 +222,30 @@ namespace RentCar.Persistence
                 .WithMany()
                 .HasForeignKey(b => b.CityId)
                 .OnDelete(DeleteBehavior.Restrict); // 👈 prevent cascade
+
+            modelBuilder.Entity<Business>()
+            .Property(c => c.Address);
+
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnOrder(0);
+                entity.Property(e => e.ParentId).HasColumnOrder(1);
+                entity.Property(e => e.Title).HasColumnOrder(2);
+                entity.Property(e => e.Subtitle).HasColumnOrder(3);
+                entity.Property(e => e.Type).HasColumnOrder(4);
+                entity.Property(e => e.Icon).HasColumnOrder(5);
+                entity.Property(e => e.Link).HasColumnOrder(6);
+                entity.Property(e => e.HasSubMenu).HasColumnOrder(7);
+                entity.Property(e => e.Claim).HasColumnName("Claim").HasColumnOrder(8);
+                entity.Property(e => e.Active).HasColumnOrder(9);
+                entity.Property(e => e.SortNumber).HasColumnOrder(10);
+                entity.Property(e => e.CreatedBy).HasColumnOrder(11);
+                entity.Property(e => e.CreatedOn).HasColumnOrder(12);
+                entity.Property(e => e.LastModifiedBy).HasColumnOrder(13);
+                entity.Property(e => e.LastModifiedOn).HasColumnOrder(14);
+                entity.Property(e => e.DeletedBy).HasColumnOrder(15);
+                entity.Property(e => e.DeletedOn).HasColumnOrder(16);
+            });
 
         }
     }

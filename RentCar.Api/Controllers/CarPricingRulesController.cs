@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Application.Authorization;
+using RentCar.Domain.Authorization;
 using RentCar.Application.Features.CarPricingRules.Command;
 using RentCar.Application.Features.CarPricingRules.Queries;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
