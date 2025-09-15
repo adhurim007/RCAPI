@@ -4,5 +4,30 @@
         <name>RentCar.Api</name>
     </assembly>
     <members>
+        <member name="M:RentCar.Api.Controllers.MenusController.Create(RentCar.Application.Features.Menus.Commands.CreateMenuCommand)">
+            <summary>
+            Create a new menu
+            </summary>
+        </member>
+        <member name="M:RentCar.Api.Controllers.MenusController.Update(System.Int32,RentCar.Application.Features.Menus.Commands.UpdateMenuCommand)">
+            <summary>
+            Update an existing menu
+            </summary>
+        </member>
+        <member name="M:RentCar.Api.Controllers.MenusController.Delete(System.Int32)">
+            <summary>
+            Delete a menu
+            </summary>
+        </member>
+        <member name="M:RentCar.Api.Controllers.MenusController.GetAll">
+            <summary>
+            Get all menus (sorted)
+            </summary>
+        </member>
+        <member name="M:RentCar.Api.Controllers.MenusController.AssignToRole(RentCar.Application.Features.Menus.Commands.AssignMenuToRoleCommand)">
+            <summary>
+            Assign a menu (claim) to a role
+            </summary>
+        </member>
     </members>
 </doc>
