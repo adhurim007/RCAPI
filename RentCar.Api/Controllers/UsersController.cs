@@ -60,14 +60,16 @@ namespace RentCar.Api.Controllers
         {
             if (id != command.Id) return BadRequest("ID mismatch");
             var result = await _mediator.Send(command);
-            return result ? Ok("User updated") : NotFound("User not found");
+
+            return Ok(new { message = "User updated successfully" });
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _mediator.Send(new DeleteUserCommand(id));
-            return result ? Ok("User deleted") : NotFound("User not found");
+
+            return Ok(new { message = "User deleted successfully" });
         }
     }
 }

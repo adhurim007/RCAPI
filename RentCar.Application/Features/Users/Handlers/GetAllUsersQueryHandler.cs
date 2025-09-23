@@ -1,23 +1,24 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RentCar.Application.DTOs.Users;
 using RentCar.Application.Features.Users.Queries;
 using RentCar.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RentCar.Persistence;   // 👈 adjust if your DbContext namespace differs
 
 namespace RentCar.Application.Features.Users.Handlers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<UserDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RentCarDbContext _dbContext;
 
-        public GetAllUsersQueryHandler(UserManager<ApplicationUser> userManager)
+        public GetAllUsersQueryHandler(
+            UserManager<ApplicationUser> userManager,
+            RentCarDbContext dbContext)
         {
             _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         public async Task<List<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
@@ -28,11 +29,24 @@ namespace RentCar.Application.Features.Users.Handlers
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
+
+                string? businessName = null;
+                if (roles.Contains("BusinessAdmin"))
+                {
+                    businessName = await _dbContext.Businesses
+                        .Where(b => b.UserId == user.Id)
+                        .Select(b => b.CompanyName)
+                        .FirstOrDefaultAsync(cancellationToken);
+                }
+
                 result.Add(new UserDto
                 {
                     Id = user.Id.ToString(),
+                    FullName = user.FullName ?? "",
                     Email = user.Email ?? "",
-                    Roles = roles.ToList()
+                    PhoneNumber = user.PhoneNumber ?? "",
+                    BusinessName = !string.IsNullOrEmpty(businessName) ? businessName : "", 
+                    Roles = roles.ToList(), 
                 });
             }
 
