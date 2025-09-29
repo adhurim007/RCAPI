@@ -42,7 +42,7 @@ namespace RentCar.Application.Features.Users.Handlers
                 result.Add(new UserDto
                 {
                     Id = user.Id.ToString(),
-                    FullName = user.FullName ?? "",
+                    FirstName = user.FullName ?? "",
                     Email = user.Email ?? "",
                     PhoneNumber = user.PhoneNumber ?? "",
                     BusinessName = !string.IsNullOrEmpty(businessName) ? businessName : "", 
