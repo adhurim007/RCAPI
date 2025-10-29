@@ -1,4 +1,7 @@
-﻿namespace RentCar.Domain.Authorization
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace RentCar.Domain.Authorization
 {
     public static class Permissions
     {
@@ -73,7 +76,14 @@
             public const string Add = "Permissions.Payments.Add";
             public const string Confirm = "Permissions.Payments.Confirm";
         }
-
+         
+        public static List<string> All =>
+            typeof(Permissions)
+                .GetNestedTypes()
+                .SelectMany(t => t.GetFields()
+                    .Where(f => f.IsLiteral && !f.IsInitOnly)
+                    .Select(f => f.GetValue(null)?.ToString() ?? string.Empty))
+                .ToList();
 
     }
 }

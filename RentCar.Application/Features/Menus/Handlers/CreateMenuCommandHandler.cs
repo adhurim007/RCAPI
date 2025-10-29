@@ -23,22 +23,21 @@ namespace RentCar.Application.Features.Menus.Handlers
         {
             var menu = new Menu
             {
+                ParentId = request.ParentId,
                 Title = request.Title,
                 Subtitle = request.Subtitle,
-                Type = request.Type,        // e.g. "basic", "group", "collapsable"
-                Link = request.Link,        // route like "/cars/list"
+                Type = request.Type,
                 Icon = request.Icon,
-                ParentId = request.ParentId,
-                Claim = request.Claim,
+                Link = request.Link,
+                HasSubMenu = request.HasSubMenu,
                 Active = request.Active,
+                Claim = request.Claim,
                 SortNumber = request.SortNumber,
-                CreatedBy = request.CreatedBy,
                 CreatedOn = DateTime.UtcNow
             };
 
             _context.Menus.Add(menu);
             await _context.SaveChangesAsync(cancellationToken);
-
             return menu.Id;
         }
     }
