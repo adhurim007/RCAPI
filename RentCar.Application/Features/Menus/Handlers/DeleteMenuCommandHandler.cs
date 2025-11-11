@@ -12,7 +12,7 @@ namespace RentCar.Application.Features.Menus.Handlers
     public class DeleteMenuCommandHandler : IRequestHandler<DeleteMenuCommand, bool>
     {
         private readonly RentCarDbContext _context;
-
+          
         public DeleteMenuCommandHandler(RentCarDbContext context)
         {
             _context = context;
@@ -20,13 +20,15 @@ namespace RentCar.Application.Features.Menus.Handlers
 
         public async Task<bool> Handle(DeleteMenuCommand request, CancellationToken cancellationToken)
         {
-            var menu = await _context.Menus.FindAsync(new object[] { request.Id }, cancellationToken);
-            if (menu == null) return false;
+            var menu = await _context.Menus.FindAsync(request.Id);
+            if (menu == null)
+                return false;
 
             _context.Menus.Remove(menu);
             await _context.SaveChangesAsync(cancellationToken);
-
             return true;
         }
+
+
     }
 }

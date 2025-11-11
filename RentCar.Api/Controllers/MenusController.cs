@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Domain.Authorization;
 using RentCar.Application.DTOs.MenuDto;
 using RentCar.Application.Features.Menus.Commands;
 using RentCar.Application.Features.Menus.Queries;
+using RentCar.Domain.Authorization;
 using RentCar.Domain.Entities;
 
 namespace RentCar.Api.Controllers
@@ -25,7 +26,7 @@ namespace RentCar.Api.Controllers
         /// Create a new menu
         /// </summary>
         [HttpPost("create")]
-        [Authorize(Policy = Permissions.Menus.Add)]
+        //[Authorize(Policy = Permissions.Menus.Add)]
         public async Task<IActionResult> Create([FromBody] CreateMenuCommand command)
         {
             var menuId = await _mediator.Send(command);
@@ -50,12 +51,16 @@ namespace RentCar.Api.Controllers
         /// Delete a menu
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize(Policy = Permissions.Menus.DeleteByRole)]
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _mediator.Send(new DeleteMenuCommand(id));
-            return success ? Ok("Menu deleted") : NotFound();
+            if (!success)
+                return NotFound();
+
+            // ✅ kthimi i duhur për DELETE
+            return NoContent();
         }
+
 
         /// <summary>
         /// Get all menus (sorted)
@@ -89,6 +94,12 @@ namespace RentCar.Api.Controllers
             return Ok(result);
         }
 
-
+        [HttpGet("claims")]
+        public async Task<IActionResult> GetClaims([FromServices] RoleManager<IdentityRole<Guid>> roleManager)
+        {
+            // ✅ this returns all possible claims to bind to menu
+            var claims = Permissions.All.Select(p => new { value = p, label = p });
+            return Ok(claims);
+        }
     }
 }

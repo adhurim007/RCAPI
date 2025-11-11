@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Menus.Commands
 {
-    public record CreateMenuCommand(
-    string Title,
-    string? Subtitle,
-    string? Type,          // "basic", "group", "collapsable"
-    string? Link,          // e.g. "/cars/list"
-    string? Icon,
-    int? ParentId,
-    string? Claim,
-    bool Active,
-    int SortNumber,
-    Guid? CreatedBy
-) : IRequest<int>;
-
+    public class CreateMenuCommand : IRequest<int>
+    {
+        public int? ParentId { get; set; }
+        public string Title { get; set; } = null!;
+        public string? Subtitle { get; set; }
+        public string Type { get; set; } = "basic";  
+        public string? Icon { get; set; }
+        public string? Link { get; set; }
+        public bool HasSubMenu { get; set; }
+        public bool Active { get; set; } = true;
+        public string? Claim { get; set; }  
+        public int SortNumber { get; set; } = 0;
+    }
 }

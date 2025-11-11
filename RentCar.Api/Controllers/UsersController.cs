@@ -60,14 +60,43 @@ namespace RentCar.Api.Controllers
         {
             if (id != command.Id) return BadRequest("ID mismatch");
             var result = await _mediator.Send(command);
-            return result ? Ok("User updated") : NotFound("User not found");
+
+            return Ok(new { message = "User updated successfully" });
         }
+
+        [HttpPost("{id}/reset-password")]
+        public async Task<IActionResult> ResetPassword(string id, [FromBody] ResetPasswordCommand command)
+        {
+            if (id != command.UserId)
+                return BadRequest("UserId mismatch");
+
+            var result = await _mediator.Send(command);
+
+            //if (!result.Succeeded)
+            //  return BadRequest(result.Errors);
+
+            return Ok(new { message = "Password reset successfully" });
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var user = await _mediator.Send(new GetUserByIdQuery(id));
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _mediator.Send(new DeleteUserCommand(id));
-            return result ? Ok("User deleted") : NotFound("User not found");
+
+            return Ok(new { message = "User deleted successfully" });
         }
     }
 }

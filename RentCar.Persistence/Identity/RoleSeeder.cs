@@ -12,6 +12,7 @@ namespace RentCar.Persistence.Identity
             public const string SuperAdmin = "SuperAdmin";
             public const string BusinessAdmin = "BusinessAdmin";
             public const string Client = "Client";
+
             public static readonly string[] AllRoles = { SuperAdmin, BusinessAdmin, Client };
         }
 
@@ -19,7 +20,7 @@ namespace RentCar.Persistence.Identity
             RoleManager<IdentityRole<Guid>> roleManager,
             UserManager<ApplicationUser> userManager)
         {
-            // Ensure roles exist
+            // 🔹 Ensure roles exist
             foreach (var role in DefaultRoles.AllRoles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -28,10 +29,10 @@ namespace RentCar.Persistence.Identity
                 }
             }
 
-            // 🔹 Collect ALL permissions dynamically
+            // 🔹 Get all permissions dynamically
             var allPermissions = GetAllPermissions();
 
-            // Assign all permissions to SuperAdmin role
+            // 🔹 Assign all permissions to SuperAdmin role
             var superAdminRole = await roleManager.FindByNameAsync(DefaultRoles.SuperAdmin);
             if (superAdminRole != null)
             {
@@ -46,7 +47,7 @@ namespace RentCar.Persistence.Identity
                 }
             }
 
-            // Optionally: Seed a default SuperAdmin user
+            // 🔹 Optionally: create default SuperAdmin user if missing
             var superAdminEmail = "superadmin@rentcar.com";
             var superAdminUser = await userManager.FindByEmailAsync(superAdminEmail);
             if (superAdminUser == null)
@@ -55,7 +56,8 @@ namespace RentCar.Persistence.Identity
                 {
                     UserName = "superadmin",
                     Email = superAdminEmail,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    FullName = "System Super Admin"
                 };
 
                 var result = await userManager.CreateAsync(superAdminUser, "SuperAdmin123!");
@@ -73,7 +75,6 @@ namespace RentCar.Persistence.Identity
         {
             var permissions = new List<string>();
 
-            // Reflect over Permissions class and get all public const strings
             var fields = typeof(Permissions).GetNestedTypes()
                 .SelectMany(t => t.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy))
                 .Where(f => f.IsLiteral && !f.IsInitOnly && f.FieldType == typeof(string));

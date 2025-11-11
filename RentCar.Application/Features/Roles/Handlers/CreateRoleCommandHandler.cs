@@ -20,10 +20,10 @@ namespace RentCar.Application.Features.Roles.Handlers
 
         public async Task<bool> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
-            if (await _roleManager.RoleExistsAsync(request.RoleName))
+            if (await _roleManager.RoleExistsAsync(request.Name))
                 return false;
 
-            var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.RoleName));
+            var result = await _roleManager.CreateAsync(new IdentityRole<Guid>(request.Name));
             return result.Succeeded;
         }
     }
