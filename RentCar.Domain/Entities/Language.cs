@@ -12,8 +12,7 @@ namespace RentCar.Domain.Entities
         public string Code { get; set; } = string.Empty;  // e.g. 'en', 'fr', 'sq'
         public string Name { get; set; } = string.Empty;  // e.g. 'English'
         public bool IsActive { get; set; } = true;
-
-        // 🔗 Navigation
+         
         public ICollection<Translation> Translations { get; set; } = new List<Translation>();
     }
 
@@ -21,10 +20,10 @@ namespace RentCar.Domain.Entities
     {
         public int Id { get; set; }
         public int LanguageId { get; set; }
-        public string Key { get; set; } = string.Empty;    // e.g. 'dashboard.title'
-        public string Value { get; set; } = string.Empty;  // e.g. 'Dashboard'
+        public string Key { get; set; } = string.Empty;    
+        public string Value { get; set; } = string.Empty;   
 
-        // 🔗 Navigation
+      
         public Language Language { get; set; }
     }
 }

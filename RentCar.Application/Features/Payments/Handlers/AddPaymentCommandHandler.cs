@@ -34,8 +34,8 @@ namespace RentCar.Application.Features.Payments.Handlers
                 ReservationId = reservation.Id,
                 Amount = request.Amount,
                 PaidAt = DateTime.UtcNow,
-                PaymentMethod = request.PaymentMethod,
-                IsConfirmed = request.IsConfirmed
+                //PaymentMethod = request.PaymentMethod,
+                //IsConfirmed = request.IsConfirmed
             };
 
             _context.Payments.Add(payment);

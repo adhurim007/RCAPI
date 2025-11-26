@@ -10,31 +10,31 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Reservations.Handlers
 {
-    public class AddReservationHistoryCommandHandler
-        : IRequestHandler<AddReservationHistoryCommand, int>
-    {
-        private readonly RentCarDbContext _context;
+    //public class AddReservationHistoryCommandHandler
+    //    : IRequestHandler<AddReservationHistoryCommand, int>
+    //{
+    //    private readonly RentCarDbContext _context;
 
-        public AddReservationHistoryCommandHandler(RentCarDbContext context)
-        {
-            _context = context;
-        }
+    //    public AddReservationHistoryCommandHandler(RentCarDbContext context)
+    //    {
+    //        _context = context;
+    //    }
 
-        public async Task<int> Handle(AddReservationHistoryCommand request, CancellationToken cancellationToken)
-        {
-            var history = new ReservationStatusHistory
-            {
-                ReservationId = request.ReservationId,
-                ReservationStatusId = request.ReservationStatusId,
-                ChangedAt = DateTime.UtcNow,
-                ChangedBy = request.ChangedBy,
-                Note = request.Note
-            };
+    //    //public async Task<int> Handle(AddReservationHistoryCommand request, CancellationToken cancellationToken)
+    //    //{
+    //    //    var history = new ReservationStatusHistory
+    //    //    {
+    //    //        ReservationId = request.ReservationId,
+    //    //        ReservationStatusId = request.ReservationStatusId,
+    //    //        ChangedAt = DateTime.UtcNow,
+    //    //        ChangedBy = request.ChangedBy,
+    //    //        Note = request.Note
+    //    //    };
 
-            _context.ReservationStatusHistories.Add(history);
-            await _context.SaveChangesAsync(cancellationToken);
+    //    //    _context.ReservationStatusHistories.Add(history);
+    //    //    await _context.SaveChangesAsync(cancellationToken);
 
-            return history.Id;
-        }
-    }
+    //    //    return history.Id;
+    //    //}
+    //}
 }

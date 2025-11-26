@@ -27,6 +27,7 @@ namespace RentCar.Application.Features.Cars.Handlers
             var car = new Car
             {  
                 BusinessId = request.BusinessId,
+                CarBrandId = request.CarBrandId,
                 CarModelId = request.CarModelId,
                 CarTypeId = request.CarTypeId,
                 FuelTypeId = request.FuelTypeId,
@@ -36,7 +37,7 @@ namespace RentCar.Application.Features.Cars.Handlers
                 DailyPrice = request.DailyPrice,
                 ImageUrl = request.ImageUrl,
                 Description = request.Description,
-                IsAvailable = true,
+                IsAvailable = request.IsAvailable,
                 CreatedAt = DateTime.UtcNow
             };
 

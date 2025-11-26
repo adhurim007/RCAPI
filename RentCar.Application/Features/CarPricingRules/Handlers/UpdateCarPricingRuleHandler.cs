@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Handlers
 {
-    public class UpdateCarPricingRuleHandler : IRequestHandler<UpdateCarPricingRuleCommand, bool>
+    public class UpdateCarPricingRuleHandler
+        : IRequestHandler<UpdateCarPricingRuleCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,14 +21,21 @@ namespace RentCar.Application.Features.CarPricingRules.Handlers
 
         public async Task<bool> Handle(UpdateCarPricingRuleCommand request, CancellationToken cancellationToken)
         {
-            var rule = await _unitOfWork.CarPricingRules.GetByIdAsync(request.Id);
-            if (rule == null) return false;
+            var rule = await _unitOfWork.CarPricingRules.GetAsync(request.Id);
 
-            rule.FromDate = (DateTime)request.FromDate;
-            rule.ToDate = (DateTime)request.ToDate;
-            rule.Value = request.PricePerDay;
+            if (rule == null)
+                return false;
 
-            _unitOfWork.CarPricingRules.Update(rule);
+            rule.CarId = request.CarId;
+            rule.RuleType = request.RuleType;
+            rule.PricePerDay = request.PricePerDay;
+            rule.FromDate = request.FromDate;
+            rule.ToDate = request.ToDate;
+            rule.DaysOfWeek = request.DaysOfWeek != null
+                ? string.Join(",", request.DaysOfWeek)
+                : null;
+            rule.Description = request.Description;
+
             await _unitOfWork.SaveChangesAsync();
 
             return true;

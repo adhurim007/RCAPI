@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Domain.Authorization;
+using RentCar.Application.DTOs.Cars;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Handlers;
+using RentCar.Application.Features.Cars.Queries.CarBrandAndModel;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
+using RentCar.Domain.Authorization;
 
 namespace RentCar.Api.Controllers
 {
@@ -20,8 +22,8 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = Permissions.Cars.Create)]
-        [Authorize(Roles = "Business")]  
+        //[Authorize(Policy = Permissions.Cars.Create)]
+        //[Authorize(Roles = "Business")]  
         public async Task<IActionResult> Create([FromBody] CreateCarCommand command)
         {
             if (!ModelState.IsValid)
@@ -30,7 +32,22 @@ namespace RentCar.Api.Controllers
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = result }, new { id = result });
         }
-          
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCarCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("Id mismatch");
+
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return NotFound("Car not found");
+
+            return NoContent();
+        }
+
+
         [HttpGet]
         [AllowAnonymous]
         [Authorize(Policy = Permissions.Cars.View)]
@@ -41,7 +58,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Policy = Permissions.Cars.View)]
+        //[Authorize(Policy = Permissions.Cars.View)]
         public async Task<IActionResult> GetById(int id)
         {
             var car = await _mediator.Send(new GetCarByIdQuery(id));
@@ -121,6 +138,27 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<List<LookupDto>>> GetBrands()
+         => Ok(await _mediator.Send(new GetCarBrandsQuery()));
+
+        [HttpGet("models/{brandId}")]
+        public async Task<ActionResult<List<LookupDto>>> GetModels(int brandId)
+         => Ok(await _mediator.Send(new GetCarModelsByBrandQuery(brandId)));
+
+        [HttpGet("cartypes")]
+        public async Task<ActionResult<List<LookupDto>>> GetCarTypes()
+            => Ok(await _mediator.Send(new GetCarTypesQuery()));
+
+        [HttpGet("fueltypes")]
+        public async Task<ActionResult<List<LookupDto>>> GetFuelTypes()
+            => Ok(await _mediator.Send(new GetFuelTypesQuery()));
+
+        [HttpGet("transmissions")]
+        public async Task<ActionResult<List<LookupDto>>> GetTransmissions()
+            => Ok(await _mediator.Send(new GetTransmissionsQuery()));
+
 
 
     }

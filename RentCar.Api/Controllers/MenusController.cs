@@ -34,6 +34,20 @@ namespace RentCar.Api.Controllers
         }
 
         /// <summary>
+        /// Get menu by ID
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MenuDto>> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetMenuByIdQuery(id));
+
+            if (result == null)
+                return NotFound($"Menu with ID {id} not found.");
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Update an existing menu
         /// </summary>
         [HttpPut("{id}")]

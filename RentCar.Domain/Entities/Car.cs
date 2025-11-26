@@ -12,6 +12,7 @@ namespace RentCar.Domain.Entities
     {
         public int Id { get; set; }
         public int BusinessId { get; set; }
+        public int CarBrandId { get; set; }
         public int CarModelId { get; set; }
         public int CarTypeId { get; set; }
         public int FuelTypeId { get; set; }
@@ -26,6 +27,7 @@ namespace RentCar.Domain.Entities
         public DateTime CreatedAt { get; set; }
 
         public Business Business { get; set; }
+        public CarBrand CarBrand { get; set; }
         public CarModel CarModel { get; set; }
         public CarType CarType { get; set; }
         public FuelType FuelType { get; set; }

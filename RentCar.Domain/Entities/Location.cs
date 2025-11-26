@@ -10,7 +10,13 @@ namespace RentCar.Domain.Entities
     public class Location
     {
         public int Id { get; set; }
-        public string City { get; set; }
-        public string Address { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<Reservation> PickupReservations { get; set; }
+            = new List<Reservation>();
+
+        public ICollection<Reservation> DropoffReservations { get; set; }
+            = new List<Reservation>();
     }
+
 }

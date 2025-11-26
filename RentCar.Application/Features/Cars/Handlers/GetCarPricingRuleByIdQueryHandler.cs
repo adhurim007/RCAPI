@@ -2,6 +2,7 @@
 using RentCar.Application.DTOs.Cars;
 using RentCar.Application.Features.CarPricingRules.Queries;
 using RentCar.Domain.Interfaces;
+using RentCar.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +13,29 @@ namespace RentCar.Application.Features.Cars.Handlers
 {
     public class GetCarPricingRuleByIdQueryHandler : IRequestHandler<GetCarPricingRuleByIdQuery, CarPricingRuleDto?>
     {
-        private readonly ICarPricingRuleRepository _repository;
+        private readonly RentCarDbContext _context;
 
-        public GetCarPricingRuleByIdQueryHandler(ICarPricingRuleRepository repository)
+        public GetCarPricingRuleByIdQueryHandler(RentCarDbContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
         public async Task<CarPricingRuleDto?> Handle(GetCarPricingRuleByIdQuery request, CancellationToken cancellationToken)
         {
-            var rule = await _repository.GetByIdAsync(request.Id);
+            var rule = await _context.CarPricingRules.FindAsync(request.Id);
             if (rule == null) return null;
 
             return new CarPricingRuleDto
             {
                 Id = rule.Id,
                 CarId = rule.CarId,
-                StartDate = (DateTime)rule.FromDate,
-                EndDate = (DateTime)(rule.ToDate = rule.ToDate),  
+                RuleType = rule.RuleType,
+                Description = rule.Description,
+                PricePerDay = rule.PricePerDay,
+                DaysOfWeek = rule.DaysOfWeek,
+                FromDate = rule.FromDate,
+                ToDate = rule.ToDate
             };
-        }
+        } 
     }
 }

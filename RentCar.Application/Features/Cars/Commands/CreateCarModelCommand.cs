@@ -7,5 +7,9 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.Cars.Commands
 {
-    public record CreateCarModelCommand(string Name) : IRequest<int>;
+    public class CreateCarModelCommand : IRequest<int>
+    {
+        public string Name { get; set; }
+        public int CarBrandId { get; set; }
+    }
 }

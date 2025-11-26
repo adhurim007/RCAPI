@@ -19,12 +19,7 @@ namespace RentCar.Persistence.Repositories
             _context = context;
             _dbSet = context.Set<T>();
         }
-
-        public async Task<T?> GetByIdAsync(Guid id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
-
+  
         public async Task<List<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
@@ -53,6 +48,11 @@ namespace RentCar.Persistence.Repositories
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.AnyAsync(predicate);
+        }
+
+        public async Task<T?> GetAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
         }
     }
 }

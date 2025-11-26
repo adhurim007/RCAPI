@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Audit\Commands\" />
-    <Folder Include="Features\Dashboard\Commands\" />
     <Folder Include="Features\Menus\Validators\" />
     <Folder Include="Features\Roles\Validators\" />
     <Folder Include="Features\Users\Validators\" />

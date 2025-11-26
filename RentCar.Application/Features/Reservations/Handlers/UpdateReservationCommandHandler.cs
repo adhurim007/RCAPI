@@ -27,10 +27,10 @@ namespace RentCar.Application.Features.Reservations.Handlers
             if (reservation == null)
                 return false;
 
-            reservation.StartDate = request.StartDate;
-            reservation.EndDate = request.EndDate;
-            reservation.TotalPrice = request.TotalPrice;
-            reservation.ReservationStatusId = request.ReservationStatusId;
+           // reservation.StartDate = request.StartDate;
+           // reservation.EndDate = request.EndDate;
+           // reservation.TotalPrice = request.TotalPrice;
+           // reservation.ReservationStatusId = request.ReservationStatusId;
 
             await _context.SaveChangesAsync(cancellationToken);
             return true;

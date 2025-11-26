@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Interfaces
 {
-    public interface ICarPricingRuleRepository : IGenericRepository<CarPricingRule>
+    public interface ICarPricingRuleRepository 
     {
+        Task AddAsync(CarPricingRule car);
+        Task DeleteAsync(CarPricingRule car);
         Task<List<CarPricingRule>> GetByCarIdAsync(int carId);
 
+        Task<IEnumerable<CarPricingRule>> GetAllAsync();
 
-        Task<CarPricingRule> GetByIdAsync(int id);
+        Task<CarPricingRule> GetAsync(int id);
     }
 }

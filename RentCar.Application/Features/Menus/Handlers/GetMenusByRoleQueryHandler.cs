@@ -35,6 +35,7 @@ public class GetMenusForUserQueryHandler : IRequestHandler<GetMenusForUserQuery,
             .Select(m => new MenuDto
             {
                 Id = m.Id,
+                ParentId = m.ParentId,
                 Title = m.Title,
                 Type = m.Type,
                 Icon = m.Icon,

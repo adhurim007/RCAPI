@@ -9,6 +9,11 @@
             Create a new menu
             </summary>
         </member>
+        <member name="M:RentCar.Api.Controllers.MenusController.GetById(System.Int32)">
+            <summary>
+            Get menu by ID
+            </summary>
+        </member>
         <member name="M:RentCar.Api.Controllers.MenusController.Update(System.Int32,RentCar.Application.Features.Menus.Commands.UpdateMenuCommand)">
             <summary>
             Update an existing menu

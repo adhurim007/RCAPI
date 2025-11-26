@@ -24,8 +24,8 @@ namespace RentCar.Application.Features.Cars.Handlers
             {
                 Id = rule.Id,
                 CarId = rule.CarId,
-                StartDate = (DateTime)rule.FromDate,
-                EndDate = (DateTime)rule.ToDate,
+                FromDate = (DateTime)rule.FromDate,
+                ToDate = (DateTime)rule.ToDate,
                 PricePerDay = rule.PricePerDay
             }).ToList();
         }

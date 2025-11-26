@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Queries
 {
-    public record GetCarPricingRuleByIdQuery(Guid Id) : IRequest<CarPricingRuleDto>;
+    public record GetCarPricingRuleByIdQuery(int Id) : IRequest<CarPricingRuleDto?>;
 }

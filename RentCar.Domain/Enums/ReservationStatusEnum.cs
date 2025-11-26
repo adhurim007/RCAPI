@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace RentCar.Domain.Enums
 {
-    public enum ReservationStatusEnum
+    public enum PaymentStatus
     {
-        Pending = 1,        
-        Confirmed = 2,     
-        Cancelled = 3,    
-        Completed = 4    
+        Pending = 1,
+        Paid = 2,
+        Refunded = 3
+    }
+
+    public enum DepositStatus
+    {
+        None = 0,
+        Held = 1,
+        Released = 2,
+        UsedForDamage = 3
+    }
+
+    public enum InspectionType
+    {
+        Pickup = 1,
+        Dropoff = 2
     }
 }

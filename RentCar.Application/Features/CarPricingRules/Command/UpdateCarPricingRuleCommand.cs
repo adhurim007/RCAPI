@@ -7,15 +7,23 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Command
 {
-    public record UpdateCarPricingRuleCommand(
-        int Id,
-        string RuleType,
-        decimal PricePerDay,
-        DateTime? FromDate,
-        DateTime? ToDate,
-        List<DayOfWeek>? DaysOfWeek,
-        string? Description
-    ) : IRequest<bool>;
+    public class UpdateCarPricingRuleCommand : IRequest<bool>
+    {
+        public int Id { get; set; }
 
+        public int CarId { get; set; }
+
+        public string RuleType { get; set; } = string.Empty;
+
+        public decimal PricePerDay { get; set; }
+
+        public DateTime? FromDate { get; set; }
+
+        public DateTime? ToDate { get; set; }
+
+        public List<string> DaysOfWeek { get; set; } = new();
+
+        public string? Description { get; set; }
+    }
 
 }

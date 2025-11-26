@@ -6711,25 +6711,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\DELL\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj",
+      "projectUniqueName": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj",
       "projectName": "RentCar.Application",
-      "projectPath": "C:\\github\\rentacar\\RentCar.Application\\RentCar.Application.csproj",
-      "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "C:\\github\\rentacar\\RentCar.Application\\obj\\",
+      "projectPath": "E:\\RCAPI\\RentCar.Application\\RentCar.Application.csproj",
+      "packagesPath": "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\",
+      "outputPath": "E:\\RCAPI\\RentCar.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\adhurim.sulejmani\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -6738,14 +6736,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj": {
-              "projectPath": "C:\\github\\rentacar\\RentCar.Persistence\\RentCar.Persistence.csproj"
+            "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj": {
+              "projectPath": "E:\\RCAPI\\RentCar.Persistence\\RentCar.Persistence.csproj"
             }
           }
         }

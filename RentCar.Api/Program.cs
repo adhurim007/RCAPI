@@ -108,7 +108,7 @@ builder.Services.AddScoped<INotificationService, EmailNotificationService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
 builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
-builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
+//builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
 builder.Services.AddScoped<ReportGenerator>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<AuthService>();

@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Domain.Authorization;
+using RentCar.Application.Features.CarModel;
 using RentCar.Application.Features.Cars.Commands;
 using RentCar.Application.Features.Cars.Queries.CarBrandAndModel;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
+using RentCar.Domain.Authorization;
 using RentCar.Domain.Entities;
 
 namespace RentCar.Api.Controllers
@@ -23,8 +24,8 @@ namespace RentCar.Api.Controllers
 
         // GET: api/carmodels
         [HttpGet]
-        [Authorize(Policy = Permissions.CarModels.View)]
-        public async Task<ActionResult<List<CarModel>>> GetAll()
+        //[Authorize(Policy = Permissions.CarModels.View)]
+        public async Task<ActionResult<List<CarModelDto>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllCarModelsQuery());
             return Ok(result);
@@ -32,8 +33,8 @@ namespace RentCar.Api.Controllers
 
         // GET: api/carmodels/{id}
         [HttpGet("{id}")]
-        [Authorize(Policy = Permissions.CarModels.View)]
-        public async Task<ActionResult<CarModel>> GetById(int id)
+       // [Authorize(Policy = Permissions.CarModels.View)]
+        public async Task<ActionResult<CarModelDto>> GetById(int id)
         {
             var model = await _mediator.Send(new GetCarModelByIdQuery(id));
             if (model == null) return NotFound();
@@ -42,7 +43,7 @@ namespace RentCar.Api.Controllers
 
         // POST: api/carmodels
         [HttpPost]
-        [Authorize(Policy = Permissions.CarModels.Create)]
+        //[Authorize(Policy = Permissions.CarModels.Create)]
         public async Task<ActionResult<int>> Create([FromBody] CreateCarModelCommand command)
         {
             var id = await _mediator.Send(command);
@@ -51,7 +52,7 @@ namespace RentCar.Api.Controllers
 
         // PUT: api/carmodels/{id}
         [HttpPut("{id}")]
-        [Authorize(Policy = Permissions.CarModels.Update)]
+        //[Authorize(Policy = Permissions.CarModels.Update)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCarModelCommand command)
         {
             if (id != command.Id) return BadRequest("ID mismatch");
@@ -61,7 +62,7 @@ namespace RentCar.Api.Controllers
 
         // DELETE: api/carmodels/{id}
         [HttpDelete("{id}")]
-        [Authorize(Policy = Permissions.CarModels.Delete)]
+        //[Authorize(Policy = Permissions.CarModels.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             await _mediator.Send(new DeleteCarModelCommand(id));
