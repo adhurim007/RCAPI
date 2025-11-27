@@ -10,9 +10,9 @@ namespace RentCar.Domain.Entities
     {
         public int Id { get; set; }
 
-        public int VehicleInspectionId { get; set; }
-        public VehicleInspection VehicleInspection { get; set; }
+        public int InspectionId { get; set; }
+        public VehicleInspection Inspection { get; set; }
 
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

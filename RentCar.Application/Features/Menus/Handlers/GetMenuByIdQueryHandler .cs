@@ -23,7 +23,7 @@ namespace RentCar.Application.Features.Menus.Handlers
         public async Task<MenuDto> Handle(GetMenuByIdQuery request, CancellationToken cancellationToken)
         {
             var menu = await _context.Menus
-                .Where(x => x.Id == request.Id)
+                .Where(x => x.Id == request.Id) 
                 .Select(x => new MenuDto
                 {
                     Id = x.Id,

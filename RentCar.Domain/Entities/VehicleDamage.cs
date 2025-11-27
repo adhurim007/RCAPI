@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RentCar.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +14,14 @@ namespace RentCar.Domain.Entities
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
 
+        public string DamageType { get; set; }
         public string Description { get; set; }
         public decimal EstimatedCost { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DamageStatus Status { get; set; } = DamageStatus.Pending;
 
-        public ICollection<VehicleDamagePhoto> Photos { get; set; }
+        public List<VehicleDamagePhoto> Photos { get; set; } = new();
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

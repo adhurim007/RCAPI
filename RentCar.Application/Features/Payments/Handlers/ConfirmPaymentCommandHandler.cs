@@ -31,7 +31,7 @@ namespace RentCar.Application.Features.Payments.Handlers
                 throw new Exception("Payment not found.");
 
             //payment.IsConfirmed = true;
-            payment.PaidAt = DateTime.UtcNow;
+            //payment.PaidAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 

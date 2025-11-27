@@ -9,7 +9,7 @@ namespace RentCar.Domain.Entities
     {
         public string FullName { get; set; }
         public string Role { get; set; }
-        public Client Client { get; set; }
+        public Customer Client { get; set; }
         public Business Business { get; set; }
     }
 }

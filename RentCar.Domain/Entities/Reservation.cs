@@ -20,10 +20,10 @@ namespace RentCar.Domain.Entities
         public Car Car { get; set; }
 
         public int PickupLocationId { get; set; }
-        public Location PickupLocation { get; set; }
+        public BusinessLocations PickupLocation { get; set; }
 
         public int DropoffLocationId { get; set; }
-        public Location DropoffLocation { get; set; }
+        public BusinessLocations DropoffLocation { get; set; }
 
         public DateTime PickupDate { get; set; }
         public DateTime DropoffDate { get; set; }
@@ -41,8 +41,7 @@ namespace RentCar.Domain.Entities
         public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-        // RELATIONS
+         
         public ICollection<ReservationExtraService> ExtraServices { get; set; } = new List<ReservationExtraService>();
         public ICollection<AdditionalDriver> AdditionalDrivers { get; set; }
         public ICollection<VehicleInspection> Inspections { get; set; }

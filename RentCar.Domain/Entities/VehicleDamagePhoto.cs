@@ -10,9 +10,9 @@ namespace RentCar.Domain.Entities
     {
         public int Id { get; set; }
 
-        public int VehicleDamageId { get; set; }
-        public VehicleDamage VehicleDamage { get; set; }
+        public int DamageId { get; set; }
+        public VehicleDamage Damage { get; set; }
 
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

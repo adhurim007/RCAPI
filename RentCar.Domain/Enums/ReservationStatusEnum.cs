@@ -26,4 +26,27 @@ namespace RentCar.Domain.Enums
         Pickup = 1,
         Dropoff = 2
     }
+
+    public enum PaymentType
+    {
+        Deposit = 1,
+        Rental = 2,
+        Damage = 3,
+        ExtraService = 4
+    }
+
+    public enum PaymentMethod
+    {
+        Cash = 1,
+        Card = 2,
+        Bank = 3
+    }
+
+    public enum DamageStatus
+    {
+        Pending = 1,
+        Paid = 2,
+        Waived = 3
+    }
+
 }

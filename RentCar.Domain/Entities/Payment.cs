@@ -14,10 +14,12 @@ namespace RentCar.Domain.Entities
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
 
+        public PaymentType Type { get; set; }
         public decimal Amount { get; set; }
-        public string Method { get; set; } // Cash, Card, Bank Transfer
-        public PaymentStatus Status { get; set; }
-        public DateTime PaidAt { get; set; }
+        public PaymentMethod Method { get; set; }
+        public PaymentStatus Status { get; set; } = PaymentStatus.Paid;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
 }

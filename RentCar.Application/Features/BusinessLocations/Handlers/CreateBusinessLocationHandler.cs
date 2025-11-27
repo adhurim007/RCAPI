@@ -1,0 +1,36 @@
+﻿using MediatR;
+using RentCar.Application.Features.BusinessLocations.Command; 
+using RentCar.Persistence;
+ 
+namespace RentCar.Application.Features.BusinessLocations.Handlers
+{
+    public class CreateBusinessLocationHandler
+        : IRequestHandler<CreateBusinessLocationCommand, int>
+    {
+        private readonly RentCarDbContext _db;
+
+        public CreateBusinessLocationHandler(RentCarDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<int> Handle(
+            CreateBusinessLocationCommand request,
+            CancellationToken cancellationToken)
+        {
+            var entity = new Domain.Entities.BusinessLocations
+            {
+                BusinessId = request.BusinessId,
+                Name = request.Name,
+                Address = request.Address,
+                StateId = request.StateId,
+                CityId = request.CityId
+            };
+
+            await _db.BusinessLocations.AddAsync(entity, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            return entity.Id;
+        }
+    }
+}

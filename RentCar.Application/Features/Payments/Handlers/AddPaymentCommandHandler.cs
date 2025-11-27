@@ -33,7 +33,7 @@ namespace RentCar.Application.Features.Payments.Handlers
             {
                 ReservationId = reservation.Id,
                 Amount = request.Amount,
-                PaidAt = DateTime.UtcNow,
+                //PaidAt = DateTime.UtcNow,
                 //PaymentMethod = request.PaymentMethod,
                 //IsConfirmed = request.IsConfirmed
             };
