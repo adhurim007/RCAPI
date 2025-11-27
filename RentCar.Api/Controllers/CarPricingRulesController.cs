@@ -10,7 +10,6 @@ namespace RentCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Business")]
     public class CarPricingRulesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -21,45 +20,66 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = Permissions.CarPricingRules.Create)]
+        //[Authorize(Policy = Permissions.CarPricingRules.Create)]
         public async Task<IActionResult> Create([FromBody] CreateCarPricingRuleCommand command)
         {
-            var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id = result }, new { id = result });
+            var id = await _mediator.Send(command); 
+            return Ok(id);
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Policy = Permissions.CarPricingRules.Update)]
+        [HttpPut("{id:int}")]
+        //[Authorize(Policy = Permissions.CarPricingRules.Update)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCarPricingRuleCommand command)
         {
-            if (id != command.Id) return BadRequest("Id mismatch");
-            var result = await _mediator.Send(command);
-            return result ? NoContent() : NotFound();
+            if (id != command.Id)
+                return BadRequest("Id mismatch");
+
+            var success = await _mediator.Send(command);
+
+            if (!success)
+                return NotFound();
+
+            return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        [Authorize(Policy = Permissions.CarPricingRules.Delete)]
+        [HttpDelete("{id:int}")]
+        //[Authorize(Policy = Permissions.CarPricingRules.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _mediator.Send(new DeleteCarPricingRuleCommand(id));
-            return result ? NoContent() : NotFound();
+            var success = await _mediator.Send(new DeleteCarPricingRuleCommand(id));
+
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _mediator.Send(new GetAllCarPricingRulesQuery());
+            return Ok(result);
         }
 
 
-        [HttpGet("{id}")]
-        [Authorize(Policy = Permissions.CarPricingRules.View)]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("{id:int}")]
+        //[Authorize(Policy = Permissions.CarPricingRules.View)]
+        public async Task<IActionResult> GetAsync(int id)
         {
             var rule = await _mediator.Send(new GetCarPricingRuleByIdQuery(id));
-            return rule == null ? NotFound() : Ok(rule);
+
+            if (rule == null)
+                return NotFound();
+
+            return Ok(rule);
         }
 
-        [HttpGet("by-car/{carId}")]
-        [Authorize(Policy = Permissions.CarPricingRules.View)]
+        [HttpGet("by-car/{carId:int}")]
+        //[Authorize(Policy = Permissions.CarPricingRules.View)]
         public async Task<IActionResult> GetByCarId(int carId)
         {
             var rules = await _mediator.Send(new GetCarPricingRulesByCarIdQuery(carId));
             return Ok(rules);
-        } 
+        }
     }
 }

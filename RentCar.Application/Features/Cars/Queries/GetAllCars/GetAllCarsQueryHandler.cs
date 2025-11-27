@@ -22,13 +22,14 @@ namespace RentCar.Application.Features.Cars.Queries.GetAllCars
         public async Task<List<CarDto>> Handle(GetAllCarsQuery request, CancellationToken cancellationToken)
         {
             var cars = await _context.Cars
+                .Include(c=> c.Business)
                 .Include(c => c.CarModel).ThenInclude(m => m.CarBrand)
                 .Include(c => c.CarType)
                 .Include(c => c.FuelType)
                 .Include(c => c.Transmission)
                 .Select(c => new CarDto
                 {
-                    Id = c.Id,
+                    Id = c.Id, 
                     LicensePlate = c.LicensePlate,
                     Color = c.Color,
                     DailyPrice = c.DailyPrice,

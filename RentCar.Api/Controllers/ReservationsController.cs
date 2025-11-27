@@ -118,26 +118,26 @@ namespace RentCar.Api.Controllers
             return Ok(new { ContractId = contractId });
         }
 
-        [HttpGet("report/list")] 
-        public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
-        {
-            var pdf = await _reportService.GenerateReservationListReport(from, to, businessId);
-            return File(pdf, "application/pdf", "ReservationList.pdf");
-        }
+        //[HttpGet("report/list")] 
+        //public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
+        //{
+        //    var pdf = await _reportService.GenerateReservationListReport(from, to, businessId);
+        //    return File(pdf, "application/pdf", "ReservationList.pdf");
+        //}
 
-        [HttpGet("report/income")] 
-        public async Task<IActionResult> GetIncomeReport(DateTime from, DateTime to)
-        {
-            var pdf = await _reportService.GenerateIncomeReport(from, to);
-            return File(pdf, "application/pdf", "IncomeReport.pdf");
-        }
+        //[HttpGet("report/income")] 
+        //public async Task<IActionResult> GetIncomeReport(DateTime from, DateTime to)
+        //{
+        //    var pdf = await _reportService.GenerateIncomeReport(from, to);
+        //    return File(pdf, "application/pdf", "IncomeReport.pdf");
+        //}
 
-        [HttpGet("report/pending")] 
-        public async Task<IActionResult> GetPendingReservationsReport()
-        {
-            var pdf = await _reportService.GeneratePendingReservationsReport();
-            return File(pdf, "application/pdf", "PendingReservations.pdf");
-        }
+        //[HttpGet("report/pending")] 
+        //public async Task<IActionResult> GetPendingReservationsReport()
+        //{
+        //    var pdf = await _reportService.GeneratePendingReservationsReport();
+        //    return File(pdf, "application/pdf", "PendingReservations.pdf");
+        //}
 
 
     }

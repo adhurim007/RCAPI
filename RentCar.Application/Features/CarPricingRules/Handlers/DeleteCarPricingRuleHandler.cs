@@ -9,23 +9,25 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Handlers
 {
-    public class DeleteCarPricingRuleHandler : IRequestHandler<DeleteCarPricingRuleCommand, bool>
+    public class DeleteCarPricingRuleHandler
+           : IRequestHandler<DeleteCarPricingRuleCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICarPricingRuleRepository _carPricingRepository;
 
-        public DeleteCarPricingRuleHandler(IUnitOfWork unitOfWork)
+        public DeleteCarPricingRuleHandler(ICarPricingRuleRepository carPricingRepository)
         {
-            _unitOfWork = unitOfWork;
+            _carPricingRepository = carPricingRepository;
         }
 
         public async Task<bool> Handle(DeleteCarPricingRuleCommand request, CancellationToken cancellationToken)
         {
-            var rule = await _unitOfWork.CarPricingRules.GetByIdAsync(request.Id);
-            if (rule == null) return false;
+            var rule = await _carPricingRepository.GetAsync(request.Id);
 
-            _unitOfWork.CarPricingRules.Delete(rule);
-            await _unitOfWork.SaveChangesAsync();
+            if (rule == null)
+                return false;
 
+            await _carPricingRepository.DeleteAsync(rule);
+         
             return true;
         }
     }

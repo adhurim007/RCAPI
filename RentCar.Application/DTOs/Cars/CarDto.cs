@@ -9,6 +9,12 @@ namespace RentCar.Application.DTOs.Cars
     public class CarDto
     {
         public int Id { get; set; }
+        public int BusinessId { get; set; }
+        public int CarBrandId { get; set; }
+        public int CarModelId { get; set; }
+        public int CarTypeId { get; set; }
+        public int FuelTypeId { get; set; }
+        public int TransmissionId { get; set; }
         public string? LicensePlate { get; set; }
         public string? Color { get; set; }
         public decimal DailyPrice { get; set; }

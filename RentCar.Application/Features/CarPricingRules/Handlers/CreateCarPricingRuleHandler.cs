@@ -10,30 +10,36 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Handlers
 {
-    public class CreateCarPricingRuleHandler : IRequestHandler<CreateCarPricingRuleCommand, int>
+    public class CreateCarPricingRuleHandler
+        : IRequestHandler<CreateCarPricingRuleCommand, int>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICarPricingRuleRepository _carPricingRepository;
 
-        public CreateCarPricingRuleHandler(IUnitOfWork unitOfWork)
+        public CreateCarPricingRuleHandler(ICarPricingRuleRepository carPricingRepository)
         {
-            _unitOfWork = unitOfWork;
+            _carPricingRepository = carPricingRepository;
         }
 
         public async Task<int> Handle(CreateCarPricingRuleCommand request, CancellationToken cancellationToken)
         {
             var rule = new CarPricingRule
-            { 
+            {
                 CarId = request.CarId,
-                FromDate = (DateTime)request.FromDate,
-                ToDate = (DateTime)request.ToDate,
-                Value = request.PricePerDay,
-                RuleType = "Custom"  
+                RuleType = string.IsNullOrWhiteSpace(request.RuleType)
+                    ? "Custom"
+                    : request.RuleType,
+                PricePerDay = request.PricePerDay,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                DaysOfWeek = request.DaysOfWeek != null
+                    ? string.Join(",", request.DaysOfWeek)
+                    : null,
+                Description = request.Description
             };
 
-            await _unitOfWork.CarPricingRules.AddAsync(rule);
-            await _unitOfWork.SaveChangesAsync();
-            //return rule.Id;
-            return 1;
+            await _carPricingRepository.AddAsync(rule);
+             
+            return rule.Id;
         }
     }
 

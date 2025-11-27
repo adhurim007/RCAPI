@@ -31,7 +31,7 @@ namespace RentCar.Domain.Entities
         public ApplicationUser User { get; set; }
         public ICollection<Car> Cars { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
-        public ICollection<BusinessLocation> Locations { get; set; }
+        public ICollection<BusinessLocations> Locations { get; set; }
     }
 
 

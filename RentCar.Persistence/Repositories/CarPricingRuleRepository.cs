@@ -10,22 +10,43 @@ using System.Threading.Tasks;
 
 namespace RentCar.Persistence.Repositories
 {
-    public class CarPricingRuleRepository : GenericRepository<CarPricingRule>, ICarPricingRuleRepository
+    public class CarPricingRuleRepository : ICarPricingRuleRepository
     {
-        public CarPricingRuleRepository(RentCarDbContext context) : base(context)
+        private readonly RentCarDbContext _dbContext;
+
+        public CarPricingRuleRepository(RentCarDbContext dbContext)  
         {
+            _dbContext = dbContext;
         } 
         public async Task<List<CarPricingRule>> GetByCarIdAsync(int carId)
         {
-            return await _context.CarPricingRules
+            return await _dbContext.CarPricingRules
                 .Where(r => r.CarId == carId)
                 .ToListAsync();
         }
 
-        public Task<CarPricingRule> GetByIdAsync(int id)
+        public async Task AddAsync(CarPricingRule car)
         {
-            throw new NotImplementedException();
+            await _dbContext.CarPricingRules.AddAsync(car);
+            await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(CarPricingRule car)
+        {
+            _dbContext.CarPricingRules.Remove(car);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<CarPricingRule> GetAsync(int id)
+        {
+            return await _dbContext.CarPricingRules.FirstOrDefaultAsync(r => r.Id == id);
+        }
+         
+        public async Task<IEnumerable<CarPricingRule>> GetAllAsync()
+        {
+            return await _dbContext.CarPricingRules.ToListAsync();
+        }
+         
     }
 
 }

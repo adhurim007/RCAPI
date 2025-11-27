@@ -15,9 +15,9 @@ namespace RentCar.Application.Features.Cars.Validators
             RuleFor(x => x.LicensePlate).NotEmpty().MaximumLength(15);
             RuleFor(x => x.Color).NotEmpty().MaximumLength(30);
             RuleFor(x => x.DailyPrice).GreaterThan(0);
-            RuleFor(x => x.ImageUrl).NotEmpty().MaximumLength(250);
+            //RuleFor(x => x.ImageUrl).NotEmpty().MaximumLength(250);
             RuleFor(x => x.Description).MaximumLength(500);
-            RuleFor(x => x.BusinessId).NotEmpty();
+            //RuleFor(x => x.BusinessId).NotEmpty();
         }
     }
 }

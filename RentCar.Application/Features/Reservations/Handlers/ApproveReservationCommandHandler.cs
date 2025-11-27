@@ -28,13 +28,13 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 return false;
 
            
-            reservation.ReservationStatusId = 2;
+            //reservation.ReservationStatusId = 2;
 
             
-            var business = await _context.Businesses
-                .FirstOrDefaultAsync(b => b.Id == reservation.BusinessId, cancellationToken);
-            if (business != null)
-                business.ApprovedBy = request.ApprovedBy;
+            //var business = await _context.Businesses
+               // .FirstOrDefaultAsync(b => b.Id == reservation.BusinessId, cancellationToken);
+           // if (business != null)
+            //    business.ApprovedBy = request.ApprovedBy;
 
             await _context.SaveChangesAsync(cancellationToken);
             return true;

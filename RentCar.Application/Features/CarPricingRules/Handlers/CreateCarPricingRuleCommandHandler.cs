@@ -27,8 +27,7 @@ namespace RentCar.Application.Features.CarPricingRules.Handlers
                 RuleType = request.RuleType,
                 PricePerDay = request.PricePerDay,
                 FromDate = (DateTime)request.FromDate,
-                ToDate = (DateTime)request.ToDate,
-                //DaysOfWeek = request.DaysOfWeek != null ? string.Join(",", request.DaysOfWeek) : null,
+                ToDate = (DateTime)request.ToDate, 
                 Description = request.Description
             };
 

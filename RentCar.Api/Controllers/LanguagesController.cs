@@ -7,8 +7,7 @@ using RentCar.Domain.Entities;
 namespace RentCar.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize(Roles = "SuperAdmin")] // only superadmin can manage languages
+    [Route("api/[controller]")] 
     public class LanguagesController : ControllerBase
     {
         private readonly RentCarDbContext _context;
@@ -18,14 +17,21 @@ namespace RentCar.Api.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var langs = await _context.Language.ToListAsync();
-            return Ok(langs);
+            return Ok(await _context.Language.OrderBy(l => l.Id).ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [HttpGet("active")]
+        public async Task<IActionResult> GetActive()
+        {
+            return Ok(await _context.Language.Where(l => l.IsActive).OrderBy(l => l.Id).ToListAsync());
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var lang = await _context.Language.FindAsync(id);
@@ -40,7 +46,7 @@ namespace RentCar.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = language.Id }, language);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] Language language)
         {
             if (id != language.Id) return BadRequest("Id mismatch");
@@ -49,7 +55,7 @@ namespace RentCar.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             var lang = await _context.Language.FindAsync(id);
@@ -60,4 +66,5 @@ namespace RentCar.Api.Controllers
             return NoContent();
         }
     }
+
 }

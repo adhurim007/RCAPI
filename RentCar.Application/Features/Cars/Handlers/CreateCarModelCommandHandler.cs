@@ -1,12 +1,6 @@
-﻿using MediatR;
-using RentCar.Application.Features.Cars.Commands;
-using RentCar.Domain.Entities;
-using RentCar.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR; 
+using RentCar.Application.Features.Cars.Commands; 
+using RentCar.Persistence; 
 
 namespace RentCar.Application.Features.Cars.Handlers
 {
@@ -21,9 +15,15 @@ namespace RentCar.Application.Features.Cars.Handlers
 
         public async Task<int> Handle(CreateCarModelCommand request, CancellationToken cancellationToken)
         {
-            var model = new CarModel { Name = request.Name };
+            var model = new RentCar.Domain.Entities.CarModel
+            {
+                Name = request.Name,
+                CarBrandId = request.CarBrandId
+            };
+
             _context.CarModels.Add(model);
             await _context.SaveChangesAsync(cancellationToken);
+
             return model.Id;
         }
     }

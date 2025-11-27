@@ -22,9 +22,7 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
-        /// <summary>
-        /// Create a new menu
-        /// </summary>
+       
         [HttpPost("create")]
         //[Authorize(Policy = Permissions.Menus.Add)]
         public async Task<IActionResult> Create([FromBody] CreateMenuCommand command)
@@ -33,9 +31,19 @@ namespace RentCar.Api.Controllers
             return Ok(new { MenuId = menuId });
         }
 
-        /// <summary>
-        /// Update an existing menu
-        /// </summary>
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MenuDto>> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetMenuByIdQuery(id));
+
+            if (result == null)
+                return NotFound($"Menu with ID {id} not found.");
+
+            return Ok(result);
+        }
+
+        
         [HttpPut("{id}")]
         [Authorize(Policy = Permissions.Menus.Edit)]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuCommand command)
@@ -75,9 +83,7 @@ namespace RentCar.Api.Controllers
             return Ok(result);
         }
   
-        /// <summary>
-        /// Assign a menu (claim) to a role
-        /// </summary>
+      
         [HttpPost("assign-to-role")]
         [Authorize(Policy = Permissions.Menus.AssignToRole)]
         public async Task<IActionResult> AssignToRole([FromBody] AssignMenuToRoleCommand command)

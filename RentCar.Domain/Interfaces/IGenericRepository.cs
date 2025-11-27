@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace RentCar.Domain.Interfaces
 {
     public interface IGenericRepository<T> where T : class
-    {
-        Task<T?> GetByIdAsync(Guid id);
+    { 
         Task<List<T>> GetAllAsync();
         IQueryable<T> GetQueryable();
         Task AddAsync(T entity);

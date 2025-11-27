@@ -7,6 +7,5 @@ using System.Threading.Tasks;
 
 namespace RentCar.Application.Features.CarPricingRules.Command
 {
-    public record DeleteCarPricingRuleCommand(int Id) : IRequest<bool>;
-     
+    public record DeleteCarPricingRuleCommand(int Id) : IRequest<bool>; 
 }

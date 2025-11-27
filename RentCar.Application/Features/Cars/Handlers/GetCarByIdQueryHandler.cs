@@ -25,11 +25,17 @@ namespace RentCar.Application.Features.Cars.Handlers
             return new CarDto
             {
                 Id = car.Id,
+                BusinessId = car.BusinessId,
+                CarBrandId = car.CarBrandId,
+                CarModelId = car.CarModelId,
+                CarTypeId = car.CarTypeId,
+                FuelTypeId = car.FuelTypeId,
+                TransmissionId = car.TransmissionId,
                 LicensePlate = car.LicensePlate,
                 Color = car.Color,
                 DailyPrice = car.DailyPrice,
-                CarModel = car.CarModel?.Name,
-                CarBrand = car.CarModel?.CarBrand?.Name 
+                Description = car.Description,
+                IsAvailable = car.IsAvailable
             };
         }
     }

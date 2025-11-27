@@ -20,19 +20,26 @@ namespace RentCar.Application.Features.Menus.Handlers
         {
             _context = context;
         }
-
         public async Task<List<MenuDto>> Handle(GetAllMenusQuery request, CancellationToken cancellationToken)
         {
             return await _context.Menus
+                .OrderBy(m => m.SortNumber)  
                 .Select(m => new MenuDto
                 {
                     Id = m.Id,
-                    Title = m.Title, // map correctly from your entity field
-                    Type = string.IsNullOrEmpty(m.Type) ? "basic" : m.Type,
-                    Icon = string.IsNullOrEmpty(m.Icon) ? "heroicons_outline:square-3-stack-3d" : m.Icon,
-                    Link = string.IsNullOrEmpty(m.Subtitle) ? "/" : m.Subtitle
+                    ParentId = m.ParentId,
+                    Title = m.Title,
+                    Subtitle = m.Subtitle,
+                    Type = string.IsNullOrWhiteSpace(m.Type) ? "basic" : m.Type,
+                    Icon = string.IsNullOrWhiteSpace(m.Icon) ? "heroicons_outline:square-3-stack-3d" : m.Icon,
+                    Link = string.IsNullOrWhiteSpace(m.Link) ? "/" : m.Link,
+                    HasSubMenu = m.HasSubMenu,
+                    Claim = m.Claim,
+                    Active = m.Active,
+                    SortNumber = m.SortNumber
                 })
                 .ToListAsync(cancellationToken);
         }
+
     }
 }

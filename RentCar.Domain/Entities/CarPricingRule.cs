@@ -10,16 +10,21 @@ namespace RentCar.Domain.Entities
     public class CarPricingRule
     {
         public int Id { get; set; }
+
         public int CarId { get; set; }
-        public string RuleType { get; set; }    
-        public decimal Value { get; set; } 
-        public DateTime? FromDate { get; set; }    
-        public DateTime? ToDate { get; set; }   
-        public string? Description { get; set; }
+
+        public string RuleType { get; set; } = "Standard";
+         
         public decimal PricePerDay { get; set; }
+         
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+         
         public string? DaysOfWeek { get; set; }
 
-        public Car Car { get; set; }
+        public string? Description { get; set; }
+         
+        public Car Car { get; set; } = null!;
     }
 
 
