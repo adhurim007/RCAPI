@@ -14,10 +14,10 @@ namespace RentCar.Domain.Entities
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
 
-        public InspectionType Type { get; set; }   // Pickup or Dropoff
+        public InspectionType Type { get; set; }  
 
         public int Mileage { get; set; }
-        public decimal FuelLevel { get; set; }     // 0–100 %
+        public decimal FuelLevel { get; set; }    
         public string TireCondition { get; set; }
         public string OverallCondition { get; set; }
 
