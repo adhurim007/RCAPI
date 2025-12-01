@@ -45,6 +45,9 @@ namespace RentCar.Persistence
 
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<VehicleInspection> VehicleInspection { get; set; }
+        public DbSet<VehicleInspectionPhoto> VehicleInspectionPhoto { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -104,6 +107,7 @@ namespace RentCar.Persistence
                 .WithMany()
                 .HasForeignKey(bl => bl.CityId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             // ===========================
             // CAR RELATIONS
