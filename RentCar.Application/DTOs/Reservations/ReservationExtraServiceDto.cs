@@ -10,5 +10,7 @@ namespace RentCar.Application.DTOs.Reservations
     {
         public int ExtraServiceId { get; set; }
         public int Quantity { get; set; }
+        public decimal PricePerDay { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

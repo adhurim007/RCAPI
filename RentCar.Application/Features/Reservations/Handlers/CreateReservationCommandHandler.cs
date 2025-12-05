@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RentCar.Application.Features.Reservations.Commands;
 using RentCar.Application.Features.Reservations.Validators;
@@ -18,17 +19,64 @@ namespace RentCar.Application.Features.Reservations.Handlers
     : IRequestHandler<CreateReservationCommand, int>
     {
         private readonly RentCarDbContext _context;
-
-        public CreateReservationCommandHandler(RentCarDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager; 
+        public CreateReservationCommandHandler(RentCarDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager; 
         }
 
         public async Task<int> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
         {
-            var year = DateTime.UtcNow.Year;
+            var existingCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.DocumentNumber == request.PersonalNumber);
 
-            // Merr totalin e rezervimeve ekzistuese për këtë vit
+            int customerUserId;
+
+            if (existingCustomer == null)
+            { 
+                string username = $"{request.FirstName}.{request.LastName}".ToLower();
+                string email = $"{username}@rentacar.com";
+
+                var newUser = new ApplicationUser
+                {
+                    UserName = username,
+                    Email = email,
+                    FullName = $"{request.FirstName} {request.LastName}",
+                    PhoneNumber = request.PhoneNumber,
+                    EmailConfirmed = true
+                };
+
+                var createUserResult = await _userManager.CreateAsync(newUser, "Client123!");
+
+                if (!createUserResult.Succeeded)
+                    throw new Exception("Unable to create AspNetUser: " +
+                        string.Join(", ", createUserResult.Errors.Select(e => e.Description)));
+                 
+                 
+                await _userManager.AddToRoleAsync(newUser, "Customer");
+                 
+                var newCustomer = new Domain.Entities.Customer
+                {
+                    FullName = $"{request.FirstName} {request.LastName}",
+                    PhoneNumber = request.PhoneNumber,
+                    DocumentNumber = request.PersonalNumber,
+                    UserId = newUser.Id,
+                    DateOfBirth = DateTime.UtcNow,
+                    Address = request.Address
+                };
+
+                _context.Customer.Add(newCustomer);
+                await _context.SaveChangesAsync();
+
+                customerUserId = newCustomer.Id;
+            }
+            else
+            {
+                customerUserId = existingCustomer.Id;
+            }
+             
+            var year = DateTime.UtcNow.Year;
+             
             var totalReservationsThisYear = await _context.Reservations
                 .Where(r => r.CreatedAt.Year == year)   
                 .CountAsync(cancellationToken);
@@ -108,7 +156,7 @@ namespace RentCar.Application.Features.Reservations.Handlers
             {
                 ReservationNumber = reservationNumber,
                 CarId = request.CarId,
-                CustomerId = request.CustomerId,
+                CustomerId = customerUserId,
                 PickupLocationId = request.PickupLocationId,
                 DropoffLocationId = request.DropoffLocationId,
                 PickupDate = request.PickupDate,

@@ -19,6 +19,8 @@ namespace RentCar.Application.Features.Reservations.Commands
 
         public string? Notes { get; set; }
         public int ReservationStatusId { get; set; }
+        public int? Discount { get; set; }
+
     }
 
 }

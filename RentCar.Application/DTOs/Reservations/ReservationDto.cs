@@ -43,6 +43,16 @@ namespace RentCar.Application.DTOs.Reservations
         public string DropoffLocation { get; set; }
         public string CarName { get; set; }
         public string Notes { get; set; }
+        public string PersonalNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; } 
+        public decimal TotalWithoutDiscount { get; set; }
+        public decimal Discount { get; set; }
+
+        // EXTRA SERVICES
+        public List<ReservationExtraServiceDto> ExtraServices { get; set; } = new();
     }
 
 }

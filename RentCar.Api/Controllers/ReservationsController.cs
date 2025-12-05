@@ -69,6 +69,17 @@ namespace RentCar.Api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _mediator.Send(new DeleteReservationCommand(id));
+
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
+
         [HttpPost("{id}/cancel")]
         public async Task<IActionResult> CancelReservation(int id, [FromBody] string reason)
         {

@@ -20,8 +20,12 @@ namespace RentCar.Application.Features.Reservations.Commands
 
         public decimal? Discount { get; set; }
         public string? Notes { get; set; }
+        public string? PersonalNumber { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
 
-    
         public List<ReservationExtraServiceDto> ExtraServices { get; set; }
             = new List<ReservationExtraServiceDto>();
     }

@@ -69,5 +69,13 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchCustomer([FromQuery] string personalNumber)
+        {
+            var result = await _mediator.Send(new SearchCustomerQuery(personalNumber));
+
+            return Ok(result); 
+        }
     }
 }

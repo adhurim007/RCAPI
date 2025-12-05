@@ -25,23 +25,21 @@ namespace RentCar.Application.Features.Reservations.Handlers
         {
             var reservation = await _context.Reservations
 
-                // Car → Model → Brand
                 .Include(r => r.Car)
                     .ThenInclude(c => c.CarModel)
                         .ThenInclude(m => m.CarBrand)
 
-                // Customer
                 .Include(r => r.Customer)
 
-                // Business
                 .Include(r => r.Business)
 
-                // Status
                 .Include(r => r.ReservationStatus)
 
-                // Locations
                 .Include(r => r.PickupLocation)
                 .Include(r => r.DropoffLocation)
+
+                .Include(r => r.ExtraServices)
+                    .ThenInclude(es => es.ExtraService)
 
                 .FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken);
 
@@ -59,7 +57,11 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 LicensePlate = reservation.Car.LicensePlate,
 
                 CustomerId = reservation.CustomerId,
-                CustomerName = reservation.Customer.FullName,
+                PersonalNumber = reservation.Customer.DocumentNumber,
+                FirstName = reservation.Customer.FullName.Split(" ").FirstOrDefault(),
+                LastName = reservation.Customer.FullName.Split(" ").Skip(1).FirstOrDefault(),
+                PhoneNumber = reservation.Customer.PhoneNumber,
+                Address = reservation.Customer.Address,
 
                 BusinessId = reservation.BusinessId,
                 BusinessName = reservation.Business.CompanyName,
@@ -68,23 +70,25 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 DropoffDate = reservation.DropoffDate,
                 TotalDays = reservation.TotalDays,
 
-                TotalPrice = reservation.TotalPrice,
-                DepositAmount = (decimal)reservation.DepositAmount,
-
-                PaymentStatus = reservation.PaymentStatus.ToString(),
-                DepositStatus = reservation.DepositStatus.ToString(),
-
-                ReservationStatusId = reservation.ReservationStatusId,
-                Status = reservation.ReservationStatus.Name,
-
                 PickupLocationId = reservation.PickupLocationId,
-                PickupLocation = reservation.PickupLocation.Name,
-
                 DropoffLocationId = reservation.DropoffLocationId,
-                DropoffLocation = reservation.DropoffLocation.Name,
+                PickupLocation = reservation.PickupLocation?.Name,
+                DropoffLocation = reservation.DropoffLocation?.Name,
 
-                Notes = reservation.Notes
+                TotalPrice = reservation.TotalPrice,
+                TotalWithoutDiscount = reservation.TotalPriceWithoutDiscount,
+                Discount = reservation.Discount ?? 0,
+
+                ExtraServices = reservation.ExtraServices
+        .Select(x => new ReservationExtraServiceDto
+        {
+            ExtraServiceId = x.ExtraServiceId,
+            Quantity = x.Quantity,
+            PricePerDay = x.PricePerDay,
+            TotalPrice = x.TotalPrice
+        }).ToList()
             };
         }
+
     }
 }

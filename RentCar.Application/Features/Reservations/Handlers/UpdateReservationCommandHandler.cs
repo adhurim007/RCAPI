@@ -24,6 +24,8 @@ namespace RentCar.Application.Features.Reservations.Handlers
             var reservation = await _context.Reservations
                 .Include(r => r.Car)
                     .ThenInclude(c => c.PricingRules)
+                .Include(r => r.ExtraServices)
+                .ThenInclude(es => es.ExtraService)
                 .FirstOrDefaultAsync(r => r.Id == request.Id, cancellationToken);
 
             if (reservation == null)
@@ -32,20 +34,29 @@ namespace RentCar.Application.Features.Reservations.Handlers
             if (request.PickupDate >= request.DropoffDate)
                 throw new Exception("Dropoff date must be after pickup date.");
 
-            // Update basic fields
+            // ----------------------
+            // UPDATE BASIC FIELDS
+            // ----------------------
             reservation.PickupDate = request.PickupDate;
             reservation.DropoffDate = request.DropoffDate;
             reservation.PickupLocationId = request.PickupLocationId;
             reservation.DropoffLocationId = request.DropoffLocationId;
             reservation.Notes = request.Notes;
-            reservation.ReservationStatusId = request.ReservationStatusId;
 
-            // Recalculate days
+            // IMPORTANT:
+            // MOS E NDRRO statusin gjatë update
+            // reservation.ReservationStatusId = reservation.ReservationStatusId;
+
+            // ----------------------
+            // CALCULATE TOTAL DAYS
+            // ----------------------
             int totalDays = (reservation.DropoffDate - reservation.PickupDate).Days;
             reservation.TotalDays = totalDays;
 
-            // Recalculate price using pricing rules
-            decimal totalPrice = 0;
+            // ----------------------
+            // CALCULATE CAR PRICE
+            // ----------------------
+            decimal carTotal = 0;
 
             for (int i = 0; i < totalDays; i++)
             {
@@ -59,18 +70,40 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 {
                     if (rule.RuleType == "Discount")
                         dayPrice -= rule.PricePerDay;
+
                     else if (rule.RuleType == "Increase")
                         dayPrice += rule.PricePerDay;
                 }
 
-                totalPrice += dayPrice;
+                carTotal += dayPrice;
             }
 
-            reservation.TotalPrice = totalPrice;
+            // ----------------------
+            // CALCULATE EXTRA SERVICES
+            // ----------------------
+            decimal extrasTotal = reservation.ExtraServices.Sum(es => es.TotalPrice);
 
+            // ----------------------
+            // APPLY DISCOUNT
+            // ----------------------
+            decimal discount = request.Discount ?? 0;
+
+            decimal totalWithoutDiscount = carTotal + extrasTotal;
+
+            decimal finalTotal = totalWithoutDiscount - discount;
+            if (finalTotal < 0) finalTotal = 0; // Safety rule
+
+            reservation.Discount = discount;
+            reservation.TotalPriceWithoutDiscount = totalWithoutDiscount;
+            reservation.TotalPrice = finalTotal;
+
+            // ----------------------
+            // SAVE
+            // ----------------------
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
+
     }
 
 }
