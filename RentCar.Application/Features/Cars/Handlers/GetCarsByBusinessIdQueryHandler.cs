@@ -1,46 +1,40 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ReportingServices.Interfaces;
 using RentCar.Application.DTOs.Cars;
 using RentCar.Application.Features.Cars.Queries.GetAllCars;
 using RentCar.Application.MultiTenancy;
+using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces.Repositories;
+using RentCar.Persistence;
 namespace RentCar.Application.Features.Cars.Handlers
 {
-    public class GetCarsByBusinessIdQueryHandler : IRequestHandler<GetCarsByBusinessIdQuery, List<CarDto>>
+    public class GetCarsByBusinessIdQueryHandler
+   : IRequestHandler<GetCarsByBusinessIdQuery, List<CarDto>>
     {
-        private readonly ICarRepository _carRepository;
-        private readonly ITenantProvider _tenantProvider;
+        private readonly RentCarDbContext _context;
 
-        public GetCarsByBusinessIdQueryHandler(ICarRepository carRepository, ITenantProvider tenantProvider)
+        public GetCarsByBusinessIdQueryHandler(RentCarDbContext context)
         {
-            _carRepository = carRepository;
-            _tenantProvider = tenantProvider;
+            _context = context;
         }
 
         public async Task<List<CarDto>> Handle(GetCarsByBusinessIdQuery request, CancellationToken cancellationToken)
         {
-            var businessId = _tenantProvider.GetBusinessId();
-
-            if (!_tenantProvider.IsSuperAdmin() && (!businessId.HasValue || businessId.Value != request.BusinessId))
-                throw new UnauthorizedAccessException("You are not allowed to access these cars.");
-
-            var cars = await _carRepository
-                .Query()
+            return await _context.Cars
                 .Where(c => c.BusinessId == request.BusinessId)
                 .Include(c => c.CarModel)
                     .ThenInclude(m => m.CarBrand)
                 .Select(c => new CarDto
                 {
                     Id = c.Id,
-                    LicensePlate = c.LicensePlate,
-                    Color = c.Color,
-                    DailyPrice = c.DailyPrice,
+                    CarBrand = c.CarModel.CarBrand.Name,
                     CarModel = c.CarModel.Name,
-                    CarBrand = c.CarModel.CarBrand.Name
+                    LicensePlate = c.LicensePlate,
+                    DailyPrice = c.DailyPrice, 
                 })
                 .ToListAsync(cancellationToken);
-
-            return cars;
         }
     }
+
 }

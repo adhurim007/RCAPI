@@ -9,7 +9,7 @@ namespace RentCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "SuperAdmin")] // only SuperAdmin can manage users
+    //[Authorize(Roles = "SuperAdmin")]  
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -97,6 +97,17 @@ namespace RentCar.Api.Controllers
             var result = await _mediator.Send(new DeleteUserCommand(id));
 
             return Ok(new { message = "User deleted successfully" });
+        }
+
+        [HttpGet("{userId}/business-id")]
+        public async Task<IActionResult> GetBusinessId(string userId)
+        {
+            var business = await _mediator.Send(new GetBusinessIdByUserIdQuery(userId));
+
+            if (business == null)
+                return NotFound(new { message = "This user has no business profile." });
+
+            return Ok(new { businessId = business.Id });
         }
     }
 }

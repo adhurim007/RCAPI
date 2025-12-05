@@ -855,7 +855,7 @@ namespace RentCar.Persistence.Migrations
                     b.Property<decimal>("BasePricePerDay")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("BusinessId")
+                    b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
                     b.Property<int>("CarId")
@@ -872,6 +872,9 @@ namespace RentCar.Persistence.Migrations
 
                     b.Property<int>("DepositStatus")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DropoffDate")
                         .HasColumnType("datetime2");
@@ -894,13 +897,16 @@ namespace RentCar.Persistence.Migrations
                     b.Property<string>("ReservationNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReservationStatusId")
+                    b.Property<int>("ReservationStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalDays")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalPriceWithoutDiscount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -925,22 +931,32 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.ReservationExtraService", b =>
                 {
-                    b.Property<int>("ReservationId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ExtraServiceId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
+                    b.Property<decimal>("PricePerDay")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ReservationId", "ExtraServiceId");
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ExtraServiceId");
+
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("ReservationExtraServices");
                 });
@@ -1417,9 +1433,11 @@ namespace RentCar.Persistence.Migrations
 
             modelBuilder.Entity("RentCar.Domain.Entities.Reservation", b =>
                 {
-                    b.HasOne("RentCar.Domain.Entities.Business", null)
+                    b.HasOne("RentCar.Domain.Entities.Business", "Business")
                         .WithMany("Reservations")
-                        .HasForeignKey("BusinessId");
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RentCar.Domain.Entities.Car", "Car")
                         .WithMany("Reservations")
@@ -1447,7 +1465,11 @@ namespace RentCar.Persistence.Migrations
 
                     b.HasOne("RentCar.Domain.Entities.ReservationStatus", "ReservationStatus")
                         .WithMany()
-                        .HasForeignKey("ReservationStatusId");
+                        .HasForeignKey("ReservationStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Business");
 
                     b.Navigation("Car");
 
@@ -1482,7 +1504,7 @@ namespace RentCar.Persistence.Migrations
             modelBuilder.Entity("RentCar.Domain.Entities.ReservationStatusHistory", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.Reservation", "Reservation")
-                        .WithMany()
+                        .WithMany("ReservationStatusHistories")
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1616,6 +1638,8 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Inspections");
 
                     b.Navigation("Payments");
+
+                    b.Navigation("ReservationStatusHistories");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.State", b =>

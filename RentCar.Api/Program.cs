@@ -109,7 +109,9 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
 builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
 //builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
+builder.Services.AddScoped<IReservationReportService, ReservationReportService>(); 
 builder.Services.AddScoped<ReportGenerator>();
+ 
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);

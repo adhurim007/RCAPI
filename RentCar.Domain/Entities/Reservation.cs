@@ -27,29 +27,48 @@ namespace RentCar.Domain.Entities
 
         public DateTime PickupDate { get; set; }
         public DateTime DropoffDate { get; set; }
+
         public int TotalDays { get; set; }
 
         public decimal BasePricePerDay { get; set; }
+
+        // Total before discount
+        public decimal TotalPriceWithoutDiscount { get; set; }
+
+        // Final total after discount
         public decimal TotalPrice { get; set; }
+
+        // Optional discount applied by business
+        public decimal? Discount { get; set; }
 
         public decimal? DepositAmount { get; set; }
         public DepositStatus DepositStatus { get; set; }
 
         public PaymentStatus PaymentStatus { get; set; }
+
+        public int ReservationStatusId { get; set; }
         public ReservationStatus ReservationStatus { get; set; }
 
         public string? Notes { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-         
-        public ICollection<ReservationExtraService> ExtraServices { get; set; } = new List<ReservationExtraService>();
+
+        public int BusinessId { get; set; }
+        public Business Business { get; set; }
+
+        public ICollection<ReservationExtraService> ExtraServices { get; set; }
+            = new List<ReservationExtraService>();
+
         public ICollection<AdditionalDriver> AdditionalDrivers { get; set; }
         public ICollection<VehicleInspection> Inspections { get; set; }
         public ICollection<VehicleDamage> Damages { get; set; }
         public ICollection<Payment> Payments { get; set; }
+        public ICollection<ReservationStatusHistory> ReservationStatusHistories { get; set; }
 
         public Contract Contract { get; set; }
     }
+
 
 
 

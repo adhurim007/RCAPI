@@ -15,22 +15,22 @@ namespace RentCar.Api.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ReservationReportService _reportService;
+        //private readonly ReservationReportService _reportService;
 
-        public ReservationsController(IMediator mediator, ReservationReportService reportService)
+        public ReservationsController(IMediator mediator)
         {
             _mediator = mediator;
-            _reportService = reportService;
+           // _reportService = reportService;  
         }
 
+
+        //[Authorize(Policy = Permissions.Reservations.Create)]
         [HttpPost]
-        [Authorize(Policy = Permissions.Reservations.Create)]
         public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
         {
-            var reservationId = await _mediator.Send(command);
-            return Ok(new { ReservationId = reservationId });
-        }
-
+            var id = await _mediator.Send(command);
+            return Ok(id);
+        } 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ReservationDto>> GetById(int id)

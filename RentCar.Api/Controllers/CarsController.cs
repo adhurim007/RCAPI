@@ -46,8 +46,7 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
-
-
+         
         [HttpGet]
         [AllowAnonymous]
         [Authorize(Policy = Permissions.Cars.View)]
@@ -91,8 +90,7 @@ namespace RentCar.Api.Controllers
         }
 
         [HttpGet("by-business/{businessId}")]
-        [Authorize(Policy = Permissions.Cars.View)]
-        public async Task<IActionResult> GetByBusinessId(int businessId)
+        public async Task<IActionResult> getByBusiness(int businessId)
         {
             var cars = await _mediator.Send(new GetCarsByBusinessIdQuery { BusinessId = businessId });
             return Ok(cars);

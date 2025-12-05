@@ -9,12 +9,7 @@ namespace RentCar.Persistence
     {
         public RentCarDbContext(DbContextOptions<RentCarDbContext> options)
             : base(options) { }
-
-        // ===========================
-        // ENTITY SETS
-        // ===========================
-
-        
+  
         public DbSet<Business> Businesses { get; set; }
         public DbSet<CarImage> CarImages { get; set; }
         public DbSet<CarBrand> CarBrands { get; set; }
@@ -23,9 +18,7 @@ namespace RentCar.Persistence
         public DbSet<CarPricingRule> CarPricingRules { get; set; }
         public DbSet<FuelType> FuelTypes { get; set; }
         public DbSet<Transmission> Transmissions { get; set; }
-        public DbSet<Car> Cars { get; set; }
-
-        // Reservations
+        public DbSet<Car> Cars { get; set; } 
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationStatusHistory> ReservationStatusHistories { get; set; }
         public DbSet<Contract> Contracts { get; set; }
@@ -35,6 +28,7 @@ namespace RentCar.Persistence
 
         // NEW — Business Location (single table)
         public DbSet<BusinessLocations> BusinessLocations { get; set; }
+        public DbSet<Customer> Customer { get; set; }
 
         // Other modules
         public DbSet<Menu> Menus { get; set; }
@@ -52,26 +46,19 @@ namespace RentCar.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // ===========================
-            // CLIENT → USER
-            // ===========================
+ 
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)
                 .HasForeignKey<Customer>(c => c.UserId);
 
-            // ===========================
-            // BUSINESS → USER
-            // ===========================
+             
             modelBuilder.Entity<Business>()
                 .HasOne(b => b.User)
                 .WithOne(u => u.Business)
                 .HasForeignKey<Business>(b => b.UserId);
 
-            // ===========================
-            // BUSINESS → STATE / CITY
-            // ===========================
+         
             modelBuilder.Entity<Business>()
                 .HasOne(b => b.State)
                 .WithMany()
@@ -84,34 +71,28 @@ namespace RentCar.Persistence
                 .HasForeignKey(b => b.CityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ===========================
-            // BUSINESS → BUSINESS LOCATIONS
-            // ===========================
-            // BUSINESS → LOCATIONS
+           
             modelBuilder.Entity<BusinessLocations>()
                 .HasOne(bl => bl.Business)
                 .WithMany(b => b.Locations)
                 .HasForeignKey(bl => bl.BusinessId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // STATE
+          
             modelBuilder.Entity<BusinessLocations>()
                 .HasOne(bl => bl.State)
                 .WithMany()
                 .HasForeignKey(bl => bl.StateId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // CITY
+          
             modelBuilder.Entity<BusinessLocations>()
                 .HasOne(bl => bl.City)
                 .WithMany()
                 .HasForeignKey(bl => bl.CityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-            // ===========================
-            // CAR RELATIONS
-            // ===========================
+ 
             modelBuilder.Entity<Car>()
                 .Property(c => c.DailyPrice)
                 .HasPrecision(18, 2);
@@ -162,18 +143,14 @@ namespace RentCar.Persistence
                 .Property(r => r.PricePerDay)
                 .HasPrecision(18, 2);
 
-            // ===========================
-            // CAR IMAGES
-            // ===========================
+            
             modelBuilder.Entity<CarImage>()
                 .HasOne(ci => ci.Car)
                 .WithMany(c => c.Images)
                 .HasForeignKey(ci => ci.CarId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ===========================
-            // RESERVATION → BUSINESS LOCATIONS
-            // ===========================
+          
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.PickupLocation)
                 .WithMany()
@@ -186,18 +163,14 @@ namespace RentCar.Persistence
                 .HasForeignKey(r => r.DropoffLocationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ===========================
-            // CONTRACT
-            // ===========================
+           
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.Reservation)
                 .WithOne(r => r.Contract)
                 .HasForeignKey<Contract>(c => c.ReservationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ===========================
-            // PAYMENT
-            // ===========================
+           
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Reservation)
                 .WithMany(r => r.Payments)
@@ -208,30 +181,53 @@ namespace RentCar.Persistence
                 .Property(p => p.Amount)
                 .HasPrecision(18, 2);
 
-            // ===========================
-            // RESERVATION EXTRA SERVICES
-            // ===========================
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Business)
+                .WithMany(b => b.Reservations)
+                .HasForeignKey(r => r.BusinessId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.ReservationStatus)
+                .WithMany()
+                .HasForeignKey(r => r.ReservationStatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ReservationExtraService>(entity =>
             {
-                entity.HasKey(res => new { res.ReservationId, res.ExtraServiceId });
+                entity.HasKey(x => x.Id);
 
-                entity.Property(res => res.Price)
-                    .HasPrecision(18, 2);
+                entity.HasOne(x => x.Reservation)
+                      .WithMany(r => r.ExtraServices)
+                      .HasForeignKey(x => x.ReservationId)
+                      .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(res => res.Reservation)
-                    .WithMany(r => r.ExtraServices)
-                    .HasForeignKey(res => res.ReservationId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(x => x.ExtraService)
+                      .WithMany(e => e.ReservationExtraServices)
+                      .HasForeignKey(x => x.ExtraServiceId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(res => res.ExtraService)
-                    .WithMany(es => es.ReservationExtraServices)
-                    .HasForeignKey(res => res.ExtraServiceId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                entity.Property(x => x.PricePerDay)
+                      .HasColumnType("decimal(18,2)")
+                      .IsRequired();
+
+                entity.Property(x => x.TotalPrice)
+                      .HasColumnType("decimal(18,2)")
+                      .IsRequired();
             });
+             
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                entity.Property(r => r.TotalPriceWithoutDiscount)
+                      .HasColumnType("decimal(18,2)");
 
-            // ===========================
-            // TRANSLATIONS
-            // ===========================
+                entity.Property(r => r.TotalPrice)
+                      .HasColumnType("decimal(18,2)");
+
+                entity.Property(r => r.Discount)
+                      .HasColumnType("decimal(18,2)");
+            });
+             
             modelBuilder.Entity<Translation>()
                 .HasIndex(t => new { t.LanguageId, t.Key })
                 .IsUnique();

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.DTOs.BusinessLocationDTO;
 using RentCar.Application.Features.BusinessLocations.Command;
 using RentCar.Application.Features.BusinessLocations.Queries;
 
@@ -20,6 +21,13 @@ namespace RentCar.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllBusinessLocationsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("businesses")]
+        public async Task<ActionResult<List<BusinessDto>>> GetBusinesses()
+        {
+            var result = await _mediator.Send(new GetAllBusinessesQuery());
             return Ok(result);
         }
 
