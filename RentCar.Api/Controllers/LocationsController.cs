@@ -14,8 +14,7 @@ namespace RentCar.Api.Controllers
         {
             _db = db;
         }
-
-        // GET: /api/locations/states
+         
         [HttpGet("states")]
         public async Task<IActionResult> GetStates()
         {
@@ -25,8 +24,7 @@ namespace RentCar.Api.Controllers
 
             return Ok(states);
         }
-
-        // GET: /api/locations/cities/{stateId}
+         
         [HttpGet("cities/{stateId}")]   
         public async Task<IActionResult> GetCities(int stateId)
         {

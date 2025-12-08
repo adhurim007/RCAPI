@@ -16,16 +16,14 @@ namespace RentCar.Api.Controllers
         {
             _mediator = mediator;
         }
-
-        // GET: api/customers
+         
         [HttpGet]
         public async Task<ActionResult<List<CustomerDto>>> GetAll()
         {
             var result = await _mediator.Send(new GetAllCustomersQuery());
             return Ok(result);
         }
-
-        // GET: api/customers/5
+         
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CustomerDto>> GetById(int id)
         {
@@ -35,16 +33,14 @@ namespace RentCar.Api.Controllers
 
             return Ok(result);
         }
-
-        // POST: api/customers
+         
         [HttpPost]
         public async Task<ActionResult<int>> Create([FromBody] CreateCustomerCommand command)
         {
             var id = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
-
-     
+         
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerCommand command)
         {

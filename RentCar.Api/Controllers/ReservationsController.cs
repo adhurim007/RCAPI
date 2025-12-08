@@ -22,9 +22,7 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
            // _reportService = reportService;  
         }
-
-
-        //[Authorize(Policy = Permissions.Reservations.Create)]
+         
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
         {

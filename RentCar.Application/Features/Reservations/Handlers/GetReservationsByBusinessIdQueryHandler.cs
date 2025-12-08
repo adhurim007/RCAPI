@@ -37,22 +37,17 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 throw new UnauthorizedAccessException("Not allowed to view these reservations.");
 
             var reservations = await _context.Reservations
-
-                // Car → Model → Brand
+                 
                 .Include(r => r.Car)
                     .ThenInclude(c => c.CarModel)
                         .ThenInclude(m => m.CarBrand)
-
-                // Customer
+                         
                 .Include(r => r.Customer)
-
-                // Business
+                 
                 .Include(r => r.Business)
-
-                // Status
+                 
                 .Include(r => r.ReservationStatus)
-
-                // Locations
+                 
                 .Include(r => r.PickupLocation)
                 .Include(r => r.DropoffLocation)
 

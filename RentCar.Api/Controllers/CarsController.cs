@@ -21,9 +21,7 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
-        //[Authorize(Policy = Permissions.Cars.Create)]
-        //[Authorize(Roles = "Business")]  
+        [HttpPost] 
         public async Task<IActionResult> Create([FromBody] CreateCarCommand command)
         {
             if (!ModelState.IsValid)
@@ -75,8 +73,7 @@ namespace RentCar.Api.Controllers
         //    var result = await _mediator.Send(new UpdateCarImageCommand(imageId, file));
         //    return Ok(result);
         //}
-
-
+         
         [HttpDelete("{id}")]
         [Authorize(Policy = Permissions.Cars.Delete)]
         public async Task<IActionResult> Delete(int id)

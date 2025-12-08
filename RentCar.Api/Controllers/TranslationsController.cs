@@ -52,9 +52,7 @@ namespace RentCar.Api.Controllers
 
             return Ok(translations);
         }
-
-
-
+         
         // List translations for a language (for admin grid)
         [HttpGet("list/{languageId:int}")] 
         public async Task<IActionResult> GetList(int languageId, [FromQuery] string? search = null)

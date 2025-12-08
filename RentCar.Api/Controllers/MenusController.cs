@@ -54,10 +54,7 @@ namespace RentCar.Api.Controllers
             var success = await _mediator.Send(command);
             return success ? Ok("Menu updated") : NotFound();
         }
-
-        /// <summary>
-        /// Delete a menu
-        /// </summary>
+          
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -68,11 +65,7 @@ namespace RentCar.Api.Controllers
             // ✅ kthimi i duhur për DELETE
             return NoContent();
         }
-
-
-        /// <summary>
-        /// Get all menus (sorted)
-        /// </summary>
+ 
         [HttpGet]
         public async Task<ActionResult<List<MenuDto>>> GetAll()
         {

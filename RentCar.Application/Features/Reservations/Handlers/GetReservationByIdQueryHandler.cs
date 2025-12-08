@@ -80,13 +80,13 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 Discount = reservation.Discount ?? 0,
 
                 ExtraServices = reservation.ExtraServices
-        .Select(x => new ReservationExtraServiceDto
-        {
-            ExtraServiceId = x.ExtraServiceId,
-            Quantity = x.Quantity,
-            PricePerDay = x.PricePerDay,
-            TotalPrice = x.TotalPrice
-        }).ToList()
+                    .Select(x => new ReservationExtraServiceDto
+                    {
+                        ExtraServiceId = x.ExtraServiceId,
+                        Quantity = x.Quantity,
+                        PricePerDay = x.PricePerDay,
+                        TotalPrice = x.TotalPrice
+                    }).ToList()
             };
         }
 

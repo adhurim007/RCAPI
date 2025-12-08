@@ -34,28 +34,17 @@ namespace RentCar.Application.Features.Reservations.Handlers
             if (request.PickupDate >= request.DropoffDate)
                 throw new Exception("Dropoff date must be after pickup date.");
 
-            // ----------------------
-            // UPDATE BASIC FIELDS
-            // ----------------------
+          
             reservation.PickupDate = request.PickupDate;
             reservation.DropoffDate = request.DropoffDate;
             reservation.PickupLocationId = request.PickupLocationId;
             reservation.DropoffLocationId = request.DropoffLocationId;
             reservation.Notes = request.Notes;
-
-            // IMPORTANT:
-            // MOS E NDRRO statusin gjatë update
-            // reservation.ReservationStatusId = reservation.ReservationStatusId;
-
-            // ----------------------
-            // CALCULATE TOTAL DAYS
-            // ----------------------
+             
             int totalDays = (reservation.DropoffDate - reservation.PickupDate).Days;
             reservation.TotalDays = totalDays;
 
-            // ----------------------
-            // CALCULATE CAR PRICE
-            // ----------------------
+            
             decimal carTotal = 0;
 
             for (int i = 0; i < totalDays; i++)
@@ -78,14 +67,10 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 carTotal += dayPrice;
             }
 
-            // ----------------------
-            // CALCULATE EXTRA SERVICES
-            // ----------------------
+         
             decimal extrasTotal = reservation.ExtraServices.Sum(es => es.TotalPrice);
 
-            // ----------------------
-            // APPLY DISCOUNT
-            // ----------------------
+           
             decimal discount = request.Discount ?? 0;
 
             decimal totalWithoutDiscount = carTotal + extrasTotal;
@@ -97,9 +82,7 @@ namespace RentCar.Application.Features.Reservations.Handlers
             reservation.TotalPriceWithoutDiscount = totalWithoutDiscount;
             reservation.TotalPrice = finalTotal;
 
-            // ----------------------
-            // SAVE
-            // ----------------------
+           
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
