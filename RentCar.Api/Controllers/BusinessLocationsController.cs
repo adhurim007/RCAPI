@@ -24,6 +24,17 @@ namespace RentCar.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("by-business/{businessId:int}")]
+        public async Task<IActionResult> GetByBusiness(int businessId)
+        {
+            var result = await _mediator.Send(
+                new GetBusinessLocationsByBusinessIdQuery(businessId)
+            );
+
+            return Ok(result);
+        }
+
+
         [HttpGet("businesses")]
         public async Task<ActionResult<List<BusinessDto>>> GetBusinesses()
         {
@@ -47,14 +58,14 @@ namespace RentCar.Api.Controllers
 
             return Ok(result);
         }
-         
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateBusinessLocationCommand command)
         {
             var id = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
-         
+
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateBusinessLocationCommand command)
         {

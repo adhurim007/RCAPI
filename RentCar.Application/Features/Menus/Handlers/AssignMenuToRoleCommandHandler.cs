@@ -21,15 +21,13 @@ public class AssignMenuToRoleCommandHandler : IRequestHandler<AssignMenuToRoleCo
     {
         var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
         if (role == null) return false;
-
-        // Check if claim already exists
+         
         var existingClaims = await _roleManager.GetClaimsAsync(role);
         if (existingClaims.Any(c => c.Type == "Permission" && c.Value == request.Claim))
         {
-            return false; // already assigned
+            return false;  
         }
-
-        // Add claim to role
+         
         var result = await _roleManager.AddClaimAsync(role, new System.Security.Claims.Claim("Permission", request.Claim));
         return result.Succeeded;
     }

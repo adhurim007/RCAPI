@@ -33,11 +33,9 @@ namespace RentCar.Application.Features.VehicleInspection.Handlers
             inspection.FuelLevel = request.FuelLevel;
             inspection.TireCondition = request.TireCondition;
             inspection.OverallCondition = request.OverallCondition;
-
-            // Remove old photos
+             
             _context.VehicleInspectionPhoto.RemoveRange(inspection.Photos);
-
-            // Add new photos
+             
             if (request.Photos != null)
             {
                 foreach (var url in request.Photos)

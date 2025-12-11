@@ -40,7 +40,9 @@ namespace RentCar.Persistence
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<VehicleInspection> VehicleInspection { get; set; }
-        public DbSet<VehicleInspectionPhoto> VehicleInspectionPhoto { get; set; }
+        public DbSet<VehicleInspectionPhoto> VehicleInspectionPhoto { get; set; } 
+        public DbSet<VehicleDamage> VehicleDamage { get; set; }
+        public DbSet<VehicleDamagePhoto> VehicleDamagePhoto { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -97,6 +99,7 @@ namespace RentCar.Persistence
                 .Property(c => c.DailyPrice)
                 .HasPrecision(18, 2);
 
+
             modelBuilder.Entity<Car>()
                 .HasOne(c => c.CarBrand)
                 .WithMany()  
@@ -132,6 +135,49 @@ namespace RentCar.Persistence
                 .WithMany(b => b.Cars)
                 .HasForeignKey(c => c.BusinessId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<VehicleInspection>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.HasOne(x => x.Reservation)
+                    .WithMany(r => r.Inspections)
+                    .HasForeignKey(x => x.ReservationId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.Business)
+                    .WithMany()
+                    .HasForeignKey(x => x.BusinessId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(x => x.Photos)
+                    .WithOne(p => p.Inspection)
+                    .HasForeignKey(p => p.InspectionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<VehicleDamage>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.HasOne(x => x.Reservation)
+                    .WithMany(r => r.Damages)
+                    .HasForeignKey(x => x.ReservationId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.Business)
+                    .WithMany()
+                    .HasForeignKey(x => x.BusinessId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(x => x.EstimatedCost)
+                    .HasPrecision(18, 2);
+
+                entity.HasMany(x => x.Photos)
+                    .WithOne(p => p.Damage)
+                    .HasForeignKey(p => p.DamageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<CarPricingRule>()
             .HasOne(r => r.Car)

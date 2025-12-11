@@ -30,15 +30,10 @@ namespace RentCar.Domain.Entities
 
         public int TotalDays { get; set; }
 
-        public decimal BasePricePerDay { get; set; }
-
-        // Total before discount
-        public decimal TotalPriceWithoutDiscount { get; set; }
-
-        // Final total after discount
+        public decimal BasePricePerDay { get; set; } 
+        public decimal TotalPriceWithoutDiscount { get; set; } 
         public decimal TotalPrice { get; set; }
-
-        // Optional discount applied by business
+         
         public decimal? Discount { get; set; }
 
         public decimal? DepositAmount { get; set; }
@@ -62,6 +57,7 @@ namespace RentCar.Domain.Entities
 
         public ICollection<AdditionalDriver> AdditionalDrivers { get; set; }
         public ICollection<VehicleInspection> Inspections { get; set; }
+        = new List<VehicleInspection>();
         public ICollection<VehicleDamage> Damages { get; set; }
         public ICollection<Payment> Payments { get; set; }
         public ICollection<ReservationStatusHistory> ReservationStatusHistories { get; set; }

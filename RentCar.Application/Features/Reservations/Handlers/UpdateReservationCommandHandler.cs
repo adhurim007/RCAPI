@@ -39,14 +39,12 @@ namespace RentCar.Application.Features.Reservations.Handlers
             reservation.DropoffDate = request.DropoffDate;
             reservation.PickupLocationId = request.PickupLocationId;
             reservation.DropoffLocationId = request.DropoffLocationId;
-            reservation.Notes = request.Notes;
-             
+            reservation.Notes = request.Notes; 
             int totalDays = (reservation.DropoffDate - reservation.PickupDate).Days;
             reservation.TotalDays = totalDays;
 
             
-            decimal carTotal = 0;
-
+            decimal carTotal = 0; 
             for (int i = 0; i < totalDays; i++)
             {
                 var currentDate = reservation.PickupDate.AddDays(i);
@@ -65,19 +63,12 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 }
 
                 carTotal += dayPrice;
-            }
-
-         
-            decimal extrasTotal = reservation.ExtraServices.Sum(es => es.TotalPrice);
-
-           
-            decimal discount = request.Discount ?? 0;
-
-            decimal totalWithoutDiscount = carTotal + extrasTotal;
-
+            } 
+            decimal extrasTotal = reservation.ExtraServices.Sum(es => es.TotalPrice); 
+            decimal discount = request.Discount ?? 0; 
+            decimal totalWithoutDiscount = carTotal + extrasTotal; 
             decimal finalTotal = totalWithoutDiscount - discount;
-            if (finalTotal < 0) finalTotal = 0; // Safety rule
-
+            if (finalTotal < 0) finalTotal = 0;  
             reservation.Discount = discount;
             reservation.TotalPriceWithoutDiscount = totalWithoutDiscount;
             reservation.TotalPrice = finalTotal;

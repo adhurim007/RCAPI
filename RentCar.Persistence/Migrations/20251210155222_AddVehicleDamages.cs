@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RentCar.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrateModel : Migration
+    public partial class AddVehicleDamages : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -471,8 +471,8 @@ namespace RentCar.Persistence.Migrations
                     BusinessId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -483,6 +483,18 @@ namespace RentCar.Persistence.Migrations
                         principalTable: "Businesses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BusinessLocations_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BusinessLocations_States_StateId",
+                        column: x => x.StateId,
+                        principalTable: "States",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -607,15 +619,17 @@ namespace RentCar.Persistence.Migrations
                     DropoffDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalDays = table.Column<int>(type: "int", nullable: false),
                     BasePricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPriceWithoutDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     DepositAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     DepositStatus = table.Column<int>(type: "int", nullable: false),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
-                    ReservationStatusId = table.Column<int>(type: "int", nullable: true),
+                    ReservationStatusId = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BusinessId = table.Column<int>(type: "int", nullable: true)
+                    BusinessId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -636,7 +650,8 @@ namespace RentCar.Persistence.Migrations
                         name: "FK_Reservations_Businesses_BusinessId",
                         column: x => x.BusinessId,
                         principalTable: "Businesses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reservations_Cars_CarId",
                         column: x => x.CarId,
@@ -653,7 +668,8 @@ namespace RentCar.Persistence.Migrations
                         name: "FK_Reservations_ReservationStatus_ReservationStatusId",
                         column: x => x.ReservationStatusId,
                         principalTable: "ReservationStatus",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -729,14 +745,17 @@ namespace RentCar.Persistence.Migrations
                 name: "ReservationExtraServices",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ReservationId = table.Column<int>(type: "int", nullable: false),
                     ExtraServiceId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
+                    PricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReservationExtraServices", x => new { x.ReservationId, x.ExtraServiceId });
+                    table.PrimaryKey("PK_ReservationExtraServices", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ReservationExtraServices_ExtraServices_ExtraServiceId",
                         column: x => x.ExtraServiceId,
@@ -787,9 +806,10 @@ namespace RentCar.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReservationId = table.Column<int>(type: "int", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false),
                     DamageType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EstimatedCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EstimatedCost = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -797,11 +817,17 @@ namespace RentCar.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_VehicleDamage", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_VehicleDamage_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_VehicleDamage_Reservations_ReservationId",
                         column: x => x.ReservationId,
                         principalTable: "Reservations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -811,6 +837,7 @@ namespace RentCar.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReservationId = table.Column<int>(type: "int", nullable: false),
+                    BusinessId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Mileage = table.Column<int>(type: "int", nullable: false),
                     FuelLevel = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -822,11 +849,17 @@ namespace RentCar.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_VehicleInspection", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_VehicleInspection_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_VehicleInspection_Reservations_ReservationId",
                         column: x => x.ReservationId,
                         principalTable: "Reservations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -935,6 +968,16 @@ namespace RentCar.Persistence.Migrations
                 column: "BusinessId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BusinessLocations_CityId",
+                table: "BusinessLocations",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessLocations_StateId",
+                table: "BusinessLocations",
+                column: "StateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CarImages_CarId",
                 table: "CarImages",
                 column: "CarId");
@@ -1012,6 +1055,11 @@ namespace RentCar.Persistence.Migrations
                 column: "ExtraServiceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ReservationExtraServices_ReservationId",
+                table: "ReservationExtraServices",
+                column: "ReservationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_BusinessId",
                 table: "Reservations",
                 column: "BusinessId");
@@ -1059,6 +1107,11 @@ namespace RentCar.Persistence.Migrations
                 filter: "[Key] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_VehicleDamage_BusinessId",
+                table: "VehicleDamage",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_VehicleDamage_ReservationId",
                 table: "VehicleDamage",
                 column: "ReservationId");
@@ -1067,6 +1120,11 @@ namespace RentCar.Persistence.Migrations
                 name: "IX_VehicleDamagePhoto_DamageId",
                 table: "VehicleDamagePhoto",
                 column: "DamageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VehicleInspection_BusinessId",
+                table: "VehicleInspection",
+                column: "BusinessId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VehicleInspection_ReservationId",

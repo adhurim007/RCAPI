@@ -40,8 +40,7 @@ namespace RentCar.Application.Notifications
         }
 
         public Task SendSmsAsync(string phoneNumber, string message)
-        {
-            // Placeholder – implement Twilio or other SMS provider later
+        { 
             return Task.CompletedTask;
         }
     }

@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 namespace RentCar.Application.Features.BusinessLocations.Command
 {
     public record CreateBusinessLocationCommand(
-    int BusinessId,
-    string Name,
-    string? Address,
-    int StateId,
-    int CityId
+        int BusinessId,
+        string Name,
+        string? Address,
+        int StateId,
+        int CityId
     ) : IRequest<int>;
+
 }

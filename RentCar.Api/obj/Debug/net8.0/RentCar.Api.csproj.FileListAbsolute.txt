@@ -299,6 +299,7 @@ C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\RentCar.Api.genruntimeconfig.cac
 C:\github\rentacar\RentCar.Api\obj\Debug\net8.0\ref\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\appsettings.Development.json
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\appsettings.json
+E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.staticwebassets.runtime.json
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\RentCar.Api.staticwebassets.endpoints.json
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\LatoFont\Lato-Black.ttf
 E:\RCAPI\RentCar.Api\bin\Debug\net8.0\LatoFont\Lato-BlackItalic.ttf

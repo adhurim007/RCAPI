@@ -100,7 +100,6 @@ namespace RentCar.Persistence.Repositories
             if (rule != null)
                 _dbContext.CarPricingRules.Remove(rule);
         }
-
-
+         
     }
 }

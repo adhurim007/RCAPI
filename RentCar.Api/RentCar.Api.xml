@@ -4,15 +4,5 @@
         <name>RentCar.Api</name>
     </assembly>
     <members>
-        <member name="M:RentCar.Api.Controllers.MenusController.Delete(System.Int32)">
-            <summary>
-            Delete a menu
-            </summary>
-        </member>
-        <member name="M:RentCar.Api.Controllers.MenusController.GetAll">
-            <summary>
-            Get all menus (sorted)
-            </summary>
-        </member>
     </members>
 </doc>

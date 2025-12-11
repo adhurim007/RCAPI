@@ -23,15 +23,25 @@ namespace RentCar.Application.Features.Cars.Handlers
         {
             return await _context.Cars
                 .Where(c => c.BusinessId == request.BusinessId)
-                .Include(c => c.CarModel)
-                    .ThenInclude(m => m.CarBrand)
+                .Include(c => c.Business)
+                .Include(c => c.CarModel).ThenInclude(m => m.CarBrand)
+                .Include(c => c.CarType)
+                .Include(c => c.FuelType)
+                .Include(c => c.Transmission)
                 .Select(c => new CarDto
                 {
                     Id = c.Id,
-                    CarBrand = c.CarModel.CarBrand.Name,
-                    CarModel = c.CarModel.Name,
                     LicensePlate = c.LicensePlate,
-                    DailyPrice = c.DailyPrice, 
+                    Color = c.Color,
+                    DailyPrice = c.DailyPrice,
+                    Description = c.Description,
+                    IsAvailable = c.IsAvailable,
+                    ImageUrl = c.ImageUrl,
+                    CarModelName = c.CarModel.Name,
+                    CarBrandName = c.CarModel.CarBrand.Name,
+                    CarTypeName = c.CarType.Name,
+                    FuelTypeName = c.FuelType.Name,
+                    TransmissionName = c.Transmission.Name
                 })
                 .ToListAsync(cancellationToken);
         }

@@ -12,17 +12,10 @@ namespace RentCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReservationsController : ControllerBase
+    public class ReservationsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        //private readonly ReservationReportService _reportService;
+        private readonly IMediator _mediator = mediator;
 
-        public ReservationsController(IMediator mediator)
-        {
-            _mediator = mediator;
-           // _reportService = reportService;  
-        }
-         
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
         {
@@ -44,10 +37,11 @@ namespace RentCar.Api.Controllers
             return Ok(await _mediator.Send(new GetReservationsByClientIdQuery(clientId)));
         }
 
-        [HttpGet("business/{businessId}")]
+        [HttpGet("business/{businessId:int}")]
         public async Task<ActionResult<List<ReservationDto>>> GetByBusiness(int businessId)
         {
-            return Ok(await _mediator.Send(new GetReservationsByBusinessIdQuery(businessId)));
+            var result = await _mediator.Send(new GetReservationsByBusinessIdQuery(businessId));
+            return Ok(result);
         }
 
         [HttpGet]

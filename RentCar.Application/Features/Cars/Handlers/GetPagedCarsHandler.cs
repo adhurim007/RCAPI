@@ -45,8 +45,7 @@ namespace RentCar.Application.Features.Cars.Handlers
                     Id = car.Id,
                     DailyPrice = car.DailyPrice,
                     CarModelName = car.CarModel.Name,
-                    CarBrandName = car.CarModel.CarBrand.Name,
-                    //Year = car.Year,
+                    CarBrandName = car.CarModel.CarBrand.Name, 
                     IsAvailable = car.IsAvailable
                 })
                 .ToListAsync(cancellationToken);

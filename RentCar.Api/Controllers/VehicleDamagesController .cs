@@ -1,0 +1,63 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RentCar.Application.Features.VehicleDamage.Command;
+using RentCar.Application.Features.VehicleDamage.Queries;
+
+namespace RentCar.Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class VehicleDamagesController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public VehicleDamagesController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        // LIST
+        [HttpGet]
+        public async Task<IActionResult> GetList([FromQuery] int? reservationId)
+        {
+            var result = await _mediator.Send(
+                new GetVehicleDamagesQuery(reservationId));
+            return Ok(result);
+        }
+
+        // CREATE
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create(
+            [FromForm] CreateVehicleDamageCommand command)
+        {
+            var id = await _mediator.Send(command);
+            return Ok(id);
+        }
+
+        // UPDATE
+        [HttpPut("{id:int}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(
+            int id,
+            [FromForm] UpdateVehicleDamageCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+
+            var success = await _mediator.Send(command);
+            return success ? NoContent() : NotFound();
+        }
+
+        // DELETE
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _mediator.Send(
+                new DeleteVehicleDamageCommand(id));
+
+            return success ? NoContent() : NotFound();
+        }
+    }
+
+}

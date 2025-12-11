@@ -20,7 +20,7 @@ namespace RentCar.Persistence.Identity
             RoleManager<IdentityRole<Guid>> roleManager,
             UserManager<ApplicationUser> userManager)
         {
-            // 🔹 Ensure roles exist
+            
             foreach (var role in DefaultRoles.AllRoles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -28,11 +28,9 @@ namespace RentCar.Persistence.Identity
                     await roleManager.CreateAsync(new IdentityRole<Guid>(role));
                 }
             }
-
-            // 🔹 Get all permissions dynamically
+             
             var allPermissions = GetAllPermissions();
-
-            // 🔹 Assign all permissions to SuperAdmin role
+             
             var superAdminRole = await roleManager.FindByNameAsync(DefaultRoles.SuperAdmin);
             if (superAdminRole != null)
             {
@@ -46,8 +44,7 @@ namespace RentCar.Persistence.Identity
                     }
                 }
             }
-
-            // 🔹 Optionally: create default SuperAdmin user if missing
+             
             var superAdminEmail = "superadmin@rentcar.com";
             var superAdminUser = await userManager.FindByEmailAsync(superAdminEmail);
             if (superAdminUser == null)
@@ -67,10 +64,7 @@ namespace RentCar.Persistence.Identity
                 }
             }
         }
-
-        /// <summary>
-        /// Extracts all permission constants from the Permissions static class
-        /// </summary>
+  
         private static List<string> GetAllPermissions()
         {
             var permissions = new List<string>();

@@ -32,20 +32,28 @@ namespace RentCar.Api.Controllers
             => Ok(await _mediator.Send(new GetInspectionsByReservationQuery(reservationId)));
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-            => Ok(await _mediator.Send(new GetInspectionByIdQuery(id)));
+        public async Task<IActionResult> Get(int id) => Ok(await _mediator.Send(new GetInspectionByIdQuery(id)));
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateInspectionCommand command)
-            => Ok(await _mediator.Send(command));
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateInspectionCommand command)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] CreateInspectionCommand command)
         {
-            if (id != command.Id) return BadRequest();
-            return Ok(await _mediator.Send(command));
+            var id = await _mediator.Send(command);
+            return Ok(id);
         }
 
+        [HttpPut("{id:int}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update( int id,
+        [FromForm] UpdateInspectionCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+
+            var result = await _mediator.Send(command);
+            return result ? NoContent() : NotFound();
+        }
+         
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
             => Ok(await _mediator.Send(new DeleteInspectionCommand(id)));

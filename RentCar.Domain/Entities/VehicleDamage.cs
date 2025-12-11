@@ -14,14 +14,19 @@ namespace RentCar.Domain.Entities
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
 
-        public string DamageType { get; set; }
-        public string Description { get; set; }
+        public int BusinessId { get; set; }
+        public Business Business { get; set; }
+
+        public string? DamageType { get; set; }
+        public string? Description { get; set; }
+
         public decimal EstimatedCost { get; set; }
 
-        public DamageStatus Status { get; set; } = DamageStatus.Pending;
-
-        public List<VehicleDamagePhoto> Photos { get; set; } = new();
+        public DamageStatus Status { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<VehicleDamagePhoto> Photos { get; set; }
+            = new List<VehicleDamagePhoto>();
     }
 }

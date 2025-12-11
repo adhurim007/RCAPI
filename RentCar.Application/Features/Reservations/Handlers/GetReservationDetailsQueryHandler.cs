@@ -28,31 +28,17 @@ namespace RentCar.Application.Features.Reservations.Handlers
             CancellationToken cancellationToken)
         {
             var reservation = await _context.Reservations
-
-                // Car → Model → Brand
+                 
                 .Include(r => r.Car)
                     .ThenInclude(c => c.CarModel)
-                        .ThenInclude(m => m.CarBrand)
-
-                // Customer
-                .Include(r => r.Customer)
-
-                // Business
-                .Include(r => r.Business)
-
-                // Status
-                .Include(r => r.ReservationStatus)
-
-                // Contract
-                .Include(r => r.Contract)
-
-                // Payments (many)
-                .Include(r => r.Payments)
-
-                // Locations
+                        .ThenInclude(m => m.CarBrand) 
+                .Include(r => r.Customer) 
+                .Include(r => r.Business) 
+                .Include(r => r.ReservationStatus) 
+                .Include(r => r.Contract) 
+                .Include(r => r.Payments) 
                 .Include(r => r.PickupLocation)
-                .Include(r => r.DropoffLocation)
-                 
+                .Include(r => r.DropoffLocation) 
                 .FirstOrDefaultAsync(r => r.Id == request.ReservationId, cancellationToken);
 
             if (reservation == null)
@@ -61,61 +47,26 @@ namespace RentCar.Application.Features.Reservations.Handlers
             return new ReservationDetailsDto
             {
                 Id = reservation.Id,
-                ReservationNumber = reservation.ReservationNumber,
-
+                ReservationNumber = reservation.ReservationNumber, 
                 CarId = reservation.CarId,
                 CarBrand = reservation.Car.CarModel.CarBrand.Name,
                 CarModel = reservation.Car.CarModel.Name,
-                LicensePlate = reservation.Car.LicensePlate,
-
+                LicensePlate = reservation.Car.LicensePlate, 
                 CustomerId = reservation.CustomerId,
-                CustomerName = reservation.Customer.FullName,
-
+                CustomerName = reservation.Customer.FullName, 
                 BusinessId = reservation.BusinessId,
-                BusinessName = reservation.Business.CompanyName,
-
+                BusinessName = reservation.Business.CompanyName, 
                 PickupDate = reservation.PickupDate,
                 DropoffDate = reservation.DropoffDate,
                 TotalDays = reservation.TotalDays,
-                TotalPrice = reservation.TotalPrice,
-
-                Status = reservation.ReservationStatus.Name,
-
+                TotalPrice = reservation.TotalPrice, 
+                Status = reservation.ReservationStatus.Name, 
                 PickupLocationId = reservation.PickupLocationId,
-                PickupLocation = reservation.PickupLocation.Name,
-
+                PickupLocation = reservation.PickupLocation.Name, 
                 DropoffLocationId = reservation.DropoffLocationId,
                 DropoffLocation = reservation.DropoffLocation.Name,
 
-                //Payments = reservation.Payments.Select(p => new PaymentDto
-                //{
-                //    Id = p.Id,
-                //    Amount = p.Amount,
-                //    PaidAt = p.PaidAt,
-                //    PaymentMethod = p.PaymentMethod
-                //}).ToList(),
-
-                //Contract = reservation.Contract != null
-                //    ? new ContractDto
-                //    {
-                //        Id = reservation.Contract.Id,
-                //        FileUrl = reservation.Contract.FileUrl,
-                //        CreatedAt = reservation.Contract.CreatedAt
-                //    }
-                //    : null,
-
-                //StatusHistory = reservation.ReservationStatusHistories
-                //    .OrderByDescending(h => h.ChangedAt)
-                //    .Select(h => new ReservationStatusHistoryDto
-                //    {
-                //        Id = h.Id,
-                //        ReservationId = h.ReservationId,
-                //        ReservationStatusId = h.ReservationStatusId,
-                //        ReservationStatusName = h.ReservationStatus.Name,
-                //        ChangedAt = h.ChangedAt,
-                //        ChangedBy = h.ChangedBy,
-                //        Note = h.Note
-                //    }).ToList()
+                 
             };
         }
     }

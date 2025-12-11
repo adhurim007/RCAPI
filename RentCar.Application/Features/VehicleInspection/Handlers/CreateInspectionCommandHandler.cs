@@ -1,25 +1,39 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using RentCar.Application.Features.VehicleInspection.Commands;
-
+using RentCar.Domain.Entities;
+using RentCar.Domain.Enums;
 using RentCar.Persistence;
 
 namespace RentCar.Application.Features.VehicleInspection.Handlers
 {
-    public class CreateInspectionCommandHandler : IRequestHandler<CreateInspectionCommand, int>
+    public class CreateInspectionCommandHandler
+    : IRequestHandler<CreateInspectionCommand, int>
     {
         private readonly RentCarDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public CreateInspectionCommandHandler(RentCarDbContext context)
+        public CreateInspectionCommandHandler(
+            RentCarDbContext context,
+            IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
-        public async Task<int> Handle(CreateInspectionCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateInspectionCommand request, CancellationToken ct)
         {
+            var reservation = await _context.Reservations.Include(r => r.Car).FirstOrDefaultAsync(r => r.Id == request.ReservationId);
+
+            if (reservation == null)
+                throw new Exception("Reservation not found");
+
             var inspection = new Domain.Entities.VehicleInspection
             {
                 ReservationId = request.ReservationId,
-                Type = (Domain.Enums.InspectionType)request.Type,
+                BusinessId = reservation.BusinessId,
+                Type = (InspectionType)request.Type,
                 Mileage = request.Mileage,
                 FuelLevel = request.FuelLevel,
                 TireCondition = request.TireCondition,
@@ -27,24 +41,39 @@ namespace RentCar.Application.Features.VehicleInspection.Handlers
             };
 
             _context.VehicleInspection.Add(inspection);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
-            if (request.Photos != null)
+            var webRoot = _env.WebRootPath
+                    ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+            var uploadsPath = Path.Combine(
+                webRoot,
+                "uploads",
+                "inspections",
+                inspection.Id.ToString()
+            );
+
+            Directory.CreateDirectory(uploadsPath);
+
+            foreach (var file in request.Photos)
             {
-                foreach (var url in request.Photos)
-                {
-                    _context.VehicleInspectionPhoto.Add(new Domain.Entities.VehicleInspectionPhoto
-                    {
-                        InspectionId = inspection.Id,
-                        ImageUrl = url
-                    });
-                }
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var fullPath = Path.Combine(uploadsPath, fileName);
 
-                await _context.SaveChangesAsync(cancellationToken);
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await file.CopyToAsync(stream, ct);
+
+                _context.VehicleInspectionPhoto.Add(new VehicleInspectionPhoto
+                {
+                    InspectionId = inspection.Id,
+                    ImageUrl = $"/uploads/inspections/{inspection.Id}/{fileName}"
+                });
             }
 
+            await _context.SaveChangesAsync(ct);
             return inspection.Id;
         }
     }
+
 
 }

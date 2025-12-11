@@ -21,11 +21,8 @@ namespace RentCar.Application.Features.Reservations.Handlers
             CancellationToken cancellationToken)
         {
             var history = await _context.ReservationStatusHistories
-                .Where(h => h.ReservationId == request.ReservationId)
-
-                // Include the status name
-                .Include(h => h.ReservationStatus)
-
+                .Where(h => h.ReservationId == request.ReservationId) 
+                .Include(h => h.ReservationStatus) 
                 .OrderByDescending(h => h.ChangedAt)
                 .ToListAsync(cancellationToken);
 

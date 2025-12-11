@@ -29,7 +29,7 @@ namespace RentCar.Application.Pricing
              
             while (currentDate < endDate)
             {
-                decimal dayPrice = car.DailyPrice; // default
+                decimal dayPrice = car.DailyPrice;  
 
                 var rules = car.PricingRules
                     .Where(r =>
@@ -42,7 +42,7 @@ namespace RentCar.Application.Pricing
                 {
                     if (rule.RuleType == "Weekend" && !string.IsNullOrEmpty(rule.DaysOfWeek))
                     {
-                        var days = rule.DaysOfWeek.Split(',');   // ✅ array of strings
+                        var days = rule.DaysOfWeek.Split(',');    
                         if (days.Contains(currentDate.DayOfWeek.ToString()))
                         {
                             dayPrice = rule.PricePerDay;
