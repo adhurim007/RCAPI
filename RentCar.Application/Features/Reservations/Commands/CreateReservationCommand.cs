@@ -10,6 +10,7 @@ namespace RentCar.Application.Features.Reservations.Commands
 {
     public class CreateReservationCommand : IRequest<int>
     {
+        public int Id { get; set; }
         public int CarId { get; set; }
         public int CustomerId { get; set; }
         public int PickupLocationId { get; set; }

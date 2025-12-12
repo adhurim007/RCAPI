@@ -19,6 +19,17 @@ namespace RentCar.Application.Features.Reservations.Handlers
             _context = context;
         }
 
+        private static DateTime NormalizeToUtc(DateTime date)
+        { 
+            if (date.Kind == DateTimeKind.Unspecified)
+                return DateTime.SpecifyKind(date, DateTimeKind.Utc);
+             
+            if (date.Kind == DateTimeKind.Local)
+                return date.ToUniversalTime();
+             
+            return date;    
+        }
+
         public async Task<bool> Handle(UpdateReservationCommand request, CancellationToken cancellationToken)
         {
             var reservation = await _context.Reservations
@@ -34,9 +45,8 @@ namespace RentCar.Application.Features.Reservations.Handlers
             if (request.PickupDate >= request.DropoffDate)
                 throw new Exception("Dropoff date must be after pickup date.");
 
-          
-            reservation.PickupDate = request.PickupDate;
-            reservation.DropoffDate = request.DropoffDate;
+            reservation.PickupDate = NormalizeToUtc(request.PickupDate);
+            reservation.DropoffDate = NormalizeToUtc(request.DropoffDate);
             reservation.PickupLocationId = request.PickupLocationId;
             reservation.DropoffLocationId = request.DropoffLocationId;
             reservation.Notes = request.Notes; 

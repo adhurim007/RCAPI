@@ -16,6 +16,17 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetVehicleDamageByIdQuery(id));
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
         // LIST
         [HttpGet]
         public async Task<IActionResult> GetList([FromQuery] int? reservationId)

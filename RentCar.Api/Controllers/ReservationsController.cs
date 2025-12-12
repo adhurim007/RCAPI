@@ -121,6 +121,21 @@ namespace RentCar.Api.Controllers
             return Ok(new { ContractId = contractId });
         }
 
+        [HttpGet("check-availability")]
+        public async Task<IActionResult> CheckAvailability([FromQuery] int carId,[FromQuery] DateTime from,[FromQuery] DateTime to,[FromQuery] int? excludeReservationId)
+        {
+            var available = await _mediator.Send(
+                new CheckCarAvailabilityQuery(
+                    carId,
+                    from,
+                    to,
+                    excludeReservationId
+                )
+            );
+
+            return Ok(new { available });
+        }
+
         //[HttpGet("report/list")] 
         //public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
         //{
