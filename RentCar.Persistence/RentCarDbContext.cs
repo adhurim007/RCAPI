@@ -44,11 +44,40 @@ namespace RentCar.Persistence
         public DbSet<VehicleDamage> VehicleDamage { get; set; }
         public DbSet<VehicleDamagePhoto> VehicleDamagePhoto { get; set; }
 
+        public DbSet<CarRegistration> CarRegistrations { get; set; }
+        public DbSet<CarService> CarServices { get; set; }
 
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
- 
+
+            modelBuilder.Entity<CarRegistration>()
+             .HasOne(r => r.Car)
+             .WithMany(c => c.Registrations)
+             .HasForeignKey(r => r.CarId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CarService>()
+                .HasOne(s => s.Car)
+                .WithMany(c => c.Services)
+                .HasForeignKey(s => s.CarId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<CarService>()
+                    .HasOne(cs => cs.Business)
+                    .WithMany()
+                    .HasForeignKey(cs => cs.BusinessId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CarRegistration>()
+                .HasOne(cr => cr.Business)
+                .WithMany()
+                .HasForeignKey(cr => cr.BusinessId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.Client)

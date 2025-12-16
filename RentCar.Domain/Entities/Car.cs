@@ -35,6 +35,8 @@ namespace RentCar.Domain.Entities
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<CarPricingRule> PricingRules { get; set; }
         public ICollection<CarImage> Images { get; set; }
+        public ICollection<CarRegistration> Registrations { get; set; } = new List<CarRegistration>();
+        public ICollection<CarService> Services { get; set; } = new List<CarService>();
     }
 
 }

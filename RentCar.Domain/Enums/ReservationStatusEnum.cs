@@ -49,4 +49,14 @@ namespace RentCar.Domain.Enums
         Waived = 3
     }
 
+    public enum CarServiceType
+    {
+        OilChange = 1,
+        MajorService = 2,
+        TiresChange = 3,
+        BrakeService = 4,
+        EngineService = 5,
+        Other = 99
+    }
+
 }

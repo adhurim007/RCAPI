@@ -12,8 +12,8 @@ using RentCar.Persistence;
 namespace RentCar.Persistence.Migrations
 {
     [DbContext(typeof(RentCarDbContext))]
-    [Migration("20251210155222_AddVehicleDamages")]
-    partial class AddVehicleDamages
+    [Migration("20251215150741_addinit")]
+    partial class addinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -618,6 +618,103 @@ namespace RentCar.Persistence.Migrations
                     b.HasIndex("CarId");
 
                     b.ToTable("CarPricingRules");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.CarRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocumentUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InsuranceCompany")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("InsuranceExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("IssuedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarRegistrations");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.CarService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocumentUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Mileage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("NextServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NextServiceMileage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServiceCenter")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ServiceType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarServices");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.CarType", b =>
@@ -1401,6 +1498,28 @@ namespace RentCar.Persistence.Migrations
                     b.Navigation("Car");
                 });
 
+            modelBuilder.Entity("RentCar.Domain.Entities.CarRegistration", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Car", "Car")
+                        .WithMany("Registrations")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("RentCar.Domain.Entities.CarService", b =>
+                {
+                    b.HasOne("RentCar.Domain.Entities.Car", "Car")
+                        .WithMany("Services")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
             modelBuilder.Entity("RentCar.Domain.Entities.City", b =>
                 {
                     b.HasOne("RentCar.Domain.Entities.State", "State")
@@ -1632,7 +1751,11 @@ namespace RentCar.Persistence.Migrations
 
                     b.Navigation("PricingRules");
 
+                    b.Navigation("Registrations");
+
                     b.Navigation("Reservations");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("RentCar.Domain.Entities.CarBrand", b =>

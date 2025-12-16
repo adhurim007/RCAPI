@@ -38,6 +38,7 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<RentCarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+   
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
