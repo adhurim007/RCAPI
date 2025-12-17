@@ -29,16 +29,16 @@ namespace RentCar.Application.Features.CarRegistration.Handlers
                 .Where(x => x.Id == request.Id)
                 .Select(x => new CarRegistrationDto
                 {
-                    Id = x.Id,
-                    CarId = x.CarId,
-                    RegistrationNumber = x.RegistrationNumber,
-                    IssuedDate = x.IssuedDate,
-                    ExpiryDate = x.ExpiryDate,
-                    Cost = x.Cost,
-                    InsuranceCompany = x.InsuranceCompany,
-                    InsuranceExpiryDate = x.InsuranceExpiryDate,
-                    DocumentUrl = x.DocumentUrl,
-                    Notes = x.Notes
+                   Id= x.Id,
+                   CarId= x.CarId, 
+                   RegistrationNumber = x.RegistrationNumber,
+                   IssuedDate = x.IssuedDate,
+                   ExpiryDate = x.ExpiryDate,
+                   Cost = x.Cost,
+                   InsuranceCompany = x.InsuranceCompany,
+                   InsuranceExpiryDate = x.InsuranceExpiryDate, 
+                   Notes = x.Notes,
+                   DocumentUrl = x.DocumentUrl,
                 })
                 .FirstOrDefaultAsync(cancellationToken);
         }

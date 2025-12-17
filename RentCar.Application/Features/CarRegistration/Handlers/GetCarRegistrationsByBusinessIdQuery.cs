@@ -32,12 +32,10 @@ namespace RentCar.Application.Features.CarRegistration.Handlers
                 {
                     Id = x.Id,
                     CarId = x.CarId,
-                    LicencePlate = x.Car != null ? x.Car.LicensePlate : "",
-
+                    LicensePlate = x.Car != null ? x.Car.LicensePlate : "", 
                     RegistrationNumber = x.RegistrationNumber,
                     IssuedDate = x.IssuedDate,
-                    ExpiryDate = x.ExpiryDate,
-
+                    ExpiryDate = x.ExpiryDate, 
                     Cost = x.Cost,
                     InsuranceCompany = x.InsuranceCompany,
                     InsuranceExpiryDate = x.InsuranceExpiryDate,

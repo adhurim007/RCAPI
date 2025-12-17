@@ -45,6 +45,6 @@ namespace RentCar.Domain.Entities
         public string? Notes { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
     }
 }

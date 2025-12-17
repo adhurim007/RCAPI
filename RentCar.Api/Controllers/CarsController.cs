@@ -21,14 +21,11 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost] 
-        public async Task<IActionResult> Create([FromBody] CreateCarCommand command)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] CreateCarCommand command)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id = result }, new { id = result });
+            return CreatedAtAction(nameof(GetById), new { id = result }, result);
         }
 
         [HttpPut("{id}")]
@@ -43,6 +40,13 @@ namespace RentCar.Api.Controllers
                 return NotFound("Car not found");
 
             return NoContent();
+        }
+
+        [HttpPost("{id:int}/images")]
+        public async Task<IActionResult> UploadImages(int id, [FromForm] List<IFormFile> files)
+        {
+            await _mediator.Send(new UploadCarImagesCommand(id, files));
+            return Ok();
         }
          
         [HttpGet]
@@ -62,17 +66,16 @@ namespace RentCar.Api.Controllers
             return Ok(car);
         }
 
-        //[HttpPut("images/{imageId}")]
-        //[Authorize(Roles = "Business,Admin")] 
-        //[Authorize(Policy = Permissions.Cars.Update)]
-        //public async Task<IActionResult> UpdateImage(int imageId, [FromForm] IFormFile file)
-        //{
-        //    if (file == null)
-        //        return BadRequest("Image file is required.");
+        [HttpGet("{id:int}/details")]
+        public async Task<IActionResult> GetDetails(int id)
+        {
+            var result = await _mediator.Send(new GetCarDetailsQuery(id));
 
-        //    var result = await _mediator.Send(new UpdateCarImageCommand(imageId, file));
-        //    return Ok(result);
-        //}
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
          
         [HttpDelete("{id}")]
         [Authorize(Policy = Permissions.Cars.Delete)]
@@ -108,20 +111,7 @@ namespace RentCar.Api.Controllers
 
             return NoContent();
         }
-
-        [HttpPost("{carId}/images")]
-        [Authorize(Roles = "Business")]
-        [Authorize(Policy = Permissions.Cars.ManageImages)]
-        public async Task<IActionResult> UploadImages(int carId, [FromForm] List<IFormFile> files)
-        {
-            var result = await _mediator.Send(new UploadCarImageCommand
-            {
-                CarId = carId,
-                Files = files
-            });
-
-            return Ok(result);
-        }
+ 
 
         [HttpDelete("images/{imageId}")]
         [Authorize(Policy = Permissions.Cars.ManageImages)]
