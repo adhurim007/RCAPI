@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9cOxtBO1OXk=",
+  "dgSpecHash": "bI85rMgVdFI=",
   "success": true,
   "projectFilePath": "E:\\RCAPI\\RentCar.Api\\RentCar.Api.csproj",
   "expectedPackageFiles": [
@@ -86,7 +86,7 @@
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\questpdf\\2025.7.0\\questpdf.2025.7.0.nupkg.sha512",
-    "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\reportviewercore.netcore\\15.1.26\\reportviewercore.netcore.15.1.26.nupkg.sha512",
+    "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\reportviewercore.netcore\\15.1.28\\reportviewercore.netcore.15.1.28.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
@@ -127,7 +127,7 @@
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.memory.data\\1.0.2\\system.memory.data.1.0.2.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.reflection.metadata\\8.0.1\\system.reflection.metadata.8.0.1.nupkg.sha512",
-    "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.resources.extensions\\6.0.0\\system.resources.extensions.6.0.0.nupkg.sha512",
+    "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.resources.extensions\\8.0.0\\system.resources.extensions.8.0.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.runtime.caching\\6.0.0\\system.runtime.caching.6.0.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\adhurim.sulejmani\\.nuget\\packages\\system.security.accesscontrol\\6.0.0\\system.security.accesscontrol.6.0.0.nupkg.sha512",

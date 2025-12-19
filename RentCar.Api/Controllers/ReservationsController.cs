@@ -1,21 +1,28 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RentCar.Domain.Authorization;
 using RentCar.Application.DTOs.Reservations;
 using RentCar.Application.Features.Contracts.Commands;
 using RentCar.Application.Features.Reservations.Commands;
 using RentCar.Application.Features.Reservations.Queries;
 using RentCar.Application.Reports;
+using RentCar.Application.Reports.Core;
+using RentCar.Application.Reports.Queries;
+using RentCar.Application.Reports.Rendering;
+using RentCar.Domain.Authorization;
+using System.Data;
 
 namespace RentCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReservationsController(IMediator mediator) : ControllerBase
+    public class ReservationsController(IMediator mediator, IWebHostEnvironment env, IRdlReportRenderer rdlRenderer) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly IWebHostEnvironment _env = env;
+        private readonly IRdlReportRenderer _rdlRenderer = rdlRenderer;
 
+         
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
         {
@@ -136,26 +143,68 @@ namespace RentCar.Api.Controllers
             return Ok(new { available });
         }
 
-        //[HttpGet("report/list")] 
-        //public async Task<IActionResult> GetReservationListReport(DateTime from, DateTime to, int? businessId)
-        //{
-        //    var pdf = await _reportService.GenerateReservationListReport(from, to, businessId);
-        //    return File(pdf, "application/pdf", "ReservationList.pdf");
-        //}
+        [HttpGet("{id:int}/contract-report")]
+        public async Task<IActionResult> GenerateReservationContract(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Invalid reservation id.");
 
-        //[HttpGet("report/income")] 
-        //public async Task<IActionResult> GetIncomeReport(DateTime from, DateTime to)
-        //{
-        //    var pdf = await _reportService.GenerateIncomeReport(from, to);
-        //    return File(pdf, "application/pdf", "IncomeReport.pdf");
-        //}
+            var result = await _mediator.Send(
+                new GenerateReportQuery(
+                    new ReportRequest
+                    {
+                        ReportCode = "RESERVATION_CONTRACT",
+                        Parameters = new Dictionary<string, object?>
+                        {
+                    { "ReportCode", "RESERVATION_CONTRACT" }, // 🔥 FIX
+                    { "ReservationId", id }
+                        }
+                    }
+                )
+            );
 
-        //[HttpGet("report/pending")] 
-        //public async Task<IActionResult> GetPendingReservationsReport()
-        //{
-        //    var pdf = await _reportService.GeneratePendingReservationsReport();
-        //    return File(pdf, "application/pdf", "PendingReservations.pdf");
-        //}
+            if (result is not ReportResult reportResult || reportResult.Data is not DataSet dataSet)
+                return BadRequest("Report data could not be generated.");
+
+            var rdlPath = Path.Combine(
+                _env.ContentRootPath,
+                "Reports",
+                "Reservation",
+                "ReservationContract.rdl"
+            );
+
+            if (!System.IO.File.Exists(rdlPath))
+                return NotFound("Report template not found.");
+
+            var outputDirectory = Path.Combine(
+                _env.ContentRootPath,
+                "GeneratedReports",
+                "Contracts"
+            );
+
+            var fileName = $"ReservationContract_{id}.pdf";
+            var fullPath = Path.Combine(outputDirectory, fileName);
+
+            _rdlRenderer.RenderToPdfAndSave(
+                rdlPath,
+                dataSet,
+                outputDirectory,
+                fileName
+            );
+
+            var fileUrl =
+                $"{Request.Scheme}://{Request.Host}/generated-reports/contracts/{fileName}";
+
+            return Ok(new
+            {
+                reservationId = id,
+                fileName,
+                url = fileUrl,
+                generatedAt = System.IO.File.GetCreationTimeUtc(fullPath)
+            });
+        }
+
+
 
 
     }

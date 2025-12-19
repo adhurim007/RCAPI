@@ -47,10 +47,31 @@ namespace RentCar.Persistence
         public DbSet<CarRegistration> CarRegistrations { get; set; }
         public DbSet<CarService> CarServices { get; set; }
 
-        
+        public DbSet<ReportDefinition> ReportDefinitions => Set<ReportDefinition>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ReportDefinition>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.HasIndex(x => x.Code).IsUnique();
+
+                entity.Property(x => x.Code)
+                      .IsRequired()
+                      .HasMaxLength(100);
+
+                entity.Property(x => x.Name)
+                      .IsRequired()
+                      .HasMaxLength(200);
+
+                entity.Property(x => x.Description)
+                      .HasMaxLength(500);
+
+                entity.Property(x => x.Category)
+                      .HasMaxLength(100);
+            });
 
             modelBuilder.Entity<CarRegistration>()
              .HasOne(r => r.Car)

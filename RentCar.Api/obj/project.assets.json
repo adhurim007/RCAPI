@@ -1792,14 +1792,14 @@
           }
         }
       },
-      "ReportViewerCore.NETCore/15.1.26": {
+      "ReportViewerCore.NETCore/15.1.28": {
         "type": "package",
         "dependencies": {
           "Microsoft.CodeAnalysis.VisualBasic": "4.8.0",
           "System.CodeDom": "8.0.0",
           "System.Drawing.Common": "8.0.0",
           "System.IO.Packaging": "8.0.1",
-          "System.Resources.Extensions": "6.0.0",
+          "System.Resources.Extensions": "8.0.0",
           "System.ServiceModel.Http": "8.1.0"
         },
         "compile": {
@@ -2454,20 +2454,20 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "System.Resources.Extensions/6.0.0": {
+      "System.Resources.Extensions/8.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/System.Resources.Extensions.dll": {
+          "lib/net8.0/System.Resources.Extensions.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/System.Resources.Extensions.dll": {
+          "lib/net8.0/System.Resources.Extensions.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/netcoreapp3.1/_._": {}
+          "buildTransitive/net6.0/_._": {}
         }
       },
       "System.Runtime.Caching/6.0.0": {
@@ -5822,15 +5822,19 @@
         "runtimes/win-x86/native/qpdf.dll"
       ]
     },
-    "ReportViewerCore.NETCore/15.1.26": {
-      "sha512": "++dE5lildQKId9/jAc8DLRAPpQEzpNGsuVNCZmOIMr1mlEew3LXeRS/+Fz70BtA7cUsI2dCMbt34Xuzi7Ka4Pg==",
+    "ReportViewerCore.NETCore/15.1.28": {
+      "sha512": "U9P7ftbzOE5MlE7jG7Ww0eEDkQvjZyWu2wnFnM2aRD6ruwoVZzP5e7QfWgANp6L0rHKCkQE+ZFz2B4WAjyqhmw==",
       "type": "package",
-      "path": "reportviewercore.netcore/15.1.26",
+      "path": "reportviewercore.netcore/15.1.28",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "docs/README.md",
         "images/icon.png",
+        "lib/net10.0/Microsoft.ReportViewer.Common.dll",
+        "lib/net10.0/Microsoft.ReportViewer.DataVisualization.dll",
+        "lib/net10.0/Microsoft.ReportViewer.NETCore.dll",
+        "lib/net10.0/Microsoft.ReportViewer.ProcessingObjectModel.dll",
         "lib/net8.0/Microsoft.ReportViewer.Common.dll",
         "lib/net8.0/Microsoft.ReportViewer.DataVisualization.dll",
         "lib/net8.0/Microsoft.ReportViewer.NETCore.dll",
@@ -5839,7 +5843,7 @@
         "lib/net9.0/Microsoft.ReportViewer.DataVisualization.dll",
         "lib/net9.0/Microsoft.ReportViewer.NETCore.dll",
         "lib/net9.0/Microsoft.ReportViewer.ProcessingObjectModel.dll",
-        "reportviewercore.netcore.15.1.26.nupkg.sha512",
+        "reportviewercore.netcore.15.1.28.nupkg.sha512",
         "reportviewercore.netcore.nuspec"
       ]
     },
@@ -6935,10 +6939,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Resources.Extensions/6.0.0": {
-      "sha512": "pBnVzNQYd0OHqh0VLu/hi0zFOTtyF8QwtziQBmzX/ZtVOea4+JEVOGu29DHeSOA0a9SFrYjQorBrOLuKLhcMNQ==",
+    "System.Resources.Extensions/8.0.0": {
+      "sha512": "psnQ6GRQOvt+evda5C4nD5EuV49mz2Tv0DD2JDVDEbE/TKoMukxSkGJcsBJ0pajpPuFRr67syFYlkJ4Wj6A5Zw==",
       "type": "package",
-      "path": "system.resources.extensions/6.0.0",
+      "path": "system.resources.extensions/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -6946,15 +6950,20 @@
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/System.Resources.Extensions.targets",
+        "buildTransitive/net462/System.Resources.Extensions.targets",
+        "buildTransitive/net6.0/_._",
         "buildTransitive/netcoreapp2.0/System.Resources.Extensions.targets",
-        "buildTransitive/netcoreapp3.1/_._",
-        "lib/net461/System.Resources.Extensions.dll",
-        "lib/net461/System.Resources.Extensions.xml",
+        "lib/net462/System.Resources.Extensions.dll",
+        "lib/net462/System.Resources.Extensions.xml",
         "lib/net6.0/System.Resources.Extensions.dll",
         "lib/net6.0/System.Resources.Extensions.xml",
+        "lib/net7.0/System.Resources.Extensions.dll",
+        "lib/net7.0/System.Resources.Extensions.xml",
+        "lib/net8.0/System.Resources.Extensions.dll",
+        "lib/net8.0/System.Resources.Extensions.xml",
         "lib/netstandard2.0/System.Resources.Extensions.dll",
         "lib/netstandard2.0/System.Resources.Extensions.xml",
-        "system.resources.extensions.6.0.0.nupkg.sha512",
+        "system.resources.extensions.8.0.0.nupkg.sha512",
         "system.resources.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -7639,6 +7648,7 @@
       "RentCar.Domain >= 1.0.0",
       "RentCar.Infrastructure >= 1.0.0",
       "RentCar.Persistence >= 1.0.0",
+      "ReportViewerCore.NETCore >= 15.1.28",
       "Serilog.AspNetCore >= 8.0.3",
       "Serilog.Sinks.File >= 7.0.0",
       "Swashbuckle.AspNetCore >= 9.0.3"
@@ -7747,6 +7757,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[8.0.19, )"
+          },
+          "ReportViewerCore.NETCore": {
+            "target": "Package",
+            "version": "[15.1.28, )"
           },
           "Serilog.AspNetCore": {
             "target": "Package",

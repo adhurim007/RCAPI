@@ -169,6 +169,7 @@ namespace RentCar.Application.Features.Reservations.Handlers
                 ReservationStatusId = 1,
                 BusinessId = car.BusinessId,
                 Notes = request.Notes,
+                
                 CreatedAt = DateTime.UtcNow
             };
 

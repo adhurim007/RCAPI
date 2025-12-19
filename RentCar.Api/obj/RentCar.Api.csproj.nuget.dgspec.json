@@ -104,6 +104,10 @@
               "target": "Package",
               "version": "[8.0.19, )"
             },
+            "ReportViewerCore.NETCore": {
+              "target": "Package",
+              "version": "[15.1.28, )"
+            },
             "Serilog.AspNetCore": {
               "target": "Package",
               "version": "[8.0.3, )"

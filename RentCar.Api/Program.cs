@@ -3,18 +3,24 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RentCar.Application;
 using RentCar.Application.Auditing;
-using RentCar.Domain.Authorization;
 using RentCar.Application.Features.Reservations.Validators;
 using RentCar.Application.Localization;
 using RentCar.Application.MultiTenancy;
 using RentCar.Application.Notifications;
 using RentCar.Application.Pricing;
 using RentCar.Application.Reports;
+using RentCar.Application.Reports.Abstractions;
+using RentCar.Application.Reports.Datasets;
+using RentCar.Application.Reports.Implementations;
+using RentCar.Application.Reports.Rendering;
+using RentCar.Application.Reports.Services;
 using RentCar.Application.Services;
+using RentCar.Domain.Authorization;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
 using RentCar.Infrastructure;
@@ -50,6 +56,18 @@ builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 builder.Services.AddScoped<IPricingEngine, PricingEngine>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ILocalizationService, CachedLocalizationService>();
+builder.Services.AddScoped<IRdlReportRenderer, RdlReportRenderer>();
+
+
+
+builder.Services.AddScoped<IReportBuilder, DynamicReportBuilder>();
+builder.Services.AddScoped<IReportRegistry, ReportRegistry>();
+
+builder.Services.AddScoped<IReportDatasetProvider, ReservationDatasetProvider>();
+builder.Services.AddScoped<IReportDatasetProvider, ClientDatasetProvider>();
+builder.Services.AddScoped<IReportDatasetProvider, CarDatasetProvider>();
+builder.Services.AddScoped<IReportDatasetProvider, BusinessDatasetProvider>();
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -108,11 +126,8 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<INotificationService, EmailNotificationService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICarPricingRuleRepository, CarPricingRuleRepository>();
-builder.Services.AddScoped<IReservationValidator, ReservationValidator>();
-//builder.Services.AddScoped<IContractPdfGenerator, ContractPdfGenerator>();
-builder.Services.AddScoped<IReservationReportService, ReservationReportService>(); 
-builder.Services.AddScoped<ReportGenerator>();
- 
+builder.Services.AddScoped<IReservationValidator, ReservationValidator>(); 
+
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddAutoMapper(typeof(AssemblyMarker).Assembly);
@@ -223,7 +238,22 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+var generatedReportsPath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "GeneratedReports"
+);
+
+if (!Directory.Exists(generatedReportsPath))
+{
+    Directory.CreateDirectory(generatedReportsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(generatedReportsPath),
+    RequestPath = "/generated-reports"
+});
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
