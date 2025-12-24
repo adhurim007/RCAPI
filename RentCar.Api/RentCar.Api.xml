@@ -4,21 +4,5 @@
         <name>RentCar.Api</name>
     </assembly>
     <members>
-        <member name="M:RentCar.Api.Controllers.ReportsController.GetAvailableReports">
-            <summary>
-            Kthen listën e raporteve të disponueshme
-            </summary>
-        </member>
-        <member name="M:RentCar.Api.Controllers.ReportsController.GenerateReport(RentCar.Application.Reports.Core.ReportRequest)">
-            <summary>
-            Gjeneron raport bazuar në ReportCode dhe parametra
-            </summary>
-        </member>
-        <member name="M:RentCar.Application.Reports.Rendering.IRdlReportRenderer.RenderToPdfAndSave(System.String,System.Data.DataSet,System.String,System.String)">
-            <summary>
-            Renders an RDL report to PDF and saves it to disk.
-            Returns the full file path.
-            </summary>
-        </member>
     </members>
 </doc>

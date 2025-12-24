@@ -1,42 +1,28 @@
-﻿using MediatR;
-using RentCar.Application.Reports.Abstractions;
-using RentCar.Application.Reports.Core;
-using RentCar.Application.Reports.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using MediatR; 
+using RentCar.Application.Reports.Engine; 
+using RentCar.Application.Reports.Queries.RentCar.Application.Reports.Queries;
+ 
 namespace RentCar.Application.Reports.Handlers
 {
-    public class GenerateReportQueryHandler
-   : IRequestHandler<GenerateReportQuery, ReportResult>
+    public sealed class GenerateReportQueryHandler
+       : IRequestHandler<GenerateReportQuery, byte[]>
     {
-        private readonly IReportRegistry _registry;
+        private readonly ReportEngine _engine;
 
-        public GenerateReportQueryHandler(IReportRegistry registry)
+        public GenerateReportQueryHandler(ReportEngine engine)
         {
-            _registry = registry;
+            _engine = engine;
         }
 
-        public async Task<ReportResult> Handle(
+        public async Task<byte[]> Handle(
             GenerateReportQuery request,
             CancellationToken cancellationToken)
         {
-            var builder = _registry.GetBuilder(request.Request.ReportCode);
-
-            var data = await builder.BuildAsync(
-                request.Request.Parameters,
-                cancellationToken
-            );
-
-            return new ReportResult
-            {
-                Data = data
-            };
+            return await _engine.GeneratePdfAsync(
+                request.ReportCode,
+                request.Parameters,
+                cancellationToken);
         }
     }
-
 
 }

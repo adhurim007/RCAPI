@@ -13,13 +13,11 @@ using RentCar.Application.Localization;
 using RentCar.Application.MultiTenancy;
 using RentCar.Application.Notifications;
 using RentCar.Application.Pricing;
-using RentCar.Application.Reports;
 using RentCar.Application.Reports.Abstractions;
-using RentCar.Application.Reports.Datasets;
-using RentCar.Application.Reports.Implementations;
+using RentCar.Application.Reports.Contracts;
+using RentCar.Application.Reports.Engine;
+using RentCar.Application.Reports.Handlers;
 using RentCar.Application.Reports.Rendering;
-using RentCar.Application.Reports.Services;
-using RentCar.Application.Services;
 using RentCar.Domain.Authorization;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
@@ -44,7 +42,11 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<RentCarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-   
+ 
+builder.Services.AddScoped<IReport, ReservationContractReport>();
+builder.Services.AddScoped<ReportEngine>(); 
+builder.Services.AddScoped<IReportRenderer, RdlReportRenderer>();
+  
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
@@ -56,19 +58,7 @@ builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 builder.Services.AddScoped<IPricingEngine, PricingEngine>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ILocalizationService, CachedLocalizationService>();
-builder.Services.AddScoped<IRdlReportRenderer, RdlReportRenderer>();
-
-
-
-builder.Services.AddScoped<IReportBuilder, DynamicReportBuilder>();
-builder.Services.AddScoped<IReportRegistry, ReportRegistry>();
-
-builder.Services.AddScoped<IReportDatasetProvider, ReservationDatasetProvider>();
-builder.Services.AddScoped<IReportDatasetProvider, ClientDatasetProvider>();
-builder.Services.AddScoped<IReportDatasetProvider, CarDatasetProvider>();
-builder.Services.AddScoped<IReportDatasetProvider, BusinessDatasetProvider>();
-
-
+  
 builder.Services.AddAuthorization(options =>
 {
     // Cars
@@ -233,27 +223,13 @@ using (var scope = app.Services.CreateScope())
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RentCar API v1"));
 }
 
-app.UseHttpsRedirection();
-
-var generatedReportsPath = Path.Combine(
-    builder.Environment.ContentRootPath,
-    "GeneratedReports"
-);
-
-if (!Directory.Exists(generatedReportsPath))
-{
-    Directory.CreateDirectory(generatedReportsPath);
-}
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(generatedReportsPath),
-    RequestPath = "/generated-reports"
-});
+ 
+app.UseStaticFiles();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();

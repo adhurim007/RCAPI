@@ -9,16 +9,7 @@ namespace RentCar.Application.Reports.Rendering
 {
     public interface IRdlReportRenderer
     {
-        /// <summary>
-        /// Renders an RDL report to PDF and saves it to disk.
-        /// Returns the full file path.
-        /// </summary>
-        string RenderToPdfAndSave(
-            string rdlPath,
-            DataSet dataSet,
-            string outputDirectory,
-            string fileName
-        );
+        byte[] RenderToPdf(string rdlPath, DataSet dataSet);
     }
 
 }

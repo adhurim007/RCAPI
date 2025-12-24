@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RentCar.Application.Reports.Abstractions
 {
-    public interface IReportRegistry
+    public interface IReportRenderer
     {
-        IReadOnlyCollection<IReportDefinition> GetAll();
-        IReportBuilder GetBuilder(string reportCode);
+        byte[] Render(string reportCode, DataSet dataSet);
     }
+
 }

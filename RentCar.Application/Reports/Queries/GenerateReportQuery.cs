@@ -1,12 +1,26 @@
 ﻿using MediatR;
-using RentCar.Application.Reports.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace RentCar.Application.Reports.Queries
 {
-    public record GenerateReportQuery(ReportRequest Request) : IRequest<ReportResult>;
+    using MediatR;
+    using System.Collections.Generic;
+
+    namespace RentCar.Application.Reports.Queries
+    {
+        public sealed class GenerateReportQuery : IRequest<byte[]>
+        {
+            public string ReportCode { get; }
+            public IDictionary<string, object?> Parameters { get; }
+
+            public GenerateReportQuery(
+                string reportCode,
+                IDictionary<string, object?> parameters)
+            {
+                ReportCode = reportCode;
+                Parameters = parameters;
+            }
+        }
+    }
+
 }

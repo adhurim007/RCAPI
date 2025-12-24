@@ -2,10 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RentCar.Application.Reports.Abstractions;
-using RentCar.Application.Reports.Datasets;
-using RentCar.Application.Reports.Implementations; 
-using RentCar.Application.Reports.Services;
-
+ 
 namespace RentCar.Application
 {
     public static class ApplicationServiceRegistration

@@ -1,56 +1,29 @@
 ﻿using Microsoft.Reporting.NETCore;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using RentCar.Api.Reports.Rendering;
+using RentCar.Application.Reports.Abstractions;
+using System.Data; 
 namespace RentCar.Application.Reports.Rendering
 {
-    public class RdlReportRenderer : IRdlReportRenderer
+    public sealed class RdlReportRenderer : IReportRenderer
     {
-        public string RenderToPdfAndSave(
-            string rdlPath,
-            DataSet dataSet,
-            string outputDirectory,
-            string fileName)
+        private readonly IWebHostEnvironment _env;
+
+        public RdlReportRenderer(IWebHostEnvironment env)
         {
-            var report = new LocalReport();
+            _env = env;
+        }
 
-            using var rdlStream = File.OpenRead(rdlPath);
-            report.LoadReportDefinition(rdlStream);
+        public byte[] Render(string reportCode, DataSet ds)
+        {
+            var path = Path.Combine(
+                _env.ContentRootPath,
+                "Reports",
+                "Reservation",
+                $"{reportCode}.rdl");
 
-            foreach (DataTable table in dataSet.Tables)
-            {
-                report.DataSources.Add(
-                    new ReportDataSource(table.TableName, table)
-                );
-            }
-
-            var deviceInfo = @"
-            <DeviceInfo> <OutputFormat>PDF</OutputFormat> <PageWidth>21cm</PageWidth> <PageHeight>29.7cm</PageHeight> <MarginTop>1.5cm</MarginTop> <MarginLeft>2cm</MarginLeft> <MarginRight>2cm</MarginRight> <MarginBottom>1.5cm</MarginBottom> </DeviceInfo>";
-
-            var pdfBytes = report.Render(
-                "PDF",
-                deviceInfo,
-                out _,
-                out _,
-                out _,
-                out _,
-                out _
-            );
-
-            if (!Directory.Exists(outputDirectory))
-                Directory.CreateDirectory(outputDirectory);
-
-            var fullPath = Path.Combine(outputDirectory, fileName);
-            File.WriteAllBytes(fullPath, pdfBytes);
-
-            return fullPath;
+            return RdlPdfRenderer.Render(path, ds);
         }
     }
-
 
 
 }

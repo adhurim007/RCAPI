@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition"
+        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+
+  <rd:ReportID>8baf5e5e-2a5b-4d6b-9f4b-123456789abc</rd:ReportID>
+  <Width>6.5in</Width>
+
+  <!-- DATASOURCE -->
+  <DataSources>
+    <DataSource Name="DataSetSource">
+      <ConnectionProperties>
+        <DataProvider>System.DataD</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+    </DataSource>
+  </DataSources>
+
+  <!-- DATASETS -->
+  <DataSets>
+
+    <DataSet Name="Reservation">
+      <Fields>
+        <Field Name="PickupDate">
+          <DataField>PickupDate</DataField>
+        </Field>
+        <Field Name="DropoffDate">
+          <DataField>DropoffDate</DataField>
+        </Field>
+        <Field Name="TotalCost">
+          <DataField>TotalCost</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSetSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+
+    <DataSet Name="Client">
+      <Fields>
+        <Field Name="FullName">
+          <DataField>FullName</DataField>
+        </Field>
+        <Field Name="DocumentNumber">
+          <DataField>DocumentNumber</DataField>
+        </Field>
+        <Field Name="PhoneNumber">
+          <DataField>PhoneNumber</DataField>
+        </Field>
+        <Field Name="Email">
+          <DataField>Email</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSetSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+
+    <DataSet Name="Car">
+      <Fields>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+        </Field>
+        <Field Name="LicensePlate">
+          <DataField>LicensePlate</DataField>
+        </Field>
+        <Field Name="DailyPrice">
+          <DataField>DailyPrice</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSetSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+
+  </DataSets>
+
+  <!-- BODY -->
+  <Body>
+    <ReportItems>
+
+      <!-- TITLE -->
+      <Textbox Name="Title">
+        <Top>0.2in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.4in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>KONTRATË PËR MARRJEN ME QIRA TË AUTOMJETIT</Value>
+                <Style>
+                  <FontSize>16pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- INTRO -->
+      <Textbox Name="Intro">
+        <Top>0.8in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.7in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Kjo kontratë lidhet ndërmjet kompanisë së qirasë së automjeteve dhe klientit të identifikuar më poshtë, me qëllim të marrjes me qira të automjetit sipas kushteve të përcaktuara në këtë dokument.
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- CLIENT -->
+      <Textbox Name="Client">
+        <Top>1.6in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.7in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Klienti: =First(Fields!FullName.Value, "Client")
+                  Dokument ID: =First(Fields!DocumentNumber.Value, "Client")
+                  Telefon: =First(Fields!PhoneNumber.Value, "Client")
+                  Email: =First(Fields!Email.Value, "Client")
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- VEHICLE -->
+      <Textbox Name="Vehicle">
+        <Top>2.4in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.6in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Automjeti: =First(Fields!Name.Value, "Car")
+                  Targat: =First(Fields!LicensePlate.Value, "Car")
+                  Çmimi ditor: =First(Fields!DailyPrice.Value, "Car") €
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- PERIOD -->
+      <Textbox Name="Period">
+        <Top>3.1in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.4in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Periudha e qirasë: nga =Format(First(Fields!PickupDate.Value, "Reservation"), "dd.MM.yyyy")
+                  deri më =Format(First(Fields!DropoffDate.Value, "Reservation"), "dd.MM.yyyy")
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- TERMS -->
+      <Textbox Name="Terms">
+        <Top>3.6in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>1.2in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Kushtet:
+                  - Automjeti duhet të kthehet në gjendje të rregullt.
+                  - Klienti mban përgjegjësi për dëmet gjatë periudhës së qirasë.
+                  - Ndalohet përdorimi i automjetit për qëllime të paligjshme.
+                  - Pagesa kryhet sipas marrëveshjes.
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- TOTAL -->
+      <Textbox Name="Total">
+        <Top>4.9in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.3in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  TOTALI PËR T’U PAGUAR: =First(Fields!TotalCost.Value, "Reservation") €
+                </Value>
+                <Style>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+      <!-- SIGNATURE -->
+      <Textbox Name="Signature">
+        <Top>5.5in</Top>
+        <Left>0.2in</Left>
+        <Width>6in</Width>
+        <Height>0.6in</Height>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>
+                  Nënshkrimi i Klientit: _______________________
+
+                  Nënshkrimi i Kompanisë: _____________________
+                </Value>
+              </TextRun>
+            </TextRuns>
+          </Paragraph>
+        </Paragraphs>
+      </Textbox>
+
+    </ReportItems>
+
+    <Height>6.3in</Height>
+  </Body>
+
+  <!-- PAGE -->
+  <Page>
+    <LeftMargin>1in</LeftMargin>
+    <RightMargin>1in</RightMargin>
+    <TopMargin>1in</TopMargin>
+    <BottomMargin>1in</BottomMargin>
+  </Page>
+
+</Report>
