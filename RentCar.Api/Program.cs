@@ -18,6 +18,7 @@ using RentCar.Application.Reports.Contracts;
 using RentCar.Application.Reports.Engine;
 using RentCar.Application.Reports.Handlers;
 using RentCar.Application.Reports.Rendering;
+using RentCar.Application.Reports.Reservation;
 using RentCar.Domain.Authorization;
 using RentCar.Domain.Entities;
 using RentCar.Domain.Interfaces;
@@ -44,6 +45,7 @@ builder.Services.AddDbContext<RentCarDbContext>(options =>
 
  
 builder.Services.AddScoped<IReport, ReservationContractReport>();
+builder.Services.AddScoped<IReport, ReservationInvoiceReport>();
 builder.Services.AddScoped<ReportEngine>(); 
 builder.Services.AddScoped<IReportRenderer, RdlReportRenderer>();
   

@@ -154,5 +154,21 @@ namespace RentCar.Api.Controllers
 
             return File(pdf, "application/pdf");
         }
+
+        [HttpGet("{id:int}/invoice-report")]
+        public async Task<IActionResult> GenerateReservationInvoice(int id)
+        {
+            var pdf = await _mediator.Send(new GenerateReportQuery
+            (
+                "RESERVATION_INVOICE",
+                new Dictionary<string, object?>
+                {
+                    ["ReservationId"] = id
+                }
+            ));
+
+           return File(pdf, "application/pdf");
+       }
+
     }
 }

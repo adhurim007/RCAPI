@@ -37,10 +37,7 @@ namespace RentCar.Application.Reports.Contracts
 
             return ds;
         }
-
-        // =======================
-        // Reservation
-        // =======================
+         
         private async Task<DataTable> BuildReservation(int reservationId, CancellationToken ct)
         {
             var r = await _context.Reservations
@@ -63,10 +60,7 @@ namespace RentCar.Application.Reports.Contracts
 
             return t;
         }
-
-        // =======================
-        // Business
-        // =======================
+ 
         private async Task<DataTable> BuildBusiness(int reservationId, CancellationToken ct)
         {
             var b = await _context.Reservations
@@ -87,10 +81,7 @@ namespace RentCar.Application.Reports.Contracts
 
             return t;
         }
-
-        // =======================
-        // Client
-        // =======================
+         
         private async Task<DataTable> BuildClient(int reservationId, CancellationToken ct)
         {
             var c = await _context.Reservations
@@ -113,10 +104,7 @@ namespace RentCar.Application.Reports.Contracts
 
             return t;
         }
-
-        // =======================
-        // Car
-        // =======================
+         
         private async Task<DataTable> BuildCar(int reservationId, CancellationToken ct)
         {
             var car = await _context.Reservations
