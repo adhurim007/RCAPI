@@ -15,6 +15,7 @@ using RentCar.Application.Notifications;
 using RentCar.Application.Pricing;
 using RentCar.Application.Reports.Abstractions;
 using RentCar.Application.Reports.Contracts;
+using RentCar.Application.Reports.DataSets;
 using RentCar.Application.Reports.Engine;
 using RentCar.Application.Reports.Handlers;
 using RentCar.Application.Reports.Rendering;
@@ -43,7 +44,9 @@ builder.Host.UseSerilog();
 builder.Services.AddDbContext<RentCarDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
- 
+builder.Services.AddScoped<IReport, CarRegistrationsReport>();
+builder.Services.AddScoped<IReport, CarServicesReport>();
+builder.Services.AddScoped<IReport, VehicleDamageReport>();
 builder.Services.AddScoped<IReport, ReservationContractReport>();
 builder.Services.AddScoped<IReport, ReservationInvoiceReport>();
 builder.Services.AddScoped<ReportEngine>(); 

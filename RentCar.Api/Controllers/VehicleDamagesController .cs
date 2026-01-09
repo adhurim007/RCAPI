@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RentCar.Application.Features.VehicleDamage.Command;
 using RentCar.Application.Features.VehicleDamage.Queries;
+using RentCar.Application.Reports.Queries.RentCar.Application.Reports.Queries;
 
 namespace RentCar.Api.Controllers
 {
@@ -68,6 +69,20 @@ namespace RentCar.Api.Controllers
                 new DeleteVehicleDamageCommand(id));
 
             return success ? NoContent() : NotFound();
+        }
+
+        [HttpGet("{id:int}/damage-report")]
+        public async Task<IActionResult> GenerateDamageInspectionReport(int id)
+        {
+            var pdf = await _mediator.Send(
+                new GenerateReportQuery(
+                    "VEHICLE_DAMAGE_REPORT",
+                    new Dictionary<string, object?>
+                    {
+                        ["ReservationId"] = id
+                    }));
+
+            return File(pdf, "application/pdf");
         }
     }
 

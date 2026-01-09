@@ -17,8 +17,7 @@ namespace RentCar.Application.Reports.Rendering
         {
             var path = Path.Combine(
                 _env.ContentRootPath,
-                "Reports",
-                "Reservation",
+                "Reports", 
                 $"{reportCode}.rdl");
 
             return RdlPdfRenderer.Render(path, ds);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RentCar.Application.Features.CarRegistration;
 using RentCar.Application.Features.CarRegistration.Command;
 using RentCar.Application.Features.CarRegistration.Queries;
+using RentCar.Application.Reports.Queries.RentCar.Application.Reports.Queries;
 
 namespace RentCar.Api.Controllers
 {
@@ -55,5 +56,18 @@ namespace RentCar.Api.Controllers
                 new GetCarRegistrationByIdQuery(id)
             ));
         }
+
+        [HttpGet("{carId:int}/car-registrations-report")]
+        public async Task<IActionResult> GenerateCarRegistrationsReport(int carId)
+        {
+            var pdf = await _mediator.Send(
+                new GenerateReportQuery(
+                    "CAR_REGISTRATIONS_REPORT",
+                    new Dictionary<string, object?> { ["CarId"] = carId }
+                ));
+
+            return File(pdf, "application/pdf");
+        }
+
     }
 }

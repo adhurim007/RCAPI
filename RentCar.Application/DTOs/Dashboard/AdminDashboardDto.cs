@@ -18,4 +18,12 @@ namespace RentCar.Application.DTOs.Dashboard
         public List<string> RecentAuditLogs { get; set; } = new();
         public List<string> RecentReservations { get; set; } = new();
     }
+
+    public class AdminDashboardSummaryDto
+    {
+        public int TotalBusinesses { get; set; }
+        public int TotalReservations { get; set; }
+        public int TotalUsers { get; set; }
+        public int TotalCars { get; set; }
+    }
 }

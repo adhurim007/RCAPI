@@ -40,7 +40,7 @@ namespace RentCar.Application.Features.CarService.Handlers
                     ServiceCenter = x.ServiceCenter,
                     NextServiceDate = x.NextServiceDate,
                     NextServiceMileage = x.NextServiceMileage,
-                    Notes = x.Notes
+                    Notes = x.Notes 
                 })
                 .ToListAsync(cancellationToken);
         }
