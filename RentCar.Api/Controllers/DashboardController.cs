@@ -6,8 +6,7 @@ using RentCar.Application.Features.Dashboard.Queries;
 namespace RentCar.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize] // bazë
+    [Route("api/[controller]")] 
     public class DashboardController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -17,7 +16,7 @@ namespace RentCar.Api.Controllers
             _mediator = mediator;
         }
 
-        // ====================== BUSINESS ======================
+        
         // Summary cards + charts (last 12 months)
         [HttpGet("business")] 
         public async Task<IActionResult> GetBusinessDashboard()

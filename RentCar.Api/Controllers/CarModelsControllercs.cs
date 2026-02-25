@@ -21,8 +21,7 @@ namespace RentCar.Api.Controllers
         {
             _mediator = mediator;
         }
-
-        // GET: api/carmodels
+         
         [HttpGet]
         //[Authorize(Policy = Permissions.CarModels.View)]
         public async Task<ActionResult<List<CarModelDto>>> GetAll()

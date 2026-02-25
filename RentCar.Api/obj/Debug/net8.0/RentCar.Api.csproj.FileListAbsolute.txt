@@ -597,3 +597,4 @@ E:\RCAPI\RentCar.Api\obj\Debug\net8.0\refint\RentCar.Api.dll
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.pdb
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\RentCar.Api.genruntimeconfig.cache
 E:\RCAPI\RentCar.Api\obj\Debug\net8.0\ref\RentCar.Api.dll
+E:\RCAPI\RentCar.Api\obj\Debug\net8.0\swae.build.ex.cache
